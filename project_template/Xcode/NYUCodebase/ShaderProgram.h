@@ -1,6 +1,8 @@
-
 #pragma once
 
+#ifdef _WINDOWS
+	#include <GL/glew.h>
+#endif
 #include <SDL_opengl.h>
 #include <string>
 #include <iostream>
