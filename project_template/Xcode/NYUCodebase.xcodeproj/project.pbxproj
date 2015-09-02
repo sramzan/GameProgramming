@@ -12,24 +12,14 @@
 		6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A86B919AE5C710066C1FD /* main.cpp */; };
 		6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86BC19AE5C710066C1FD /* Credits.rtf */; };
 		6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86C519AE5C710066C1FD /* Images.xcassets */; };
-		6D5A86CD19AE5C710066C1FD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86CC19AE5C710066C1FD /* XCTest.framework */; };
-		6D5A86CE19AE5C710066C1FD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86AD19AE5C710066C1FD /* Cocoa.framework */; };
-		6D5A86D619AE5C710066C1FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86D419AE5C710066C1FD /* InfoPlist.strings */; };
-		6D5A86D819AE5C710066C1FD /* NYUCodebaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A86D719AE5C710066C1FD /* NYUCodebaseTests.m */; };
 		6D5A86E319AE5CD10066C1FD /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86E219AE5CD10066C1FD /* SDL2.framework */; };
 		6D5AC2D019AE6280004CB1BF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */; };
 		6D5AC2D219AE6A1E004CB1BF /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5AC2D119AE6A1E004CB1BF /* SDL2_image.framework */; };
+		6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23BB1B96CC2600BCE792 /* fragment.glsl */; };
+		6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */; };
+		6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */; };
+		6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23C01B96CC2600BCE792 /* vertex.glsl */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		6D5A86CF19AE5C710066C1FD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6D5A86A219AE5C710066C1FD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6D5A86A919AE5C710066C1FD;
-			remoteInfo = NYUCodebase;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYUCodebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,14 +32,17 @@
 		6D5A86B919AE5C710066C1FD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6D5A86BD19AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6D5A86C519AE5C710066C1FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		6D5A86CB19AE5C710066C1FD /* NYUCodebaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NYUCodebaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D5A86CC19AE5C710066C1FD /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6D5A86D319AE5C710066C1FD /* NYUCodebaseTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NYUCodebaseTests-Info.plist"; sourceTree = "<group>"; };
 		6D5A86D519AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6D5A86D719AE5C710066C1FD /* NYUCodebaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NYUCodebaseTests.m; sourceTree = "<group>"; };
 		6D5A86E219AE5CD10066C1FD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		6D5AC2D119AE6A1E004CB1BF /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		6DEF23BB1B96CC2600BCE792 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
+		6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
+		6DEF23BD1B96CC2600BCE792 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
+		6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
+		6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
+		6DEF23C01B96CC2600BCE792 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,15 +54,6 @@
 				6D5A86AE19AE5C710066C1FD /* Cocoa.framework in Frameworks */,
 				6D5A86E319AE5CD10066C1FD /* SDL2.framework in Frameworks */,
 				6D5AC2D219AE6A1E004CB1BF /* SDL2_image.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6D5A86C819AE5C710066C1FD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6D5A86CE19AE5C710066C1FD /* Cocoa.framework in Frameworks */,
-				6D5A86CD19AE5C710066C1FD /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */,
-				6D5A86CB19AE5C710066C1FD /* NYUCodebaseTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,7 +85,6 @@
 				6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */,
 				6D5A86E219AE5CD10066C1FD /* SDL2.framework */,
 				6D5A86AD19AE5C710066C1FD /* Cocoa.framework */,
-				6D5A86CC19AE5C710066C1FD /* XCTest.framework */,
 				6D5A86AF19AE5C710066C1FD /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -141,7 +123,6 @@
 		6D5A86D119AE5C710066C1FD /* NYUCodebaseTests */ = {
 			isa = PBXGroup;
 			children = (
-				6D5A86D719AE5C710066C1FD /* NYUCodebaseTests.m */,
 				6D5A86D219AE5C710066C1FD /* Supporting Files */,
 			);
 			path = NYUCodebaseTests;
@@ -159,6 +140,12 @@
 		6D5A86E119AE5CAA0066C1FD /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
+				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
+				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
+				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
+				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
+				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
 				6D5A86B919AE5C710066C1FD /* main.cpp */,
 			);
 			name = Code;
@@ -184,24 +171,6 @@
 			productReference = 6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6D5A86CA19AE5C710066C1FD /* NYUCodebaseTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6D5A86DE19AE5C710066C1FD /* Build configuration list for PBXNativeTarget "NYUCodebaseTests" */;
-			buildPhases = (
-				6D5A86C719AE5C710066C1FD /* Sources */,
-				6D5A86C819AE5C710066C1FD /* Frameworks */,
-				6D5A86C919AE5C710066C1FD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6D5A86D019AE5C710066C1FD /* PBXTargetDependency */,
-			);
-			name = NYUCodebaseTests;
-			productName = NYUCodebaseTests;
-			productReference = 6D5A86CB19AE5C710066C1FD /* NYUCodebaseTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -211,11 +180,6 @@
 				CLASSPREFIX = NYUCB;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Ivan Safrin";
-				TargetAttributes = {
-					6D5A86CA19AE5C710066C1FD = {
-						TestTargetID = 6D5A86A919AE5C710066C1FD;
-					};
-				};
 			};
 			buildConfigurationList = 6D5A86A519AE5C710066C1FD /* Build configuration list for PBXProject "NYUCodebase" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -231,7 +195,6 @@
 			projectRoot = "";
 			targets = (
 				6D5A86A919AE5C710066C1FD /* NYUCodebase */,
-				6D5A86CA19AE5C710066C1FD /* NYUCodebaseTests */,
 			);
 		};
 /* End PBXProject section */
@@ -242,16 +205,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
+				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6D5A86C919AE5C710066C1FD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6D5A86D619AE5C710066C1FD /* InfoPlist.strings in Resources */,
+				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,27 +219,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
+				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
 				6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6D5A86C719AE5C710066C1FD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6D5A86D819AE5C710066C1FD /* NYUCodebaseTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6D5A86D019AE5C710066C1FD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6D5A86A919AE5C710066C1FD /* NYUCodebase */;
-			targetProxy = 6D5A86CF19AE5C710066C1FD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6D5A86B619AE5C710066C1FD /* InfoPlist.strings */ = {
@@ -428,46 +371,6 @@
 			};
 			name = Release;
 		};
-		6D5A86DF19AE5C710066C1FD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NYUCodebase.app/Contents/MacOS/NYUCodebase";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NYUCodebase/NYUCodebase-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "NYUCodebaseTests/NYUCodebaseTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		6D5A86E019AE5C710066C1FD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NYUCodebase.app/Contents/MacOS/NYUCodebase";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NYUCodebase/NYUCodebase-Prefix.pch";
-				INFOPLIST_FILE = "NYUCodebaseTests/NYUCodebaseTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -485,15 +388,6 @@
 			buildConfigurations = (
 				6D5A86DC19AE5C710066C1FD /* Debug */,
 				6D5A86DD19AE5C710066C1FD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6D5A86DE19AE5C710066C1FD /* Build configuration list for PBXNativeTarget "NYUCodebaseTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6D5A86DF19AE5C710066C1FD /* Debug */,
-				6D5A86E019AE5C710066C1FD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
