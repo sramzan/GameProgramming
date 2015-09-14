@@ -15,6 +15,7 @@
 		6D5A86E319AE5CD10066C1FD /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86E219AE5CD10066C1FD /* SDL2.framework */; };
 		6D5AC2D019AE6280004CB1BF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */; };
 		6D5AC2D219AE6A1E004CB1BF /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5AC2D119AE6A1E004CB1BF /* SDL2_image.framework */; };
+		6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */; };
 		6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23BB1B96CC2600BCE792 /* fragment.glsl */; };
 		6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */; };
 		6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */; };
@@ -37,6 +38,7 @@
 		6D5A86E219AE5CD10066C1FD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		6D5AC2D119AE6A1E004CB1BF /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment_textured.glsl; sourceTree = "<group>"; };
 		6DEF23BB1B96CC2600BCE792 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
 		6DEF23BD1B96CC2600BCE792 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
+				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
 				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
 				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
 				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
@@ -206,6 +209,7 @@
 			files = (
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
+				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
