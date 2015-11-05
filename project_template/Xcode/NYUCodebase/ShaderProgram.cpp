@@ -37,12 +37,10 @@ ShaderProgram::~ShaderProgram() {
 
 GLuint ShaderProgram::loadShaderFromFile(const std::string &shaderFile, GLenum type) {
     //Open a file stream with the file name
-    std::ifstream infile(shaderFile);
-    
+    std::ifstream infile("vertex_shader.frag");
     if(infile.fail()) {
         std::cout << "Error opening shader file:" << shaderFile << std::endl;
     }
-    
     //Create a string buffer and stream the file to it
     std::stringstream buffer;
     buffer << infile.rdbuf();
