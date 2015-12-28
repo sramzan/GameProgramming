@@ -9,18 +9,31 @@
 /* Begin PBXBuildFile section */
 		6D5A86AE19AE5C710066C1FD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86AD19AE5C710066C1FD /* Cocoa.framework */; };
 		6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86B619AE5C710066C1FD /* InfoPlist.strings */; };
-		6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A86B919AE5C710066C1FD /* main.cpp */; };
 		6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86BC19AE5C710066C1FD /* Credits.rtf */; };
 		6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86C519AE5C710066C1FD /* Images.xcassets */; };
 		6D5A86E319AE5CD10066C1FD /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86E219AE5CD10066C1FD /* SDL2.framework */; };
 		6D5AC2D019AE6280004CB1BF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */; };
 		6D5AC2D219AE6A1E004CB1BF /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5AC2D119AE6A1E004CB1BF /* SDL2_image.framework */; };
-		6DC7076A1BA7273500225B7D /* vertex_textured.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DC707691BA7273500225B7D /* vertex_textured.glsl */; };
-		6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */; };
-		6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23BB1B96CC2600BCE792 /* fragment.glsl */; };
-		6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */; };
-		6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */; };
-		6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6DEF23C01B96CC2600BCE792 /* vertex.glsl */; };
+		6D9D5DDE1C2F744B00E3417E /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9D5DDD1C2F744B00E3417E /* SDL2_mixer.framework */; };
+		6D9D5DFA1C2F74BB00E3417E /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DE71C2F74BB00E3417E /* Entity.cpp */; };
+		6D9D5DFB1C2F74BB00E3417E /* GameApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DE81C2F74BB00E3417E /* GameApp.cpp */; };
+		6D9D5DFC1C2F74BB00E3417E /* GameState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DE91C2F74BB00E3417E /* GameState.cpp */; };
+		6D9D5DFD1C2F74BB00E3417E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DEA1C2F74BB00E3417E /* main.cpp */; };
+		6D9D5DFE1C2F74BB00E3417E /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DEB1C2F74BB00E3417E /* Matrix.cpp */; };
+		6D9D5DFF1C2F74BB00E3417E /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DEC1C2F74BB00E3417E /* Particle.cpp */; };
+		6D9D5E001C2F74BB00E3417E /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DED1C2F74BB00E3417E /* ShaderProgram.cpp */; };
+		6D9D5E011C2F74BB00E3417E /* SheetSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DEE1C2F74BB00E3417E /* SheetSprite.cpp */; };
+		6D9D5E021C2F74BB00E3417E /* Tools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D5DEF1C2F74BB00E3417E /* Tools.cpp */; };
+		6D9D5E031C2F74BB00E3417E /* rio.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF01C2F74BB00E3417E /* rio.mp3 */; };
+		6D9D5E041C2F74BB00E3417E /* fragment_textured_colored.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF11C2F74BB00E3417E /* fragment_textured_colored.glsl */; };
+		6D9D5E051C2F74BB00E3417E /* fragment_textured.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF21C2F74BB00E3417E /* fragment_textured.glsl */; };
+		6D9D5E061C2F74BB00E3417E /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF31C2F74BB00E3417E /* fragment.glsl */; };
+		6D9D5E071C2F74BB00E3417E /* vertex_textured_colored.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF41C2F74BB00E3417E /* vertex_textured_colored.glsl */; };
+		6D9D5E081C2F74BB00E3417E /* vertex_textured.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF51C2F74BB00E3417E /* vertex_textured.glsl */; };
+		6D9D5E091C2F74BB00E3417E /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF61C2F74BB00E3417E /* vertex.glsl */; };
+		6D9D5E0A1C2F74BB00E3417E /* tileMap.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF71C2F74BB00E3417E /* tileMap.txt */; };
+		6D9D5E0B1C2F74BB00E3417E /* tileMap2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF81C2F74BB00E3417E /* tileMap2.txt */; };
+		6D9D5E0C1C2F74BB00E3417E /* tileMap3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6D9D5DF91C2F74BB00E3417E /* tileMap3.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +44,6 @@
 		6D5A86B219AE5C710066C1FD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6D5A86B519AE5C710066C1FD /* NYUCodebase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NYUCodebase-Info.plist"; sourceTree = "<group>"; };
 		6D5A86B719AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6D5A86B919AE5C710066C1FD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6D5A86BD19AE5C710066C1FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6D5A86C519AE5C710066C1FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6D5A86D319AE5C710066C1FD /* NYUCodebaseTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NYUCodebaseTests-Info.plist"; sourceTree = "<group>"; };
@@ -39,14 +51,34 @@
 		6D5A86E219AE5CD10066C1FD /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		6D5AC2CF19AE6280004CB1BF /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		6D5AC2D119AE6A1E004CB1BF /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
-		6DC707691BA7273500225B7D /* vertex_textured.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex_textured.glsl; sourceTree = "<group>"; };
-		6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment_textured.glsl; sourceTree = "<group>"; };
-		6DEF23BB1B96CC2600BCE792 /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
-		6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
-		6DEF23BD1B96CC2600BCE792 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
-		6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
-		6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
-		6DEF23C01B96CC2600BCE792 /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
+		6D9D5DDD1C2F744B00E3417E /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
+		6D9D5DDF1C2F74BB00E3417E /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Entity.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Entity.h; sourceTree = "<group>"; };
+		6D9D5DE01C2F74BB00E3417E /* GameApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameApp.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/GameApp.h; sourceTree = "<group>"; };
+		6D9D5DE11C2F74BB00E3417E /* GameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameState.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/GameState.h; sourceTree = "<group>"; };
+		6D9D5DE21C2F74BB00E3417E /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Matrix.h; sourceTree = "<group>"; };
+		6D9D5DE31C2F74BB00E3417E /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Particle.h; sourceTree = "<group>"; };
+		6D9D5DE41C2F74BB00E3417E /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderProgram.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/ShaderProgram.h; sourceTree = "<group>"; };
+		6D9D5DE51C2F74BB00E3417E /* SheetSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SheetSprite.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/SheetSprite.h; sourceTree = "<group>"; };
+		6D9D5DE61C2F74BB00E3417E /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tools.h; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Tools.h; sourceTree = "<group>"; };
+		6D9D5DE71C2F74BB00E3417E /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Entity.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Entity.cpp; sourceTree = "<group>"; };
+		6D9D5DE81C2F74BB00E3417E /* GameApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameApp.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/GameApp.cpp; sourceTree = "<group>"; };
+		6D9D5DE91C2F74BB00E3417E /* GameState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameState.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/GameState.cpp; sourceTree = "<group>"; };
+		6D9D5DEA1C2F74BB00E3417E /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/main.cpp; sourceTree = "<group>"; };
+		6D9D5DEB1C2F74BB00E3417E /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Matrix.cpp; sourceTree = "<group>"; };
+		6D9D5DEC1C2F74BB00E3417E /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Particle.cpp; sourceTree = "<group>"; };
+		6D9D5DED1C2F74BB00E3417E /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderProgram.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/ShaderProgram.cpp; sourceTree = "<group>"; };
+		6D9D5DEE1C2F74BB00E3417E /* SheetSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SheetSprite.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/SheetSprite.cpp; sourceTree = "<group>"; };
+		6D9D5DEF1C2F74BB00E3417E /* Tools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tools.cpp; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/Tools.cpp; sourceTree = "<group>"; };
+		6D9D5DF01C2F74BB00E3417E /* rio.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = rio.mp3; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/rio.mp3; sourceTree = "<group>"; };
+		6D9D5DF11C2F74BB00E3417E /* fragment_textured_colored.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fragment_textured_colored.glsl; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/fragment_textured_colored.glsl; sourceTree = "<group>"; };
+		6D9D5DF21C2F74BB00E3417E /* fragment_textured.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fragment_textured.glsl; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/fragment_textured.glsl; sourceTree = "<group>"; };
+		6D9D5DF31C2F74BB00E3417E /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fragment.glsl; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/fragment.glsl; sourceTree = "<group>"; };
+		6D9D5DF41C2F74BB00E3417E /* vertex_textured_colored.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vertex_textured_colored.glsl; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/vertex_textured_colored.glsl; sourceTree = "<group>"; };
+		6D9D5DF51C2F74BB00E3417E /* vertex_textured.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vertex_textured.glsl; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/vertex_textured.glsl; sourceTree = "<group>"; };
+		6D9D5DF61C2F74BB00E3417E /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = vertex.glsl; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/vertex.glsl; sourceTree = "<group>"; };
+		6D9D5DF71C2F74BB00E3417E /* tileMap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tileMap.txt; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/tileMap.txt; sourceTree = "<group>"; };
+		6D9D5DF81C2F74BB00E3417E /* tileMap2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tileMap2.txt; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/tileMap2.txt; sourceTree = "<group>"; };
+		6D9D5DF91C2F74BB00E3417E /* tileMap3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tileMap3.txt; path = ../../../../Students/tian_final/NYUCodebase/NYUCodebase/tileMap3.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +87,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D5AC2D019AE6280004CB1BF /* OpenGL.framework in Frameworks */,
+				6D9D5DDE1C2F744B00E3417E /* SDL2_mixer.framework in Frameworks */,
 				6D5A86AE19AE5C710066C1FD /* Cocoa.framework in Frameworks */,
 				6D5A86E319AE5CD10066C1FD /* SDL2.framework in Frameworks */,
 				6D5AC2D219AE6A1E004CB1BF /* SDL2_image.framework in Frameworks */,
@@ -116,6 +149,7 @@
 		6D5A86B419AE5C710066C1FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6D9D5DDD1C2F744B00E3417E /* SDL2_mixer.framework */,
 				6D5A86C519AE5C710066C1FD /* Images.xcassets */,
 				6D5A86B519AE5C710066C1FD /* NYUCodebase-Info.plist */,
 				6D5A86B619AE5C710066C1FD /* InfoPlist.strings */,
@@ -144,15 +178,33 @@
 		6D5A86E119AE5CAA0066C1FD /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
-				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
-				6DC707691BA7273500225B7D /* vertex_textured.glsl */,
-				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
-				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
-				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
-				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
-				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
-				6D5A86B919AE5C710066C1FD /* main.cpp */,
+				6D9D5DDF1C2F74BB00E3417E /* Entity.h */,
+				6D9D5DE01C2F74BB00E3417E /* GameApp.h */,
+				6D9D5DE11C2F74BB00E3417E /* GameState.h */,
+				6D9D5DE21C2F74BB00E3417E /* Matrix.h */,
+				6D9D5DE31C2F74BB00E3417E /* Particle.h */,
+				6D9D5DE41C2F74BB00E3417E /* ShaderProgram.h */,
+				6D9D5DE51C2F74BB00E3417E /* SheetSprite.h */,
+				6D9D5DE61C2F74BB00E3417E /* Tools.h */,
+				6D9D5DE71C2F74BB00E3417E /* Entity.cpp */,
+				6D9D5DE81C2F74BB00E3417E /* GameApp.cpp */,
+				6D9D5DE91C2F74BB00E3417E /* GameState.cpp */,
+				6D9D5DEA1C2F74BB00E3417E /* main.cpp */,
+				6D9D5DEB1C2F74BB00E3417E /* Matrix.cpp */,
+				6D9D5DEC1C2F74BB00E3417E /* Particle.cpp */,
+				6D9D5DED1C2F74BB00E3417E /* ShaderProgram.cpp */,
+				6D9D5DEE1C2F74BB00E3417E /* SheetSprite.cpp */,
+				6D9D5DEF1C2F74BB00E3417E /* Tools.cpp */,
+				6D9D5DF01C2F74BB00E3417E /* rio.mp3 */,
+				6D9D5DF11C2F74BB00E3417E /* fragment_textured_colored.glsl */,
+				6D9D5DF21C2F74BB00E3417E /* fragment_textured.glsl */,
+				6D9D5DF31C2F74BB00E3417E /* fragment.glsl */,
+				6D9D5DF41C2F74BB00E3417E /* vertex_textured_colored.glsl */,
+				6D9D5DF51C2F74BB00E3417E /* vertex_textured.glsl */,
+				6D9D5DF61C2F74BB00E3417E /* vertex.glsl */,
+				6D9D5DF71C2F74BB00E3417E /* tileMap.txt */,
+				6D9D5DF81C2F74BB00E3417E /* tileMap2.txt */,
+				6D9D5DF91C2F74BB00E3417E /* tileMap3.txt */,
 			);
 			name = Code;
 			sourceTree = "<group>";
@@ -211,12 +263,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
-				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
-				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
+				6D9D5E081C2F74BB00E3417E /* vertex_textured.glsl in Resources */,
+				6D9D5E051C2F74BB00E3417E /* fragment_textured.glsl in Resources */,
+				6D9D5E0B1C2F74BB00E3417E /* tileMap2.txt in Resources */,
+				6D9D5E041C2F74BB00E3417E /* fragment_textured_colored.glsl in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
-				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
-				6DC7076A1BA7273500225B7D /* vertex_textured.glsl in Resources */,
+				6D9D5E071C2F74BB00E3417E /* vertex_textured_colored.glsl in Resources */,
+				6D9D5E0A1C2F74BB00E3417E /* tileMap.txt in Resources */,
+				6D9D5E061C2F74BB00E3417E /* fragment.glsl in Resources */,
+				6D9D5E031C2F74BB00E3417E /* rio.mp3 in Resources */,
+				6D9D5E091C2F74BB00E3417E /* vertex.glsl in Resources */,
+				6D9D5E0C1C2F74BB00E3417E /* tileMap3.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,9 +285,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
-				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
-				6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */,
+				6D9D5E011C2F74BB00E3417E /* SheetSprite.cpp in Sources */,
+				6D9D5DFA1C2F74BB00E3417E /* Entity.cpp in Sources */,
+				6D9D5DFF1C2F74BB00E3417E /* Particle.cpp in Sources */,
+				6D9D5DFC1C2F74BB00E3417E /* GameState.cpp in Sources */,
+				6D9D5E001C2F74BB00E3417E /* ShaderProgram.cpp in Sources */,
+				6D9D5DFD1C2F74BB00E3417E /* main.cpp in Sources */,
+				6D9D5E021C2F74BB00E3417E /* Tools.cpp in Sources */,
+				6D9D5DFB1C2F74BB00E3417E /* GameApp.cpp in Sources */,
+				6D9D5DFE1C2F74BB00E3417E /* Matrix.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +413,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/Library/Frameworks/SDL2_image.framework/Versions/A/Headers,
 					/Library/Frameworks/SDL2.framework/Versions/A/Headers,
+					/Library/Frameworks/SDL2_mixer.framework/Versions/A/Headers,
 				);
 				INFOPLIST_FILE = "NYUCodebase/NYUCodebase-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -372,6 +437,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/Library/Frameworks/SDL2_image.framework/Versions/A/Headers,
 					/Library/Frameworks/SDL2.framework/Versions/A/Headers,
+					/Library/Frameworks/SDL2_mixer.framework/Versions/A/Headers,
 				);
 				INFOPLIST_FILE = "NYUCodebase/NYUCodebase-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
