@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		141114371C687E8C0003BE05 /* dragonBall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 141114361C687E8C0003BE05 /* dragonBall.jpg */; };
 		141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114381C696DD50003BE05 /* cardSpadesQ.png */; };
-		148414C21C685ACF0052B87A /* Dragon-Ball-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 148414C11C685ACF0052B87A /* Dragon-Ball-icon.png */; };
+		141114421C698A860003BE05 /* cardSpadesJ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114401C698A860003BE05 /* cardSpadesJ.png */; };
+		141114431C698A860003BE05 /* cardSpadesK.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114411C698A860003BE05 /* cardSpadesK.png */; };
 		6D5A86AE19AE5C710066C1FD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86AD19AE5C710066C1FD /* Cocoa.framework */; };
 		6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86B619AE5C710066C1FD /* InfoPlist.strings */; };
 		6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A86B919AE5C710066C1FD /* main.cpp */; };
@@ -27,9 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		141114361C687E8C0003BE05 /* dragonBall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = dragonBall.jpg; path = ../../../../../../../Pictures/dragonBall.jpg; sourceTree = "<group>"; };
 		141114381C696DD50003BE05 /* cardSpadesQ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesQ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesQ.png"; sourceTree = "<group>"; };
-		148414C11C685ACF0052B87A /* Dragon-Ball-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Dragon-Ball-icon.png"; path = "../../../../../../../Pictures/Dragon-Ball-icon.png"; sourceTree = "<group>"; };
+		141114401C698A860003BE05 /* cardSpadesJ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesJ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesJ.png"; sourceTree = "<group>"; };
+		141114411C698A860003BE05 /* cardSpadesK.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesK.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesK.png"; sourceTree = "<group>"; };
 		6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYUCodebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D5A86AD19AE5C710066C1FD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6D5A86B019AE5C710066C1FD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -150,9 +150,9 @@
 		6D5A86E119AE5CAA0066C1FD /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				141114401C698A860003BE05 /* cardSpadesJ.png */,
+				141114411C698A860003BE05 /* cardSpadesK.png */,
 				141114381C696DD50003BE05 /* cardSpadesQ.png */,
-				141114361C687E8C0003BE05 /* dragonBall.jpg */,
-				148414C11C685ACF0052B87A /* Dragon-Ball-icon.png */,
 				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
 				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
 				6DC707691BA7273500225B7D /* vertex_textured.glsl */,
@@ -219,11 +219,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				148414C21C685ACF0052B87A /* Dragon-Ball-icon.png in Resources */,
 				141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */,
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
+				141114421C698A860003BE05 /* cardSpadesJ.png in Resources */,
+				141114431C698A860003BE05 /* cardSpadesK.png in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
-				141114371C687E8C0003BE05 /* dragonBall.jpg in Resources */,
 				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,

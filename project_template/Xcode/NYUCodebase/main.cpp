@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 #include "Matrix.h"
 #include "ShaderProgram.h"
+#include <math.h>
 using namespace std;
 
 #ifdef _WINDOWS
@@ -29,80 +30,142 @@ GLuint LoadTexture(const char *image_path) {
     return textureID;
 }
 
-void setTextures(ShaderProgram program, GLuint texture, float* vertices, float* texCords){
-    glEnable(GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, texture);
+void createWindow(){
+    SDL_Init(SDL_INIT_VIDEO);
+    displayWindow = SDL_CreateWindow("Extremely Intense Outrageous Card Assembly", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1440, 720, SDL_WINDOW_OPENGL);
+    SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
+    SDL_GL_MakeCurrent(displayWindow, context);
+}
+
+void setView(){
+    //    Matrix projectionMatrix, modelMatrix, viewMatrix;
+    glClearColor(.5f, 1.0f, .5f, 1.0f);
     
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-    glEnableVertexAttribArray(program.positionAttribute);
-    
-    glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCords);
-    glEnableVertexAttribArray(program.texCoordAttribute);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    
-    glDisableVertexAttribArray(program.positionAttribute);
-    glDisableVertexAttribArray(program.texCoordAttribute);
+    // Setup/general run tasks
+    glViewport(0, 0, 1440, 720);
+}
+
+void setProgramID(ShaderProgram* program){
+    glUseProgram(program->programID);
 }
 
 class SimpleAnimation{
 public:
-    void createWindow(){
-        SDL_Init(SDL_INIT_VIDEO);
-        displayWindow = SDL_CreateWindow("Extremely Intense Outrageous Flying Dragonball", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1440, 720, SDL_WINDOW_OPENGL);
-        SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
-        SDL_GL_MakeCurrent(displayWindow, context);
+    SimpleAnimation(ShaderProgram* prog, GLuint text){
+        this->texture = text;
+        this->program = prog;
     }
+    
+    void setPerspective(){
+        projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
+        
+    }
+    
+    void setMatrices(){
+        program->setModelMatrix(modelMatrix);
+        program->setProjectionMatrix(projectionMatrix);
+        program->setViewMatrix(viewMatrix);
+    }
+    
+    void setTexture(float* verticesArray, float* texCords){
+        glEnable(GL_BLEND);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, verticesArray);
+        glEnableVertexAttribArray(program->positionAttribute);
+        
+        glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCords);
+        glEnableVertexAttribArray(program->texCoordAttribute);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        
+        glDisableVertexAttribArray(program->positionAttribute);
+        glDisableVertexAttribArray(program->texCoordAttribute);
+    }
+    
+    void moveToTheRight(int xPos){
+        if (xPos <= 0)
+            return;
+        
+        modelMatrix.Translate(xPos, 0, 0);
+//        program->setModelMatrix(modelMatrix);
+    }
+    
+    Matrix projectionMatrix;
+    Matrix modelMatrix;
+    Matrix viewMatrix;
+    GLuint texture;
+    ShaderProgram* program;
 };
 
 int main(int argc, char *argv[])
 {
     
 //    SimpleAnimation newAnimation;
-    SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("Extremely Intense Outrageous Flying Dragonball", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1440, 720, SDL_WINDOW_OPENGL);
-    SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
-    SDL_GL_MakeCurrent(displayWindow, context);
+    createWindow();
     
-    // Creates basic window for display purposes
-//    newAnimation.createWindow();
 #ifdef _WINDOWS
     glewInit();
 #endif
     
-//    Matrix projectionMatrix, modelMatrix, viewMatrix;
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    setView();
     
-    
-    // Setup/general run tasks
-    glViewport(0, 0, 1440, 720);
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
-    bool done = false;
-    
-    // Load a new texture
-    GLuint dbzTexture = LoadTexture("cardSpadesQ.png");
-    
-    Matrix projectionMatrix;
-    Matrix modelMatrix;
-    Matrix viewMatrix;
-    
-    projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
-    glUseProgram(program.programID);
-    
-    // Define vertex points for use with internal matrices
-    float vertices[]     = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
-    float textureCords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    setProgramID(&program);
     
     SDL_Event event;
-    
-    // define xposition for dbz texture
-    float xPosition = 0;
+    bool done = false;
     
     // define var for tracking current fram tick time
     float lastFrameTicks = 0.0;
+    float xpos = 0;
+    
+    // Define vertex points for use with internal matrices
+    float vertices[]      = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
+    float textureCords[]  = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    
+    float kingVertices[]  = {-0.5 - 1, -0.5 - 1, 0.5 - 1, -0.5 - 1, 0.5 - 1, 0.5 - 1, -0.5 - 1, -0.5 - 1, 0.5 - 1, 0.5 - 1, -0.5 - 1, 0.5 - 1};
+    float kingTextCords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    
+    float jackVertices[]  = {-0.5 + 1, -0.5 + 1, 0.5 + 1, -0.5 + 1, 0.5 + 1, 0.5 + 1, -0.5 + 1, -0.5 + 1, 0.5 + 1, 0.5 + 1, -0.5 + 1, 0.5 + 1};
+    float jackTextCords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    
+    
+    
+    /*
+     - Following code defines the various textures, and performs logic in this prorgam
+     - Various textures are created via the SimpleAnimation class
+     
+     Usage:
+     
+     SimpleAnimation (ShaderProgram* programPtr, GLuint texture)
+            programPtr - can be a ShaderProgram* or the address of the program created
+            texture - this should be the already loaded texture id
+     
+     .setPerspective()
+     .setMatrices()
+     .setTexture(float[] vertices, float[] textureCords)
+     .moveToTheRight
+     
+     */
+    
+    SimpleAnimation queenCard = SimpleAnimation(&program, LoadTexture("cardSpadesQ.png"));
+    SimpleAnimation kingCard  = SimpleAnimation(&program, LoadTexture("cardSpadesK.png"));
+    SimpleAnimation jackCard  = SimpleAnimation(&program, LoadTexture("cardSpadesJ.png"));
+    
+    queenCard.setPerspective();
+    kingCard.setPerspective();
+    jackCard.setPerspective();
+    
     
     while (!done) {
         
+        float ticks = (float)SDL_GetTicks()/1000.0f;
+        float elapsed = ticks - lastFrameTicks;
+        lastFrameTicks = ticks;
+        xpos += elapsed * .1;
+        cout << "elapsed: " << elapsed << endl;
+        cout << "xpos: " << xpos << endl;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
@@ -110,35 +173,24 @@ int main(int argc, char *argv[])
         }
         glClear(GL_COLOR_BUFFER_BIT);
         
-        program.setModelMatrix(modelMatrix);
-        program.setProjectionMatrix(projectionMatrix);
-        program.setViewMatrix(viewMatrix);
+        queenCard.setMatrices();
+        queenCard.setTexture(vertices, textureCords);
         
-        modelMatrix.Rotate(.1 * (3.14159/180));
+        queenCard.modelMatrix.Rotate(5.5 * (M_1_PI/180));
         
-//        float ticks = (float)SDL_GetTicks()/1000.0f;
-//        float elapsed = ticks - lastFrameTicks;
-//        lastFrameTicks = ticks;
-//        glBindTexture(GL_TEXTURE_2D, dbzTexture);
-        setTextures(program, dbzTexture, vertices, textureCords);
+        
+        kingCard.setMatrices();
+        kingCard.setTexture(kingVertices, kingTextCords);
+        
+        jackCard.setMatrices();
+        jackCard.setTexture(jackVertices, jackTextCords);
+        jackCard.moveToTheRight(xpos);
         
         SDL_GL_SwapWindow(displayWindow);
         
     }
     
-    
-    
     SDL_Quit();
     return 0;
 }
-
-
-//glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-//glEnableVertexAttribArray(program.positionAttribute);
-//glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
-//glEnableVertexAttribArray(program.texCoordAttribute);
-//glDrawArrays(GL_TRIANGLES, 0, 6);
-//glDisableVertexAttribArray(program.positionAttribute);
-//glDisableVertexAttribArray(program.texCoordAttribute);
-
 
