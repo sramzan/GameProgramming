@@ -15,6 +15,9 @@ using namespace std;
 #define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
 #endif
 
+int WINDOW_HEIGHT = 900;
+int WINDOW_WIDTH  = 1500;
+
 SDL_Window* displayWindow;
 
 GLuint LoadTexture(const char *image_path) {
@@ -30,23 +33,21 @@ GLuint LoadTexture(const char *image_path) {
     return textureID;
 }
 
-void createWindow(){
+void createWindow(const char* nameOfGame){
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("Extremely Intense Outrageous Card Assembly", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1440, 720, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow(nameOfGame, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
-}
-
-void setView(){
-    //    Matrix projectionMatrix, modelMatrix, viewMatrix;
-    glClearColor(.5f, 1.0f, .5f, 1.0f);
-    
-    // Setup/general run tasks
-    glViewport(0, 0, 1440, 720);
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 void setProgramID(ShaderProgram* program){
     glUseProgram(program->programID);
+}
+
+void clearScreen(float red, float green, float blue, float alpha){
+    glClearColor(red, green, blue, alpha);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 class SimpleAnimation{
@@ -58,7 +59,6 @@ public:
     
     void setPerspective(){
         projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
-        
     }
     
     void setMatrices(){
@@ -83,12 +83,8 @@ public:
         glDisableVertexAttribArray(program->texCoordAttribute);
     }
     
-    void moveToTheRight(int xPos){
-        if (xPos <= 0)
-            return;
-        
-        modelMatrix.Translate(xPos, 0, 0);
-//        program->setModelMatrix(modelMatrix);
+    void rotate(float rotateAmt){
+        modelMatrix.Rotate(rotateAmt);
     }
     
     Matrix projectionMatrix;
@@ -101,36 +97,66 @@ public:
 int main(int argc, char *argv[])
 {
     
-//    SimpleAnimation newAnimation;
-    createWindow();
+    createWindow("Extremely Intense Outrageous Card Assembly");
     
 #ifdef _WINDOWS
     glewInit();
 #endif
-    
-    setView();
     
     ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     setProgramID(&program);
     
     SDL_Event event;
     bool done = false;
+    float rotateSpeedQ = -7 * (M_1_PI/180);
+    float rotateSpeedK = -5 * (M_1_PI/180);
+    float rotateSpeedJ = -5 * (M_1_PI/180);
     
     // define var for tracking current fram tick time
     float lastFrameTicks = 0.0;
     float xpos = 0;
     
     // Define vertex points for use with internal matrices
-    float vertices[]      = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5};
-    float textureCords[]  = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    float queenVertices[] = {
+        -0.5, -0.5, 0.5,
+        -0.5,  0.5, 0.5,
+        -0.5, -0.5, 0.5,
+         0.5, -0.5, 0.5
+    };
     
-    float kingVertices[]  = {-0.5 - 1, -0.5 - 1, 0.5 - 1, -0.5 - 1, 0.5 - 1, 0.5 - 1, -0.5 - 1, -0.5 - 1, 0.5 - 1, 0.5 - 1, -0.5 - 1, 0.5 - 1};
-    float kingTextCords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    float queenTextCords[] = {
+        0.0, 1.0, 1.0,
+        1.0, 1.0, 0.0,
+        0.0, 1.0, 1.0,
+        0.0, 0.0, 0.0
+    };
     
-    float jackVertices[]  = {-0.5 + 1, -0.5 + 1, 0.5 + 1, -0.5 + 1, 0.5 + 1, 0.5 + 1, -0.5 + 1, -0.5 + 1, 0.5 + 1, 0.5 + 1, -0.5 + 1, 0.5 + 1};
-    float jackTextCords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+    float kingVertices[]  = {
+        -0.5 - 1, -0.5 - 1, 0.5 - 1,
+        -0.5 - 1,  0.5 - 1, 0.5 - 1,
+        -0.5 - 1, -0.5 - 1, 0.5 - 1,
+         0.5 - 1, -0.5 - 1, 0.5 - 1
+    };
     
+    float kingTextCords[] = {
+        0.0, 1.0, 1.0,
+        1.0, 1.0, 0.0,
+        0.0, 1.0, 1.0,
+        0.0, 0.0, 0.0
+    };
     
+    float jackVertices[]  = {
+        -0.5 + 1, -0.5 + 1, 0.5 + 1,
+        -0.5 + 1,  0.5 + 1, 0.5 + 1,
+        -0.5 + 1, -0.5 + 1, 0.5 + 1,
+         0.5 + 1, -0.5 + 1, 0.5 + 1
+    };
+    
+    float jackTextCords[] = {
+        0.0, 1.0, 1.0,
+        1.0, 1.0, 0.0,
+        0.0, 1.0, 1.0,
+        0.0, 0.0, 0.0};
     
     /*
      - Following code defines the various textures, and performs logic in this prorgam
@@ -160,31 +186,30 @@ int main(int argc, char *argv[])
     
     while (!done) {
         
-        float ticks = (float)SDL_GetTicks()/1000.0f;
-        float elapsed = ticks - lastFrameTicks;
-        lastFrameTicks = ticks;
-        xpos += elapsed * .1;
-        cout << "elapsed: " << elapsed << endl;
-        cout << "xpos: " << xpos << endl;
+//        float ticks = (float)SDL_GetTicks()/1000.0f;
+//        float elapsed = ticks - lastFrameTicks;
+//        lastFrameTicks = ticks;
+//        xpos += elapsed * .1;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
             }
         }
-        glClear(GL_COLOR_BUFFER_BIT);
+        clearScreen(.5f, 0.3f, .7f, 0.0f);
         
         queenCard.setMatrices();
-        queenCard.setTexture(vertices, textureCords);
+        queenCard.setTexture(queenVertices, queenTextCords);
         
-        queenCard.modelMatrix.Rotate(5.5 * (M_1_PI/180));
+        queenCard.modelMatrix.Rotate(rotateSpeedQ);
         
         
         kingCard.setMatrices();
         kingCard.setTexture(kingVertices, kingTextCords);
+        kingCard.rotate(rotateSpeedK);
         
         jackCard.setMatrices();
         jackCard.setTexture(jackVertices, jackTextCords);
-        jackCard.moveToTheRight(xpos);
+        jackCard.rotate(rotateSpeedJ);
         
         SDL_GL_SwapWindow(displayWindow);
         
