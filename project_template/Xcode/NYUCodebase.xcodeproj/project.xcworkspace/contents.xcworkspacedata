@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../NYUCodebase/vertexData.cpp">
+   </FileRef>
+   <FileRef
       location = "self:NYUCodebase.xcodeproj">
    </FileRef>
 </Workspace>
