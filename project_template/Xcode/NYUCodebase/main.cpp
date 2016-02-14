@@ -15,10 +15,10 @@ using namespace std;
 #define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
 #endif
 
-int WINDOW_HEIGHT = 900;
-int WINDOW_WIDTH  = 1500;
+static int WINDOW_HEIGHT = 900;
+static int WINDOW_WIDTH  = 1500;
 
-SDL_Window* displayWindow;
+static SDL_Window* displayWindow;
 
 GLuint LoadTexture(const char *image_path) {
     SDL_Surface *surface = IMG_Load(image_path);
@@ -34,11 +34,11 @@ GLuint LoadTexture(const char *image_path) {
 }
 
 void createWindow(const char* nameOfGame){
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO); // initializes SDL
     displayWindow = SDL_CreateWindow(nameOfGame, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); // will set the rendering area of the window. Tells OpenGL the rendering area, as it does not know how large the window is. 0,0 defines a starting position. You can actually have multiple viewports in one window (i.e. multiple views in an editing software)
 }
 
 void setProgramID(ShaderProgram* program){
@@ -58,7 +58,7 @@ public:
     }
     
     void setPerspective(){
-        projectionMatrix.setOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
+        projectionMatrix.setOrthoProjection(-4, 4, -2.0f, 2.0f, -1.0f, 1.0f); /// will look the same anywhere as the viewport sets the amount of pixels. This sets a projection on the screen for where images can be drawn (check this)
     }
     
     void setMatrices(){
@@ -67,7 +67,7 @@ public:
         program->setViewMatrix(viewMatrix);
     }
     
-    void setTexture(float* verticesArray, float* texCords){
+    void drawTexture(float* verticesArray, float* texCords){
         glEnable(GL_BLEND);
         glBindTexture(GL_TEXTURE_2D, texture);
         
@@ -87,6 +87,10 @@ public:
         modelMatrix.Rotate(rotateAmt);
     }
     
+    void moveToTheRight(float xPos){
+        modelMatrix.Translate(xPos, 0, 0);
+    }
+    
     Matrix projectionMatrix;
     Matrix modelMatrix;
     Matrix viewMatrix;
@@ -103,7 +107,7 @@ int main(int argc, char *argv[])
     glewInit();
 #endif
     
-    ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
+    static ShaderProgram program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
     setProgramID(&program);
     
     SDL_Event event;
@@ -118,10 +122,12 @@ int main(int argc, char *argv[])
     
     // Define vertex points for use with internal matrices
     float queenVertices[] = {
-        -0.5, -0.5, 0.5,
-        -0.5,  0.5, 0.5,
-        -0.5, -0.5, 0.5,
-         0.5, -0.5, 0.5
+        -0.5, -0.5,
+         0.5, -0.5,
+         0.5,  0.5,
+        -0.5, -0.5,
+         0.5,  0.5,
+        -0.5,  0.5
     };
     
     float queenTextCords[] = {
@@ -186,10 +192,10 @@ int main(int argc, char *argv[])
     
     while (!done) {
         
-//        float ticks = (float)SDL_GetTicks()/1000.0f;
-//        float elapsed = ticks - lastFrameTicks;
-//        lastFrameTicks = ticks;
-//        xpos += elapsed * .1;
+        float ticks = (float)SDL_GetTicks()/1000.0f;
+        float elapsed = ticks - lastFrameTicks;
+        lastFrameTicks = ticks;
+        xpos += elapsed * .9;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
@@ -198,19 +204,19 @@ int main(int argc, char *argv[])
         clearScreen(.5f, 0.3f, .7f, 0.0f);
         
         queenCard.setMatrices();
-        queenCard.setTexture(queenVertices, queenTextCords);
+        queenCard.drawTexture(queenVertices, queenTextCords);
         
         queenCard.modelMatrix.Rotate(rotateSpeedQ);
         
         
         kingCard.setMatrices();
-        kingCard.setTexture(kingVertices, kingTextCords);
+        kingCard.drawTexture(kingVertices, kingTextCords);
         kingCard.rotate(rotateSpeedK);
         
         jackCard.setMatrices();
-        jackCard.setTexture(jackVertices, jackTextCords);
+        jackCard.drawTexture(jackVertices, jackTextCords);
         jackCard.rotate(rotateSpeedJ);
-        
+
         SDL_GL_SwapWindow(displayWindow);
         
     }

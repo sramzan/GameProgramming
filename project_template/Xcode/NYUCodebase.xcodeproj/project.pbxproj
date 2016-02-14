@@ -10,6 +10,11 @@
 		141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114381C696DD50003BE05 /* cardSpadesQ.png */; };
 		141114421C698A860003BE05 /* cardSpadesJ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114401C698A860003BE05 /* cardSpadesJ.png */; };
 		141114431C698A860003BE05 /* cardSpadesK.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114411C698A860003BE05 /* cardSpadesK.png */; };
+		146F885B1C6D2201000B7F9B /* windowGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 146F885A1C6D2201000B7F9B /* windowGenerator.cpp */; };
+		14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4341C6D281500DF1A56 /* programGenerator.cpp */; };
+		14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */; };
+		14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */; };
+		14CBA43E1C70F00200DF1A56 /* pong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43D1C70F00200DF1A56 /* pong.cpp */; };
 		6D5A86AE19AE5C710066C1FD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86AD19AE5C710066C1FD /* Cocoa.framework */; };
 		6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86B619AE5C710066C1FD /* InfoPlist.strings */; };
 		6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A86B919AE5C710066C1FD /* main.cpp */; };
@@ -30,6 +35,11 @@
 		141114381C696DD50003BE05 /* cardSpadesQ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesQ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesQ.png"; sourceTree = "<group>"; };
 		141114401C698A860003BE05 /* cardSpadesJ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesJ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesJ.png"; sourceTree = "<group>"; };
 		141114411C698A860003BE05 /* cardSpadesK.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesK.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesK.png"; sourceTree = "<group>"; };
+		146F885A1C6D2201000B7F9B /* windowGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = windowGenerator.cpp; sourceTree = "<group>"; };
+		14CBA4341C6D281500DF1A56 /* programGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = programGenerator.cpp; path = ../programGenerator.cpp; sourceTree = "<group>"; };
+		14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = NYUCodebase/exceptions.cpp; sourceTree = SOURCE_ROOT; };
+		14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenObject.cpp; sourceTree = SOURCE_ROOT; };
+		14CBA43D1C70F00200DF1A56 /* pong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pong.cpp; sourceTree = "<group>"; };
 		6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYUCodebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D5A86AD19AE5C710066C1FD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6D5A86B019AE5C710066C1FD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -70,6 +80,76 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		146F88571C6D219A000B7F9B /* Simple Animation */ = {
+			isa = PBXGroup;
+			children = (
+				141114401C698A860003BE05 /* cardSpadesJ.png */,
+				141114411C698A860003BE05 /* cardSpadesK.png */,
+				141114381C696DD50003BE05 /* cardSpadesQ.png */,
+				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
+				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
+				6DC707691BA7273500225B7D /* vertex_textured.glsl */,
+				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
+				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
+				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
+				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
+				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
+				6D5A86B919AE5C710066C1FD /* main.cpp */,
+			);
+			name = "Simple Animation";
+			sourceTree = "<group>";
+		};
+		146F88581C6D21C7000B7F9B /* Common-Service */ = {
+			isa = PBXGroup;
+			children = (
+				14CBA4391C6D2F0E00DF1A56 /* Animation */,
+				14CBA4361C6D2B7900DF1A56 /* Exceptions */,
+				14CBA4331C6D27ED00DF1A56 /* ProgramGeneration */,
+				146F88591C6D21D5000B7F9B /* WindowGeneration */,
+			);
+			name = "Common-Service";
+			sourceTree = "<group>";
+		};
+		146F88591C6D21D5000B7F9B /* WindowGeneration */ = {
+			isa = PBXGroup;
+			children = (
+				146F885A1C6D2201000B7F9B /* windowGenerator.cpp */,
+			);
+			name = WindowGeneration;
+			sourceTree = "<group>";
+		};
+		14CBA4331C6D27ED00DF1A56 /* ProgramGeneration */ = {
+			isa = PBXGroup;
+			children = (
+				14CBA4341C6D281500DF1A56 /* programGenerator.cpp */,
+			);
+			name = ProgramGeneration;
+			sourceTree = "<group>";
+		};
+		14CBA4361C6D2B7900DF1A56 /* Exceptions */ = {
+			isa = PBXGroup;
+			children = (
+				14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */,
+			);
+			name = Exceptions;
+			sourceTree = "<group>";
+		};
+		14CBA4391C6D2F0E00DF1A56 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */,
+			);
+			name = Animation;
+			sourceTree = "<group>";
+		};
+		14CBA43C1C70EFE800DF1A56 /* Pong */ = {
+			isa = PBXGroup;
+			children = (
+				14CBA43D1C70F00200DF1A56 /* pong.cpp */,
+			);
+			name = Pong;
+			sourceTree = "<group>";
+		};
 		6D5A86A119AE5C710066C1FD = {
 			isa = PBXGroup;
 			children = (
@@ -150,18 +230,9 @@
 		6D5A86E119AE5CAA0066C1FD /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				141114401C698A860003BE05 /* cardSpadesJ.png */,
-				141114411C698A860003BE05 /* cardSpadesK.png */,
-				141114381C696DD50003BE05 /* cardSpadesQ.png */,
-				6DEF23BB1B96CC2600BCE792 /* fragment.glsl */,
-				6DE9D2F01BA6AB8C002D599C /* fragment_textured.glsl */,
-				6DC707691BA7273500225B7D /* vertex_textured.glsl */,
-				6DEF23BC1B96CC2600BCE792 /* Matrix.cpp */,
-				6DEF23BD1B96CC2600BCE792 /* Matrix.h */,
-				6DEF23BE1B96CC2600BCE792 /* ShaderProgram.cpp */,
-				6DEF23BF1B96CC2600BCE792 /* ShaderProgram.h */,
-				6DEF23C01B96CC2600BCE792 /* vertex.glsl */,
-				6D5A86B919AE5C710066C1FD /* main.cpp */,
+				14CBA43C1C70EFE800DF1A56 /* Pong */,
+				146F88581C6D21C7000B7F9B /* Common-Service */,
+				146F88571C6D219A000B7F9B /* Simple Animation */,
 			);
 			name = Code;
 			sourceTree = "<group>";
@@ -240,8 +311,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
+				14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
+				14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */,
+				14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */,
+				14CBA43E1C70F00200DF1A56 /* pong.cpp in Sources */,
 				6D5A86BA19AE5C710066C1FD /* main.cpp in Sources */,
+				146F885B1C6D2201000B7F9B /* windowGenerator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
