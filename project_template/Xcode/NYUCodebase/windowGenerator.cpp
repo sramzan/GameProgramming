@@ -43,6 +43,10 @@ public:
         glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
     
+    SDL_Window* getDispWindow(){
+        return displayWindow;
+    }
+    
 private:
     int WINDOW_HEIGHT;
     int WINDOW_WIDTH;

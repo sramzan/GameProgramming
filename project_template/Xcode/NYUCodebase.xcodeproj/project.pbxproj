@@ -11,6 +11,7 @@
 		141114421C698A860003BE05 /* cardSpadesJ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114401C698A860003BE05 /* cardSpadesJ.png */; };
 		141114431C698A860003BE05 /* cardSpadesK.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114411C698A860003BE05 /* cardSpadesK.png */; };
 		146F885B1C6D2201000B7F9B /* windowGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 146F885A1C6D2201000B7F9B /* windowGenerator.cpp */; };
+		148923AC1C7178280030103A /* input_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148923AB1C7178280030103A /* input_output.cpp */; };
 		14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4341C6D281500DF1A56 /* programGenerator.cpp */; };
 		14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */; };
 		14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */; };
@@ -36,6 +37,7 @@
 		141114401C698A860003BE05 /* cardSpadesJ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesJ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesJ.png"; sourceTree = "<group>"; };
 		141114411C698A860003BE05 /* cardSpadesK.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesK.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesK.png"; sourceTree = "<group>"; };
 		146F885A1C6D2201000B7F9B /* windowGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = windowGenerator.cpp; sourceTree = "<group>"; };
+		148923AB1C7178280030103A /* input_output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_output.cpp; sourceTree = "<group>"; };
 		14CBA4341C6D281500DF1A56 /* programGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = programGenerator.cpp; path = ../programGenerator.cpp; sourceTree = "<group>"; };
 		14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = NYUCodebase/exceptions.cpp; sourceTree = SOURCE_ROOT; };
 		14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenObject.cpp; sourceTree = SOURCE_ROOT; };
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */,
+				148923AB1C7178280030103A /* input_output.cpp */,
 			);
 			name = Animation;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
 				14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
+				148923AC1C7178280030103A /* input_output.cpp in Sources */,
 				14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */,
 				14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */,
 				14CBA43E1C70F00200DF1A56 /* pong.cpp in Sources */,

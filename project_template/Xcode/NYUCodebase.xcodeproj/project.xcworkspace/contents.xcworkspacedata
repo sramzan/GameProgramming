@@ -2,21 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../NYUCodebase/Pong.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../animation.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../NYUCodebase/exceptions.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../programGenerator.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../NYUCodebase/programGenerator.cpp">
-   </FileRef>
-   <FileRef
       location = "self:NYUCodebase.xcodeproj">
    </FileRef>
 </Workspace>

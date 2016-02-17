@@ -23,15 +23,16 @@ using namespace std;
 #define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
 #endif
 
-
 class ScreenObject{
 public:
     ScreenObject(ShaderProgram* prog){
         this->program = prog;
     }
     
-    void setPerspective(){
-        projectionMatrix.setOrthoProjection(-4, 4, -2.0f, 2.0f, -1.0f, 1.0f);
+    void setProjection(){
+        // setOrthoProjection(      float left, float right, float bottom, float top, float near, float far);
+        projectionMatrix.setOrthoProjection(LEFT_BOUNDARY, RIGHT_BOUNDARY, BOTTOM_BOUNDARY, TOP_BOUNDARY, NEAR_BOUNDARY, FAR_BOUNDARY);
+//        projectionMatrix.setOrthoProjection(-4, 4, -2.0f, 2.0f, -1.0f, 1.0f);
     }
     
     void setMatrices(){
@@ -69,41 +70,58 @@ public:
         program->setModelMatrix(modelMatrix);
     }
     
-    void moveToTheRight(float xPos){
-        if (xPos >= 0){
-            modelMatrix.Translate(xPos, 0, 0);
+    void moveToTheRight(float xUnits){
+        if (xUnits >= 0){
+            leftPos  += xUnits;
+            rightPos += xUnits;
+            modelMatrix.Translate(xUnits, 0, 0);
             program->setModelMatrix(modelMatrix); // MUST set the model matrix everytime a transformation is made as the program will not know what changes have been in the matrix, if not explicitly told. The matrices simply hold a bunch of values that can be used to plot points on a screen
         }
     }
     
-    void moveToTheLeft(float xPos){
-        if (xPos <= 0){
-            modelMatrix.Translate(xPos, 0, 0);
+    void moveToTheLeft(float xUnits){
+        if (xUnits <= 0){
+            leftPos += xUnits;
+            rightPos += xUnits;
+            modelMatrix.Translate(xUnits, 0, 0);
             program->setModelMatrix(modelMatrix);
         }
     }
     
-    void moveUp(float yPos){
-        if (yPos >= 0){
-            modelMatrix.Translate(0, yPos, 0);
+    void moveUp(float yUnits){
+        if (yUnits >= 0){
+            topPos += yUnits;
+            bottomPos += yUnits;
+            modelMatrix.Translate(0, yUnits, 0);
             program->setModelMatrix(modelMatrix);
         }
     }
     
-    void moveDown(float yPos){
-        if (yPos <= 0){
-            modelMatrix.Translate(0, yPos, 0);
+    void moveDown(float yUnits){
+        if (yUnits <= 0){
+            topPos += yUnits;
+            bottomPos += yUnits;
+            modelMatrix.Translate(0, yUnits, 0);
             program->setModelMatrix(modelMatrix);
         }
     }
     
-    void move(float xPos, float yPos, float zPos){ // General move function to move the screen obj around on the screen
-        modelMatrix.Translate(xPos, yPos, zPos);
+    void move(float xUnits, float yUnits, float zUnits){ // General move function to move the screen obj around on the screen
+        topPos    += yUnits;
+        bottomPos += yUnits;
+        leftPos   += xUnits;
+        rightPos  += xUnits;
+        modelMatrix.Translate(xUnits, yUnits, zUnits);
         program->setModelMatrix(modelMatrix);
     }
     
-    void drawPolygon(){
-        glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, verticesArray);
+    
+    void drawPolygon(float* vertices){
+//        void glVertexAttribPointer (GLint index, GLint
+//                                    size, GLenum type, GLboolean normalized, GLsizei
+//                                    stride, const GLvoid *pointer);
+        
+        glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
         glEnableVertexAttribArray(program->positionAttribute);
         
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -112,12 +130,91 @@ public:
 
     }
     
+    void resetPosition(){
+        modelMatrix.identity();
+        program->setModelMatrix(modelMatrix);
+    }
+    
+    void setTopPos(float top){
+        topPos = top;
+    }
+    
+    void setBottomPos(float bottom){
+        bottomPos = bottom;
+    }
+    
+    void setLeftPos(float left){
+        leftPos = left;
+    }
+    
+    void setRightPos(float right)
+    {
+        rightPos = right;
+    }
+    
+    void setBoundaries(float top, float bottom, float left, float right){
+        topPos    = top;
+        bottomPos = bottom;
+        leftPos   = left;
+        rightPos  = right;
+    }
+    
+    
+    float getTopPos(){
+        return topPos;
+    }
+    
+    float getBottomPos(){
+        return bottomPos;
+    }
+    
+    float getLeftPos(){
+        return leftPos;
+    }
+    
+    float getRightPos(){
+        return rightPos;
+    }
+    
+    float getTopBoundary(){
+        return TOP_BOUNDARY;
+    }
+    
+    float getBottomBoundary(){
+        return BOTTOM_BOUNDARY;
+    }
+    
+    float getLeftBoundary(){
+        return LEFT_BOUNDARY;
+    }
+    
+    float getRightBoundary(){
+        return RIGHT_BOUNDARY;
+    }
+    
+    
     Matrix projectionMatrix;
     Matrix modelMatrix;
     Matrix viewMatrix;
     GLuint texture = NULL;
     string textureName = "";
     ShaderProgram* program;
+    
+    // these vars are used to set the ortho projection
+    float LEFT_BOUNDARY   = -14.0;
+    float RIGHT_BOUNDARY  =  14.0;
+    float BOTTOM_BOUNDARY = -8.0;
+    float TOP_BOUNDARY    =  8.0;
+    float NEAR_BOUNDARY   = -4.0;
+    float FAR_BOUNDARY    =  4.0;
+    
+    // these vars are used to keep track of where the objects are located in space
+    float topPos    = 0.0f;
+    float bottomPos = 0.0f;
+    float leftPos   = 0.0f;
+    float rightPos  = 0.0f;
+    
+
     
     // Values will be used to set the prospective per Animation
 };
