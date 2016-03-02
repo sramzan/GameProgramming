@@ -12,13 +12,13 @@
 #define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
 #endif
 
-#include "space-invaders.cpp"
+//#include "space-invaders.cpp"
 using namespace std;
 
 
 
-int main(int argc, char* argv[]){
-    playSpaceInvaders();
-    
-}
+//int main(int argc, char* argv[]){
+////    playSpaceInvaders();
+//    
+//}
 

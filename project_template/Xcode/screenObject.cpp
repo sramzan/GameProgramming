@@ -41,6 +41,10 @@ public:
         program->setViewMatrix(viewMatrix);
     }
     
+    void setModelMatrix(){
+        program->setModelMatrix(modelMatrix);
+    }
+    
     void setTexture(GLuint text, string textName){
         this->texture = text;
         this->textureName = textName;
@@ -51,7 +55,7 @@ public:
 //            throw new LoadException("Texture not defined for " + textureName + "\n");
         
         glEnable(GL_BLEND);
-        glBindTexture(GL_TEXTURE_2D, texture); // whatever texture is bound, is the one that will be mapped to the textureCoordinates
+//        glBindTexture(GL_TEXTURE_2D, texture); // whatever texture is bound, is the one that will be mapped to the textureCoordinates
         
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, verticesArray);
@@ -115,6 +119,25 @@ public:
         program->setModelMatrix(modelMatrix);
     }
     
+    void setPosition(float top, float bottom, float left, float right){ // General move function to move the screen obj around on the screen
+        topPos    = top;
+        bottomPos = bottom;
+        leftPos   = left;
+        rightPos  = right;
+//        modelMatrix.setPosition(, yUnits, zUnits);
+//        program->setModelMatrix(modelMatrix);
+    }
+    
+    void setPosition(float xUnits, float yUnits, float zUnits){
+        topPos    += yUnits;
+        bottomPos += yUnits;
+        leftPos   += xUnits;
+        rightPos  += xUnits;
+        modelMatrix.setPosition(xUnits, yUnits, zUnits);
+        program->setModelMatrix(modelMatrix);
+    }
+    
+    
     
     void drawPolygon(float* vertices){
 //        void glVertexAttribPointer (GLint index, GLint
@@ -152,12 +175,14 @@ public:
         rightPos = right;
     }
     
+    /*
     void setBoundaries(float top, float bottom, float left, float right){
         topPos    = top;
         bottomPos = bottom;
         leftPos   = left;
         rightPos  = right;
     }
+    */
     
     
     float getTopPos(){
@@ -190,6 +215,10 @@ public:
     
     float getRightBoundary(){
         return RIGHT_BOUNDARY;
+    }
+    
+    void destroy(){
+        
     }
     
     

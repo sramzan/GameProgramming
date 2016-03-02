@@ -23,24 +23,23 @@ using namespace std;
 #define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
 #endif
 
-
 class Window{
     
 public:
     
     Window(int height, int width, const char* nameOfGame){
-        this->WINDOW_HEIGHT = height;
-        this->WINDOW_WIDTH  = width;
-        this->nameOfGame    = nameOfGame;
+        this->windowHeight = height;
+        this->windowWidth  = width;
+        this->nameOfGame   = nameOfGame;
         createWindow();
     }
     
     void createWindow(){
         SDL_Init(SDL_INIT_VIDEO);
-        displayWindow = SDL_CreateWindow(nameOfGame, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
+        displayWindow = SDL_CreateWindow(nameOfGame, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
         SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
         SDL_GL_MakeCurrent(displayWindow, context);
-        glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        glViewport(0, 0, windowWidth, windowHeight);
     }
     
     SDL_Window* getDispWindow(){
@@ -48,8 +47,8 @@ public:
     }
     
 private:
-    int WINDOW_HEIGHT;
-    int WINDOW_WIDTH;
+    int windowHeight;
+    int windowWidth;
     
     const char* nameOfGame;
     

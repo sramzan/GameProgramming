@@ -7,3 +7,6 @@
 //
 
 #include <stdio.h>
+
+const int WINDOW_HEIGHT = 900;
+const int WINDOW_WIDTH  = 1500;
