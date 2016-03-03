@@ -119,7 +119,7 @@ public:
         program->setModelMatrix(modelMatrix);
     }
     
-    void setPosition(float top, float bottom, float left, float right){ // General move function to move the screen obj around on the screen
+    void setPositionInSpace(float top, float bottom, float left, float right){ // General move function to move the screen obj around on the screen
         topPos    = top;
         bottomPos = bottom;
         leftPos   = left;
@@ -128,11 +128,11 @@ public:
 //        program->setModelMatrix(modelMatrix);
     }
     
-    void setPosition(float xUnits, float yUnits, float zUnits){
-        topPos    += yUnits;
-        bottomPos += yUnits;
-        leftPos   += xUnits;
-        rightPos  += xUnits;
+    void setPosition(float xUnits, float yUnits, float zUnits, float size){
+        topPos    = yUnits;
+        bottomPos = yUnits - size;
+        leftPos   = xUnits;
+        rightPos  = xUnits + size;
         modelMatrix.setPosition(xUnits, yUnits, zUnits);
         program->setModelMatrix(modelMatrix);
     }
@@ -215,6 +215,11 @@ public:
     
     float getRightBoundary(){
         return RIGHT_BOUNDARY;
+    }
+    
+    void identity(){
+        modelMatrix.identity();
+        program->setModelMatrix(modelMatrix);
     }
     
     void destroy(){

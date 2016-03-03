@@ -45,8 +45,25 @@ public:
         return &program;
     }
     
+    float getTopBoundary()    {  return TOP_BOUNDARY;    }
+    
+    float getBottomBoundary() {  return BOTTOM_BOUNDARY; }
+    
+    float getLeftBoundary()   {  return LEFT_BOUNDARY;   }
+    
+    float getRightBoundary()  {  return RIGHT_BOUNDARY;  }
+    
 private:
     ShaderProgram program;
+    
+    // TODO - have all objects look here for boundary constraints as the program should know about the ortho boundaries, and each object should have the ability to overwrite its personal boundaries from there
+    
+    float LEFT_BOUNDARY   = -14.0;
+    float RIGHT_BOUNDARY  =  14.0;
+    float BOTTOM_BOUNDARY = -8.0;
+    float TOP_BOUNDARY    =  8.0;
+    float NEAR_BOUNDARY   = -4.0;
+    float FAR_BOUNDARY    =  4.0;
     
 };
 

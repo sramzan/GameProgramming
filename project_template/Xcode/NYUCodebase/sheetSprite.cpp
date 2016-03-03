@@ -62,6 +62,7 @@ public:
     float getBottomPos() { return bottomPos; }
     float getRightPos()  { return rightPos;  }
     float getLeftPos()   { return leftPos;   }
+    float getSize()      { return size;      }
     
     
 private:

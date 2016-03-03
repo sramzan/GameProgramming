@@ -19,6 +19,9 @@
 		149104151C83D3FF001472FA /* simple-animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 149104141C83D3FF001472FA /* simple-animation.cpp */; };
 		149104181C83D547001472FA /* play-games.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 149104171C83D547001472FA /* play-games.cpp */; };
 		1491041A1C83E0F2001472FA /* spacePics.png in Resources */ = {isa = PBXBuildFile; fileRef = 149104191C83E0F2001472FA /* spacePics.png */; };
+		1491041C1C88186A001472FA /* font1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1491041B1C881869001472FA /* font1.png */; };
+		1491041E1C881AC2001472FA /* pixel_font.png in Resources */ = {isa = PBXBuildFile; fileRef = 1491041D1C881AC2001472FA /* pixel_font.png */; };
+		149104201C881B1D001472FA /* font2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1491041F1C881B1D001472FA /* font2.png */; };
 		14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4341C6D281500DF1A56 /* programGenerator.cpp */; };
 		14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */; };
 		14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */; };
@@ -52,6 +55,9 @@
 		149104141C83D3FF001472FA /* simple-animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "simple-animation.cpp"; sourceTree = "<group>"; };
 		149104171C83D547001472FA /* play-games.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "play-games.cpp"; path = "ExecutionPoints/play-games.cpp"; sourceTree = "<group>"; };
 		149104191C83E0F2001472FA /* spacePics.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacePics.png; sourceTree = "<group>"; };
+		1491041B1C881869001472FA /* font1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font1.png; sourceTree = "<group>"; };
+		1491041D1C881AC2001472FA /* pixel_font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pixel_font.png; sourceTree = "<group>"; };
+		1491041F1C881B1D001472FA /* font2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font2.png; sourceTree = "<group>"; };
 		14CBA4341C6D281500DF1A56 /* programGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = programGenerator.cpp; path = ../programGenerator.cpp; sourceTree = "<group>"; };
 		14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = NYUCodebase/exceptions.cpp; sourceTree = SOURCE_ROOT; };
 		14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenObject.cpp; sourceTree = SOURCE_ROOT; };
@@ -156,6 +162,9 @@
 		149104111C83D048001472FA /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				1491041F1C881B1D001472FA /* font2.png */,
+				1491041D1C881AC2001472FA /* pixel_font.png */,
+				1491041B1C881869001472FA /* font1.png */,
 				149104121C83D070001472FA /* spaceSheet.png */,
 			);
 			name = Graphics;
@@ -352,12 +361,15 @@
 				141114431C698A860003BE05 /* cardSpadesK.png in Resources */,
 				149104131C83D070001472FA /* spaceSheet.png in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
+				149104201C881B1D001472FA /* font2.png in Resources */,
 				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
+				1491041C1C88186A001472FA /* font1.png in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
 				6DC7076A1BA7273500225B7D /* vertex_textured.glsl in Resources */,
 				1491041A1C83E0F2001472FA /* spacePics.png in Resources */,
+				1491041E1C881AC2001472FA /* pixel_font.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

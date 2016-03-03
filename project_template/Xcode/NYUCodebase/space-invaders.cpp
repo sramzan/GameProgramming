@@ -24,10 +24,66 @@
 
 #include <vector>
 
+#define FIXED_TIMESTEP 0.0166666f
+#define MAX_TIMESTEPS 6
+
 float r = .4f;
 float g = .3f;
 float b = .5f;
 float a = 1.0f;
+
+const int START_SCREEN = 1;
+const int GAME_SCREEN  = 2;
+const int END_SCREEN   = 3;
+int GAME_STATE   = START_SCREEN;
+
+void blendTextures(GLuint texture){
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_TEXTURE_2D);
+}
+
+void DrawText(ShaderProgram *program, int fontTexture, string text, float size, float spacing, float x_offset, float y_offset) {
+    float texture_size = 1.0/16.0f;
+    vector<float> vertexData;
+    vector<float> texCoordData;
+    for(int i=0; i < text.size(); i++) {
+        float texture_x = (float)(((int)text[i]) % 16) / 16.0f;
+        float texture_y = (float)(((int)text[i]) / 16) / 16.0f;
+        vertexData.insert(vertexData.end(), {
+            ((size+spacing) * i) + (-0.5f * size) + x_offset  , 0.5f * size + y_offset,
+            ((size+spacing) * i) + (-0.5f * size) + x_offset,  -0.5f * size + y_offset,
+            ((size+spacing) * i) + (0.5f * size)  + x_offset,   0.5f * size + y_offset,
+            
+            ((size+spacing) * i) + (0.5f * size)  + x_offset, -0.5f * size + y_offset,
+            ((size+spacing) * i) + (0.5f * size)  + x_offset,  0.5f * size + y_offset,
+            ((size+spacing) * i) + (-0.5f * size) + x_offset, -0.5f * size + y_offset,
+        });
+        texCoordData.insert(texCoordData.end(), {
+            texture_x, texture_y,
+            texture_x, texture_y + texture_size,
+            texture_x + texture_size, texture_y,
+            texture_x + texture_size, texture_y + texture_size,
+            texture_x + texture_size, texture_y,
+            texture_x, texture_y + texture_size,
+        });
+    }
+    
+    glUseProgram(program->programID);
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertexData.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoordData.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    glBindTexture(GL_TEXTURE_2D, fontTexture);
+    glDrawArrays(GL_TRIANGLES, 0, text.size() * 6);
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+    
+    blendTextures(fontTexture);
+}
+
 
 GLuint LoadTexture(const char *image_path) {
     SDL_Surface *surface = IMG_Load(image_path);
@@ -42,12 +98,41 @@ GLuint LoadTexture(const char *image_path) {
     return textureID;
 }
 
+class enemy : public ScreenObject{
+public:
+    enemy (ShaderProgram* program, GLuint spriteSheetTexture) : ScreenObject(program){
+        this->enemySheetSprite = new SheetSprite(spriteSheetTexture, 423.0f/1024.0f, 728.0f/1024.0f, 93.0f/1024.0f, 84.0f/1024.0f, 1.0);
+        setPositionInSpace(enemySheetSprite->getTopPos(), enemySheetSprite->getBottomPos(), enemySheetSprite->getLeftPos(), enemySheetSprite->getRightPos());
+        setProjection();
+        setMatrices();
+    }
+    
+    void isHitWall(){
+    
+    }
+    
+    void destroy(){
+        delete enemySheetSprite;
+        delete this;
+    }
+    
+    void draw(){
+        setModelMatrix();
+        enemySheetSprite->Draw(this);
+    }
+    
+    float getSheetSpriteSize() { return enemySheetSprite->getSize(); }
+    
+private:
+    SheetSprite* enemySheetSprite;
+
+};
 
 class bullet : public ScreenObject{
 public:
     bullet(ShaderProgram* program, GLuint spriteSheetTexture) : ScreenObject(program){
         this->bulletSheetSprite = new SheetSprite(spriteSheetTexture, 845.0f/1024.0f, 0.0f/1024.0f, 13.0f/1024.0f, 57.0f/1024.0f, 1.0);
-        setPosition(bulletSheetSprite->getTopPos(), bulletSheetSprite->getBottomPos(), bulletSheetSprite->getLeftPos(), bulletSheetSprite->getRightPos());
+        setPositionInSpace(bulletSheetSprite->getTopPos(), bulletSheetSprite->getBottomPos(), bulletSheetSprite->getLeftPos(), bulletSheetSprite->getRightPos());
         setProjection();
         setMatrices();
 
@@ -63,13 +148,16 @@ public:
         bulletSheetSprite->Draw(this);
     }
     
-    void checkCollision(){
-        
-    }
     
     bool isOffScreen(){
         // if (bullet Top pos >= topBoundary of the ortho projection, then delete it from the array)
-        return true;
+        if (getTopPos() >= getTopBoundary())
+            return true;
+        return false;
+    }
+    
+    float getSheetSpriteSize(){
+        return bulletSheetSprite->getSize();
     }
     
 private:
@@ -81,7 +169,7 @@ class player : public ScreenObject{
 public:
     player (ShaderProgram* program) : ScreenObject(program){
         this->playerShipSheetSprite = new SheetSprite(this->spriteSheetTexture, 0.0f/1024.0f, 941.0f/1024.0f, 112.0f/1024.0f, 75.0f/1024.0f, 1.0);
-        setPosition(playerShipSheetSprite->getTopPos(), playerShipSheetSprite->getBottomPos(), playerShipSheetSprite->getLeftPos(),playerShipSheetSprite->getRightPos());
+        setPositionInSpace(playerShipSheetSprite->getTopPos(), playerShipSheetSprite->getBottomPos(), playerShipSheetSprite->getLeftPos(),playerShipSheetSprite->getRightPos());
         setProjection();
         setMatrices();
     }
@@ -92,14 +180,24 @@ public:
     
     bullet* newBullet(){
         bullet* newBullet = new bullet(this->program, this->spriteSheetTexture);
-        newBullet->setPosition(0, getTopPos() + .5, 0);
+        newBullet->setPosition(getLeftPos()+.75, getTopPos() + .5, 0, newBullet->getSheetSpriteSize());
         return newBullet;
     }
     
     void moveFiredBulletsUp(float elapsed){
-        for (bullet* bullet : bullets){
-            bullet->moveUp(7 * elapsed);
-            bullet->draw();
+        if (bullets.size() == 0)
+            return;
+        
+        for (int pos = 0; pos < bullets.size(); pos++){
+            bullet* currentBullet = bullets[pos];
+            currentBullet->moveUp(10 * elapsed);
+            processEnemyBulletCollisions();
+            if (currentBullet->isOffScreen()){
+                bullets.erase(bullets.begin() + pos);
+                currentBullet->destroy();
+                continue;
+            }
+            currentBullet->draw();
         }
     }
     
@@ -109,33 +207,156 @@ public:
     }
     
     void destroy(){
-//        bullets.erase(remove_if(bullets.begin(), bullets.end(), true), bullets.end());
-//        this->destroy();
-        for (bullet* bullet : bullets)
-            bullet->destroy();
+        for (int pos = 0; pos < bullets.size(); pos++){
+            bullet* currentBullet = bullets[pos];
+            currentBullet->destroy();
+        }
+        
         delete this;
     }
     
     void processMovement(const Uint8* keys, float elapsed){
-        if (keys[SDL_SCANCODE_RIGHT])
+        if (keys[SDL_SCANCODE_RIGHT] && getRightPos() <= getRightBoundary())
             moveToTheRight(5 * elapsed);
-        if (keys[SDL_SCANCODE_LEFT])
+        if (keys[SDL_SCANCODE_LEFT] && getLeftPos() >= getLeftBoundary())
             moveToTheLeft(-5 * elapsed);
+    }
+    
+    void processEnemyBulletCollisions(){
+        for (int bulletIndex = 0; bulletIndex < bullets.size(); bulletIndex++){
+            bullet* currentBullet = bullets[bulletIndex];
+            
+            for (int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++){
+                enemy* currentEnemy= enemies[enemyIndex];
+                
+                if ( (currentBullet->getTopPos() >= currentEnemy->getBottomPos()) &&
+                     (currentBullet->getRightPos() <= (currentEnemy->getRightPos() + .75))  &&
+                     (currentBullet->getLeftPos() >= (currentEnemy->getLeftPos()) - .75)){
+                    enemies.erase(enemies.begin() + enemyIndex);
+                    currentEnemy->destroy();
+                }
+            }
+        }
+        
+//        drawEnemies();
+    }
+    
+    void moveAllEnemiesDown(float elapsed){
+        for (enemy* currentEnemy : enemies){
+             currentEnemy->setPosition(currentEnemy->getLeftPos(), currentEnemy->getTopPos()-.5, 0, currentEnemy->getSheetSpriteSize());
+//            currentEnemy->moveDown(-15 * elapsed);
+        }
+    }
+    
+    void moveAllEnemiesTowardsWall(float elapsed){
+        if (direction == 1){
+            for (int enemyIndex = enemies.size() - 1; enemyIndex >= 0; enemyIndex--){
+                enemy* currentEnemy = enemies[enemyIndex];
+                currentEnemy->move(1.5 * direction * elapsed, 0, 0);
+//                currentEnemy->setPosition(currentEnemy->getLeftPos() + 1, currentEnemy->getTopPos(), 0, currentEnemy->getSheetSpriteSize());
+                if (enemies[enemies.size() - 1]->getRightPos() >= getRightBoundary()){
+                    moveAllEnemiesDown(elapsed);
+                    direction = -1;
+                    return;
+                }
+            }
+        }
+        
+        else
+            for (int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++){
+                enemy* currentEnemy = enemies[enemyIndex];
+                currentEnemy->move(1.5 * direction * elapsed, 0, 0);
+//                currentEnemy->setPosition(currentEnemy->getLeftPos() - 1, currentEnemy->getTopPos(), 0, currentEnemy->getSheetSpriteSize());
+                if (enemies[0]->getLeftPos() <= getLeftBoundary() + 1){
+                    moveAllEnemiesDown(elapsed);
+                    direction = 1;
+                    return;
+                }
+            }
+    }
+    
+    enemy* newEnemy(float xpos, float ypos, float zpos){
+        enemy* newEnemy = new enemy(this->program, this->spriteSheetTexture);;
+        newEnemy->setPosition(xpos, ypos, zpos, newEnemy->getSheetSpriteSize());
+        return newEnemy;
+    }
+    
+    void addEnemies(){
+        // For now, this will only be called when the game begins/restarts
+        
+        float enemyXpos = getLeftBoundary();
+        float enemyYpos = getTopBoundary() - 1;
+        int newEnemyIndex = 0;
+        
+        while (enemyXpos + 1.5 <= getRightBoundary()){
+            enemies.push_back(newEnemy(enemyXpos + 1.5, enemyYpos, 0));
+            enemyXpos += enemies[newEnemyIndex]->getSheetSpriteSize() + 1.5;
+            enemies[newEnemyIndex]->draw();
+            newEnemyIndex++;
+        }
+    }
+    
+    void drawEnemies(){
+        for (int enemyIndex = 0; enemyIndex < enemies.size(); enemyIndex++){
+            enemy* currentEnemy= enemies[enemyIndex];
+            currentEnemy->draw();
+        }
+
+    }
+    
+    size_t getNumBullets(){
+        return bullets.size();
     }
     
     
 private:
     vector<bullet*> bullets;
-    GLuint spriteSheetTexture = LoadTexture("spacePics.png");
+    vector<enemy*> enemies;
     SheetSprite* playerShipSheetSprite;
+    float direction = 1;
+    GLuint spriteSheetTexture = LoadTexture("spacePics.png");
     
 };
+
 
 void spaceIvadersInit(Program* program){
     
     // Load all textures from texture sheet
     
 }
+
+
+void playGame(player* player1, float elapsed, Program* program, Window* window){
+    const Uint8 *keys = SDL_GetKeyboardState(NULL);
+    
+    program->clearScreen(r,g,b,a);
+    player1->processMovement(keys, elapsed);
+    player1->drawEnemies();
+    player1->draw();
+    player1->moveFiredBulletsUp(elapsed);
+    player1->moveAllEnemiesTowardsWall(elapsed);
+    player1->processEnemyBulletCollisions();
+    // handle moving all bullets consistently up the screen
+    
+        SDL_GL_SwapWindow(window->getDispWindow());
+    
+}
+
+
+void screenSelect(Program* program, GLuint fontTexture, player* player1, float elapsed, Window* window){
+    
+    switch(GAME_STATE){
+        case START_SCREEN:
+            program->clearScreen(r,g,b,a);
+            DrawText(program->getShaderProgram(), fontTexture, "Play Space Invaders!", 1.0f, 0, -9.5, 8.0f);
+            DrawText(program->getShaderProgram(), fontTexture, "(Spacebar to Cont)",  .75f, 0, -6, 6.5f);
+            break;
+            
+        case GAME_SCREEN:
+            playGame(player1, elapsed, program, window);
+    }
+}
+
 
 void playSpaceInvaders(){
     Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "Space Invaders");
@@ -146,36 +367,18 @@ void playSpaceInvaders(){
     
     Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
     
-    /* 
-     
-     Create()
-        - Create all intial objects on the screen
-            - aliens
-            - spaceship that can shoot
-        - In order to create the objects, the proper textures will need to be loaded from the texture xml sheet
-     
-     Process Actions
-        - The bulk of the program will be checking to see what is going on
-            1) Did the aliens hit an edge 
-                - if so, move them down a row, and reverse the direction
-    
-            2) Did the player shoot a shot, and did it hit an alien
-                - if so, delete the alien from the arr, and continue moving
-    */
-    
     vector<SheetSprite> sheetSprites;
     vector<ScreenObject> entities;
     float lastFrameTicks = 0.0f;
-    
     spaceIvadersInit(&program);
     
-//    SheetSprite meteorSprite = SheetSprite(spriteSheetTexture, 224.0f/1024.0f, 664.0f/1024.0f, 101.0f/1024.0f, 84.0f/1024.0f, 1.0);
-//    bullet* newBullet = new bullet(program.getShaderProgram(), spriteSheetTexture);
+    GLuint fontTexture = LoadTexture("font1.png");
+    
     
     player* player1 = new player(program.getShaderProgram());
     cout << "Bottom Boundary: " << player1->getBottomBoundary() << endl << "Bottom Pos: " << player1->getBottomPos() << endl << "Top Pos: " << player1->getTopPos() << endl << "Top Boundary: " << player1->getTopBoundary();
 
-
+    player1->addEnemies();
     player1->moveDown(-fabs(player1->getBottomPos() - player1->getBottomBoundary()));
     
     SDL_Event event;
@@ -195,23 +398,30 @@ void playSpaceInvaders(){
         float elapsed  = ticks - lastFrameTicks;
         lastFrameTicks = ticks;
         
-        player1->processMovement(keys, elapsed);
-        
-        program.clearScreen(r,g,b,a);
-        player1->draw();
-        
-        if(keys[SDL_SCANCODE_SPACE]) // create new bullet
+        if(keys[SDL_SCANCODE_SPACE]){ // create new bullet
+//            GAME_STATE = GAME_SCREEN;
             player1->fire();
+        }
         
         
-        player1->moveFiredBulletsUp(elapsed);
+        float fixedElapsed = elapsed;
+        if(fixedElapsed > FIXED_TIMESTEP * MAX_TIMESTEPS) {
+            fixedElapsed = FIXED_TIMESTEP * MAX_TIMESTEPS;
+        }
         
-        // handle moving all bullets consistently up the screen
+        while (fixedElapsed >= FIXED_TIMESTEP ) {
+            fixedElapsed -= FIXED_TIMESTEP;
+//            screenSelect(&program, fontTexture, player1, fixedElapsed, &window);
+            playGame(player1, FIXED_TIMESTEP, &program, &window);
+//            Update(player1, &program, &window, FIXED_TIMESTEP, fontTexture);
+        }
+        playGame(player1, fixedElapsed, &program, &window);
+//        screenSelect(&program, fontTexture, player1, fixedElapsed, &window);
+//        Update(player1, &program, &window, FIXED_TIMESTEP, fontTexture);
+//        cout << FIXED_TIMESTEP << endl;
         
-        
-        
-        SDL_GL_SwapWindow(window.getDispWindow());
-        
+//        cout << endl << "Size: " << player1->getNumBullets() << endl;
+       SDL_GL_SwapWindow(window.getDispWindow());
     }
     
     player1->destroy();
