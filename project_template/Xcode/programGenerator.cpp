@@ -28,6 +28,10 @@ using namespace std;
 class Program{
 public:
     Program(const char *vertexShaderFile, const char *fragmentShaderFile) : program(vertexShaderFile, fragmentShaderFile){
+        projectionMatrix.setOrthoProjection(LEFT_BOUNDARY, RIGHT_BOUNDARY, BOTTOM_BOUNDARY, TOP_BOUNDARY, NEAR_BOUNDARY, FAR_BOUNDARY);
+        program.setModelMatrix(modelMatrix);
+        program.setProjectionMatrix(projectionMatrix);
+        program.setViewMatrix(viewMatrix);
         setProgramID();
     }
     
@@ -53,6 +57,11 @@ public:
     
     float getRightBoundary()  {  return RIGHT_BOUNDARY;  }
     
+    void setPosition(float xUnits, float yUnits, float zUnits){
+        modelMatrix.setPosition(xUnits, yUnits, zUnits);
+        program.setModelMatrix(modelMatrix);
+    }
+    
 private:
     ShaderProgram program;
     
@@ -64,6 +73,10 @@ private:
     float TOP_BOUNDARY    =  8.0;
     float NEAR_BOUNDARY   = -4.0;
     float FAR_BOUNDARY    =  4.0;
+    
+    Matrix projectionMatrix;
+    Matrix modelMatrix;
+    Matrix viewMatrix;
     
 };
 
