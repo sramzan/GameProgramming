@@ -12,6 +12,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 #include "Matrix.h"
 #include "ShaderProgram.h"
@@ -177,8 +178,9 @@ public:
         setMatrices();
     }
     
-    void fire(){
+    void fire(Mix_Chunk *laserBlastSound){
         bullets.push_back(newBullet());
+        Mix_PlayChannel( -1, laserBlastSound, 0);
     }
     
     bullet* newBullet(){
@@ -350,7 +352,7 @@ void updateGame(Program* program, player* player1, Window* window, float fixedEl
 }
 
 
-void playGame(Program* program, Window* window){
+void playGame(Program* program, Window* window, Mix_Chunk* laserBlastSound){
     
     player* player1 = new player(program->getShaderProgram());
     cout << "Bottom Boundary: " << player1->getBottomBoundary() << endl << "Bottom Pos: " << player1->getBottomPos() << endl << "Top Pos: " << player1->getTopPos() << endl << "Top Boundary: " << player1->getTopBoundary();
@@ -384,7 +386,7 @@ void playGame(Program* program, Window* window){
         
         
         if(keys[SDL_SCANCODE_SPACE]){ // create new bullet
-            player1->fire();
+            player1->fire(laserBlastSound);
         }
         
         
@@ -404,7 +406,7 @@ void playGame(Program* program, Window* window){
 }
 
 
-void screenSelect(Program* program, GLuint fontTexture, Window* window){
+void screenSelect(Program* program, GLuint fontTexture, Window* window, Mix_Chunk* laserBlastSound){
     
     switch(GAME_STATE){
         case START_SCREEN:
@@ -415,13 +417,14 @@ void screenSelect(Program* program, GLuint fontTexture, Window* window){
             break;
             
         case GAME_SCREEN:
-            playGame(program, window);
+            playGame(program, window, laserBlastSound);
             GAME_STATE = END_SCREEN;
             break;
             
         case END_SCREEN:
             program->clearScreen(r,g,b,a);
-            DrawText(program->getShaderProgram(), fontTexture, "GAME OVER", 1.0f, 0, -9.5, 8.0f);
+            program->identity();
+            DrawText(program->getShaderProgram(), fontTexture, "GAME OVER", 1.0f, 0, 0, 0);
             SDL_GL_SwapWindow(window->getDispWindow());
             break;
     }
@@ -429,11 +432,17 @@ void screenSelect(Program* program, GLuint fontTexture, Window* window){
 
 
 void playSpaceInvaders(){
+//    Int Mix_OpenAudio
     Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "Space Invaders");
     
 #ifdef _WINDOWS
     glewInit();
 #endif
+    
+    Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 );
+    Mix_Chunk* laserBlastSound;
+    laserBlastSound = Mix_LoadWAV("Laser_Blast.wav");
+    
     
     Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
     
@@ -453,10 +462,10 @@ void playSpaceInvaders(){
         if(keys[SDL_SCANCODE_SPACE] && gameEnded == false ) // create new bullet
             GAME_STATE = GAME_SCREEN;
         
-        screenSelect(&program, fontTexture, &window);
+        screenSelect(&program, fontTexture, &window, laserBlastSound);
 
     }
-    
+    Mix_FreeChunk(laserBlastSound);
     SDL_Quit();
     
 }

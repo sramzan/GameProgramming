@@ -62,6 +62,11 @@ public:
         program.setModelMatrix(modelMatrix);
     }
     
+    void identity(){
+        modelMatrix.identity();
+        program.setModelMatrix(modelMatrix);
+    }
+    
 private:
     ShaderProgram program;
     
