@@ -440,8 +440,8 @@ void playSpaceInvaders(){
 #endif
     
     Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 );
-    Mix_Chunk* laserBlastSound;
-    laserBlastSound = Mix_LoadWAV("Laser_Blast.wav");
+    Mix_Chunk* laserBlastSound = Mix_LoadWAV("Laser_Blast.wav");
+    Mix_Chunk* explosionSound  = Mix_LoadWAV("Explosion.wav");
     
     
     Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
