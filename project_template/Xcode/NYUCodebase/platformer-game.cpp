@@ -27,7 +27,7 @@ using namespace std;
 #define LEVEL_HEIGHT 30
 #define LEVEL_WIDTH 30
 #define GRAVITY_X 0
-#define GRAVITY_Y .05
+#define GRAVITY_Y 0
 #define FRICTION_X .99
 #define FRICTION_Y .99
 
@@ -347,7 +347,7 @@ void checkForCollision(Entity* entity, float elapsed){
         entity->moveUp(penetration);
     }
 }
-void doTheEntityThing(const Uint8* keys, float elapsed){
+void doTheEntityThing(const Uint8* keys, float elapsed, Program* program){
     if (entities.size() > 0){
         Entity* entity = entities[0];
         entity->setModelMatrix();
@@ -388,6 +388,8 @@ void doTheEntityThing(const Uint8* keys, float elapsed){
         
         worldToTileCoordinates(entities[0]->getXPos(), entities[0]->getYPos(), &xPos, &yPos);
         entities[0]->drawTexture(entityVertexData.data(), entityTextureData.data());
+//        entity->translateViewMatrix(-entity->getXPos()/21, -entity->getYPos()/21, 0);
+//        program->translateViewMatrix(entities[0]->getX_Velocity(), entities[0]->getY_Velocity(), 0);
         entityVertexData.clear();
         entityTextureData.clear();
     }
@@ -438,10 +440,11 @@ void playPlatformGame(){
         while (fixedElapsed >= FIXED_TIMESTEP ) {
             fixedElapsed -= FIXED_TIMESTEP;
 //            updateGame(program, player1, window, FIXED_TIMESTEP, keys);
-            doTheEntityThing(keys, fixedElapsed);
+            doTheEntityThing(keys, fixedElapsed, &program);
             
         }
-        doTheEntityThing(keys, fixedElapsed);
+        doTheEntityThing(keys, fixedElapsed, &program);
+
 //        updateGame(program, player1, window, fixedElapsed, keys);
 
 
