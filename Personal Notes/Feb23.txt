@@ -1,0 +1,74 @@
+Velocity - The rate of change of the position of an object (speed * direction)
+	position_x += velocity_x * elapsed;
+	position_y += velocity_y * elapsed;
+
+
+Acceleration - The rate of change of velocity.
+	velocity_x += acceleration_x * elapsed;
+	velocity_y += acceleration_y * elapsed;
+
+Friction - The rate of decrease of velocity.
+	velocity_x = lerp(velocity_x, 0.0f, elapsed * friction_x);
+	velocity_y = lerp(velocity_y, 0.0f, elapsed * friction_y);
+
+LERP
+	LinEar InteRPolation
+	float lerp(float v0, float v1, float t) {
+		return (1.0-t)*v0 + t*v1;
+	}
+
+// Apply friction to velocity
+velocity_x = lerp(velocity_x, 0.0f, FIXED_TIMESTEP * friction_x); // velX gets a smaller val of itself... some percentage of velX between its val and 0
+velocity_y = lerp(velocity_y, 0.0f, FIXED_TIMESTEP * friction_y);
+
+// Apply any pos/neg acceleration to the velocity
+velocity_x += acceleration_x * FIXED_TIMESTEP;
+velocity_y += acceleration_y * FIXED_TIMESTEP;
+
+// update the position of the obj in space based on its velocity
+x += velocity_x * FIXED_TIMESTEP;
+y += velocity_y * FIXED_TIMESTEP;
+
+---------
+
+Circle-Cirlce Collision
+	If the distance between two circles is less than or equal to the sum of their radii, the circles are colliding!
+
+	penetration = fabs(distance - radius1 - radius2)
+	adjust = penetration * direction_vector
+
+Box-Box Collision
+	a) is R1’s bottom higher than R2’s top?
+	b) is R1’s top lower than R2’s bottom?
+	c) is R1’s left larger than R2’s right?
+	d) is R1’s right smaller than R2’s left
+		If ANY of the above are true, then the two rectangles are NOT intersecting!
+		OR
+		The rectangles are intersecting if NONE of the above are true.
+	Separate movement and collision on each axis!
+	First only movement on Y-axis!
+		Check full collision against all entities.
+		If collided check Y-penetration.
+			penetration = fabs(y_distance - height1/2 - height2/2)
+			Move on Y-axis by the amount of penetration + tiny amount. (Move up if above the other entity, otherwise move down!)
+	Now only movement on X-axis!
+		Check full collision against all entities.
+		If collided check X-penetration.
+			penetration = fabs(x_distance - width1/2 - width2/2) // xdist is the dist between the center of the obj and the wall, width1 is the width of the obj starting from the center, width2 is the width of the wall from the center
+			Move on X-axis by the amount of penetration + tiny amount. (Move left if to the left of the other entity, otherwise move right!)
+
+
+Gravity
+	A constant acceleration.
+	
+	velocity_x += gravity_x * elapsed;
+	velocity_y += gravity_y * elapsed;
+
+
+
+
+
+
+
+
+

@@ -2,21 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../NYUCodebase/ExecutionPoints/play-games.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../NYUCodebase/simple-animation.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../NYUCodebase/sheetSprite.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../global-variables.cpp">
-   </FileRef>
-   <FileRef
-      location = "group:../NYUCodebase/space-invaders.cpp">
-   </FileRef>
-   <FileRef
       location = "self:NYUCodebase.xcodeproj">
    </FileRef>
 </Workspace>

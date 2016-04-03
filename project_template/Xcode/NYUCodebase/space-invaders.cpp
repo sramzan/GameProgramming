@@ -5,7 +5,7 @@
 //  Created by Sean Ramzan on 2/27/16.
 //
 //
-
+/*
 #ifdef _WINDOWS
 #include <GL/glew.h>
 #endif
@@ -470,11 +470,11 @@ void playSpaceInvaders(){
     
 }
 
-int main(int argc, char* argv[]){
-    playSpaceInvaders();
-    
-}
-
+//int main(int argc, char* argv[]){
+//    playSpaceInvaders();
+//    
+//}
+*/
 
 
 

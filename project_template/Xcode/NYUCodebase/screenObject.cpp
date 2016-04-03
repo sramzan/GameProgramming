@@ -9,12 +9,13 @@
 #ifdef _WINDOWS
 #include <GL/glew.h>
 #endif
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <SDL_image.h>
+//#include <SDL.h>
+//#include <SDL_opengl.h>
+//#include <SDL_image.h>
 #include "Matrix.h"
 #include "ShaderProgram.h"
 #include <stdio.h>
+#include "sheetSprite.cpp"
 using namespace std;
 
 #ifdef _WINDOWS
@@ -27,12 +28,25 @@ class ScreenObject{
 public:
     ScreenObject(ShaderProgram* prog){
         this->program = prog;
+        setProjection();
+        setMatrices();
     }
     
+    ScreenObject(ShaderProgram* prog, GLuint texture){
+        this->program = prog;
+        this->spriteSheetTexture = texture;
+        setProjection();
+        setMatrices();
+    }
+    
+    // used for adding a sheetSprite to the respective entity
+    ScreenObject(ShaderProgram* prog, unsigned int textID, float uVal, float vVal, float widthVal, float heightVal,float sizeVal):
+        program(prog),
+        sheetSprite(new SheetSprite(textID, uVal, vVal, widthVal, heightVal, sizeVal)){
+            setPositionInSpace(sheetSprite->getTopPos(), sheetSprite->getBottomPos(), sheetSprite->getLeftPos(), sheetSprite->getRightPos());
+    }
     void setProjection(){
-        // setOrthoProjection(      float left, float right, float bottom, float top, float near, float far);
         projectionMatrix.setOrthoProjection(LEFT_BOUNDARY, RIGHT_BOUNDARY, BOTTOM_BOUNDARY, TOP_BOUNDARY, NEAR_BOUNDARY, FAR_BOUNDARY);
-//        projectionMatrix.setOrthoProjection(-4, 4, -2.0f, 2.0f, -1.0f, 1.0f);
     }
     
     void setMatrices(){
@@ -53,7 +67,7 @@ public:
     void drawTexture(float* verticesArray, float* texCords){
 //        if (texture == NULL)
 //            throw new LoadException("Texture not defined for " + textureName + "\n");
-        
+        glBindTexture(GL_TEXTURE_2D, spriteSheetTexture);
         glEnable(GL_BLEND);
 //        glBindTexture(GL_TEXTURE_2D, texture); // whatever texture is bound, is the one that will be mapped to the textureCoordinates
         
@@ -67,6 +81,36 @@ public:
         
         glDisableVertexAttribArray(program->positionAttribute);
         glDisableVertexAttribArray(program->texCoordAttribute);
+    }
+    
+    void drawFromSheetSprite() {
+        float u = sheetSprite->getUCoord();
+        float v = sheetSprite->getVCoord();
+        float width = sheetSprite->getWidth();
+        float height = sheetSprite->getHeight();
+        float size = sheetSprite->getSize();
+
+        glBindTexture(GL_TEXTURE_2D, sheetSprite->getTextID());
+        GLfloat texCoords[] = {
+            u, v+height,
+            u+width, v,
+            u, v,
+            u+width, v,
+            u, v+height,
+            u+width, v+height
+        };
+        float aspect = width / height;
+        float vertices[] = {
+            -0.5f * size * aspect, -0.5f * size,
+            0.5f * size * aspect,  0.5f * size,
+            -0.5f * size * aspect,  0.5f * size,
+            
+            0.5f * size * aspect,  0.5f * size,
+            -0.5f * size * aspect, -0.5f * size,
+            0.5f * size * aspect, -0.5f * size
+        };
+        // draw our arrays
+        drawTexture(vertices, texCoords);
     }
     
     void rotate(float rotateAmt){
@@ -128,15 +172,35 @@ public:
 //        program->setModelMatrix(modelMatrix);
     }
     
+//    void setPosition(float xUnits, float yUnits, float zUnits, float size){ // TODO - REMOVE
+//        topPos    = yUnits;
+//        bottomPos = yUnits - size;
+//        leftPos   = xUnits;
+//        rightPos  = xUnits + size;
+//        modelMatrix.setPosition(xUnits, yUnits, zUnits);
+//        program->setModelMatrix(modelMatrix);
+//    }
+    
     void setPosition(float xUnits, float yUnits, float zUnits, float size){
-        topPos    = yUnits;
+        topPos    = yUnits + size;
         bottomPos = yUnits - size;
-        leftPos   = xUnits;
+        leftPos   = xUnits - size;
         rightPos  = xUnits + size;
         modelMatrix.setPosition(xUnits, yUnits, zUnits);
         program->setModelMatrix(modelMatrix);
     }
     
+    void setPositionVars(float xUnits, float yUnits, float zUnits, float size){
+        topPos    = yUnits + size;
+        bottomPos = yUnits - size;
+        leftPos   = xUnits - size;
+        rightPos  = xUnits + size;
+    }
+    
+    void translateViewMatrix(float x, float y, float z){
+        viewMatrix.Translate(x, y, z);
+        program->setViewMatrix(viewMatrix);
+    }
     
     
     void drawPolygon(float* vertices){
@@ -247,6 +311,20 @@ public:
     float bottomPos = 0.0f;
     float leftPos   = 0.0f;
     float rightPos  = 0.0f;
+    
+    float velocity_x;
+    float velocity_y;
+    float acceleration_x;
+    float acceleration_y;
+    bool isStatic;
+//    EntityType entityType;
+    bool collidedTop = false;
+    bool collidedBottom = false;
+    bool collidedLeft = false;
+    bool collidedRight = false;
+    
+    SheetSprite* sheetSprite;
+    GLuint spriteSheetTexture;
     
 
     

@@ -45,6 +45,11 @@ public:
         glClear(GL_COLOR_BUFFER_BIT);
     }
     
+    void translateViewMatrix(float x, float y, float z){
+        viewMatrix.Translate(x, y, z);
+        program.setViewMatrix(viewMatrix);
+    }
+    
     ShaderProgram* getShaderProgram(){
         return &program;
     }

@@ -11,7 +11,11 @@
 		141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114381C696DD50003BE05 /* cardSpadesQ.png */; };
 		141114421C698A860003BE05 /* cardSpadesJ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114401C698A860003BE05 /* cardSpadesJ.png */; };
 		141114431C698A860003BE05 /* cardSpadesK.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114411C698A860003BE05 /* cardSpadesK.png */; };
+		145071BD1CA980B700E3DBCD /* platformer-game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145071BB1CA980B700E3DBCD /* platformer-game.cpp */; };
 		146F885B1C6D2201000B7F9B /* windowGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 146F885A1C6D2201000B7F9B /* windowGenerator.cpp */; };
+		1485CD1D1CA9CDF300A22965 /* screenObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1485CD1C1CA9CDF300A22965 /* screenObject.cpp */; };
+		1485CD1F1CAB548100A22965 /* spritesheet.png in Resources */ = {isa = PBXBuildFile; fileRef = 1485CD1E1CAB548100A22965 /* spritesheet.png */; };
+		1485CD211CACC81F00A22965 /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1485CD201CACC81F00A22965 /* level1.txt */; };
 		148923AC1C7178280030103A /* input_output.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148923AB1C7178280030103A /* input_output.cpp */; };
 		149104091C82722B001472FA /* space-invaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 149104081C82722B001472FA /* space-invaders.cpp */; };
 		1491040C1C82736A001472FA /* global-variables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1491040B1C82736A001472FA /* global-variables.cpp */; };
@@ -26,7 +30,6 @@
 		14A22EBA1C9214E500F8FB29 /* Laser_Blast.wav in Resources */ = {isa = PBXBuildFile; fileRef = 14A22EB91C9214E500F8FB29 /* Laser_Blast.wav */; };
 		14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4341C6D281500DF1A56 /* programGenerator.cpp */; };
 		14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */; };
-		14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */; };
 		14CBA43E1C70F00200DF1A56 /* pong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43D1C70F00200DF1A56 /* pong.cpp */; };
 		6D5A86AE19AE5C710066C1FD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5A86AD19AE5C710066C1FD /* Cocoa.framework */; };
 		6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D5A86B619AE5C710066C1FD /* InfoPlist.strings */; };
@@ -49,7 +52,12 @@
 		141114381C696DD50003BE05 /* cardSpadesQ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesQ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesQ.png"; sourceTree = "<group>"; };
 		141114401C698A860003BE05 /* cardSpadesJ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesJ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesJ.png"; sourceTree = "<group>"; };
 		141114411C698A860003BE05 /* cardSpadesK.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesK.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesK.png"; sourceTree = "<group>"; };
+		145071BB1CA980B700E3DBCD /* platformer-game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "platformer-game.cpp"; sourceTree = "<group>"; };
+		145071BC1CA980B700E3DBCD /* platformer-game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platformer-game.h"; sourceTree = "<group>"; };
 		146F885A1C6D2201000B7F9B /* windowGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = windowGenerator.cpp; sourceTree = "<group>"; };
+		1485CD1C1CA9CDF300A22965 /* screenObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenObject.cpp; sourceTree = "<group>"; };
+		1485CD1E1CAB548100A22965 /* spritesheet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spritesheet.png; sourceTree = "<group>"; };
+		1485CD201CACC81F00A22965 /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level1.txt; sourceTree = "<group>"; };
 		148923AB1C7178280030103A /* input_output.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_output.cpp; sourceTree = "<group>"; };
 		149104081C82722B001472FA /* space-invaders.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "space-invaders.cpp"; sourceTree = "<group>"; };
 		1491040B1C82736A001472FA /* global-variables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "global-variables.cpp"; sourceTree = SOURCE_ROOT; };
@@ -64,7 +72,6 @@
 		14A22EB91C9214E500F8FB29 /* Laser_Blast.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Laser_Blast.wav; sourceTree = "<group>"; };
 		14CBA4341C6D281500DF1A56 /* programGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = programGenerator.cpp; path = ../programGenerator.cpp; sourceTree = "<group>"; };
 		14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = NYUCodebase/exceptions.cpp; sourceTree = SOURCE_ROOT; };
-		14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenObject.cpp; sourceTree = SOURCE_ROOT; };
 		14CBA43D1C70F00200DF1A56 /* pong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pong.cpp; sourceTree = "<group>"; };
 		6D5A86AA19AE5C710066C1FD /* NYUCodebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYUCodebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D5A86AD19AE5C710066C1FD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -107,6 +114,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		145071BA1CA9786600E3DBCD /* Platformer Game */ = {
+			isa = PBXGroup;
+			children = (
+				145071BB1CA980B700E3DBCD /* platformer-game.cpp */,
+				145071BC1CA980B700E3DBCD /* platformer-game.h */,
+			);
+			name = "Platformer Game";
+			sourceTree = "<group>";
+		};
 		146F88571C6D219A000B7F9B /* Simple Animation */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +183,8 @@
 		149104111C83D048001472FA /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				1485CD201CACC81F00A22965 /* level1.txt */,
+				1485CD1E1CAB548100A22965 /* spritesheet.png */,
 				1491041F1C881B1D001472FA /* font2.png */,
 				1491041D1C881AC2001472FA /* pixel_font.png */,
 				1491041B1C881869001472FA /* font1.png */,
@@ -211,8 +229,8 @@
 		14CBA4391C6D2F0E00DF1A56 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				1485CD1C1CA9CDF300A22965 /* screenObject.cpp */,
 				1491040E1C838FCD001472FA /* sheetSprite.cpp */,
-				14CBA43A1C6D2F3100DF1A56 /* screenObject.cpp */,
 				148923AB1C7178280030103A /* input_output.cpp */,
 			);
 			name = Animation;
@@ -309,6 +327,7 @@
 		6D5A86E119AE5CAA0066C1FD /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				145071BA1CA9786600E3DBCD /* Platformer Game */,
 				147803651C8271E6007DF8EF /* Space Invaders */,
 				14CBA43C1C70EFE800DF1A56 /* Pong */,
 				146F88581C6D21C7000B7F9B /* Common-Service */,
@@ -373,6 +392,7 @@
 				141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */,
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
 				141114421C698A860003BE05 /* cardSpadesJ.png in Resources */,
+				1485CD211CACC81F00A22965 /* level1.txt in Resources */,
 				141114431C698A860003BE05 /* cardSpadesK.png in Resources */,
 				149104131C83D070001472FA /* spaceSheet.png in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
@@ -380,6 +400,7 @@
 				14A22EBA1C9214E500F8FB29 /* Laser_Blast.wav in Resources */,
 				6DE9D2F11BA6AB8C002D599C /* fragment_textured.glsl in Resources */,
 				6D5A86C619AE5C710066C1FD /* Images.xcassets in Resources */,
+				1485CD1F1CAB548100A22965 /* spritesheet.png in Resources */,
 				1491041C1C88186A001472FA /* font1.png in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
@@ -397,14 +418,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				149104091C82722B001472FA /* space-invaders.cpp in Sources */,
+				145071BD1CA980B700E3DBCD /* platformer-game.cpp in Sources */,
 				149104151C83D3FF001472FA /* simple-animation.cpp in Sources */,
 				6DEF23C31B96CC2600BCE792 /* ShaderProgram.cpp in Sources */,
 				14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */,
 				6DEF23C21B96CC2600BCE792 /* Matrix.cpp in Sources */,
 				148923AC1C7178280030103A /* input_output.cpp in Sources */,
 				14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */,
+				1485CD1D1CA9CDF300A22965 /* screenObject.cpp in Sources */,
 				149104181C83D547001472FA /* play-games.cpp in Sources */,
-				14CBA43B1C6D2F3100DF1A56 /* screenObject.cpp in Sources */,
 				14CBA43E1C70F00200DF1A56 /* pong.cpp in Sources */,
 				1491040F1C838FCD001472FA /* sheetSprite.cpp in Sources */,
 				1491040C1C82736A001472FA /* global-variables.cpp in Sources */,

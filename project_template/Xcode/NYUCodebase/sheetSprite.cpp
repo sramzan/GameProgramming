@@ -8,8 +8,9 @@
 
 #include <stdio.h>
 #include "ShaderProgram.h"
-#include "../screenObject.cpp"
-
+#ifdef _WINDOWS
+#include "screenObject.cpp"
+#endif
 
 class SheetSprite {
 public:
@@ -32,38 +33,18 @@ public:
          
     }
     
-    unsigned int textureID;
     
-    void Draw(ScreenObject* obj) {
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        GLfloat texCoords[] = {
-            u, v+height,
-            u+width, v,
-            u, v,
-            u+width, v,
-            u, v+height,
-            u+width, v+height
-        };
-        float aspect = width / height;
-        float vertices[] = {
-            -0.5f * size * aspect, -0.5f * size,
-             0.5f * size * aspect,  0.5f * size,
-            -0.5f * size * aspect,  0.5f * size,
-            
-             0.5f * size * aspect,  0.5f * size,
-            -0.5f * size * aspect, -0.5f * size,
-             0.5f * size * aspect, -0.5f * size
-        };
-        // draw our arrays
-        obj->drawTexture(vertices, texCoords);
-    }
     
     float getTopPos()    { return topPos;    }
     float getBottomPos() { return bottomPos; }
     float getRightPos()  { return rightPos;  }
     float getLeftPos()   { return leftPos;   }
     float getSize()      { return size;      }
-    
+    float getUCoord()    { return u;         }
+    float getVCoord()    { return v;         }
+    float getWidth()     { return width;     }
+    float getHeight()    { return height;    }
+    float getTextID()    { return textureID; }
     
 private:
     float size;
@@ -76,5 +57,7 @@ private:
     float bottomPos;
     float leftPos;
     float rightPos;
+    
+    unsigned int textureID;
 };
 
