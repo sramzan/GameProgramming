@@ -47,8 +47,9 @@ class Entity : public ScreenObject{
 public:
     Entity(ShaderProgram* prog, string textSheet, int x, int y);
     std::string getType();
-    int getXPos();
-    int getYPos();
+    float
+    getXPos();
+    float getYPos();
     float getX_Velocity();
     float getY_Velocity();
     float getX_Acceleration();
