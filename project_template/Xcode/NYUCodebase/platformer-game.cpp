@@ -371,16 +371,23 @@ void checkForCollision(Entity* entity, float elapsed){
     
     // check left
     worldToTileCoordinates(entity->getXPos(), entity->getYPos(), &xLoc, &yLoc);
-    if (levelData[yLoc+1][xLoc+1] == solidGround || levelData[yLoc][xLoc+1] ==solidGround_2){
-        cout << "LEFT collision" << endl;
-        cout << "y " << yLoc << " x: " << xLoc << endl;
+    if (levelData[yLoc+1][xLoc+1] == solidGround || levelData[yLoc+1][xLoc+1] == solidGround_2){
+//        cout << "LEFT collision" << endl;
+//        cout << "y " << yLoc << " x: " << xLoc << endl;
     }
     
     // check right
 //    worldToTileCoordinates(fabs(right), middle, &xLoc, &yLoc);
     worldToTileCoordinates(right, middle, &xLoc, &yLoc);
-    if (levelData[yLoc+1][xLoc+1] == solidGround || levelData[yLoc][xLoc+1] ==solidGround_2){
-        cout << "RIGHT collision" << endl;
+    if (levelData[yLoc+1][xLoc+1] == solidGround || levelData[yLoc+1][xLoc+1] == solidGround_2){
+        float x_distance = fabs( fabs((xLoc * -TILE_SIZE)) - fabs(entity->getXPos()) );
+        float width1 = TILE_SIZE/2;
+        float width2 = TILE_SIZE/2;
+        float penetration = fabs(x_distance - width1/2 - width2/2);
+        entity->moveToTheLeft(-penetration + .00000001);
+        entity->updateXPos(-penetration    + .00000001);
+        return;
+        
     }
     
     
@@ -425,18 +432,22 @@ void doTheEntityThing(Entity* entity, const Uint8* keys, float elapsed, Program*
         
         entity->applyFrictionToVel();
         entity->applyGravityToVel(elapsed);
-        entity->move(entity->getX_Velocity(), entity->getY_Velocity(), 0, FIXED_TIMESTEP);
     
+        entity->move(entity->getX_Velocity(), entity->getY_Velocity(), 0, FIXED_TIMESTEP);
+        checkForCollision(entity, elapsed);
         entity->updatePosition();
     
-        checkForCollision(entity, elapsed);
+//        cout << "x0: " << entities[0]->getXPos() << " y0: " << entities[0]->getYPos();
         entity->updateAccelTo(0, 0);
     
         
         worldToTileCoordinates(entities[0]->getXPos(), entities[0]->getYPos(), &xPos, &yPos);
+//        cout << "x1: " << entities[0]->getXPos() << " y1: " << entities[0]->getYPos();
         getVertexAndTextureDataAtPoint(entity, 6, 12);
+//        cout << "x2: " << entities[0]->getXPos() << " y2: " << entities[0]->getYPos();
         entities[0]->drawTexture(entityVertexData.data(), entityTextureData.data());
-        
+//        cout << "x3: " << entities[0]->getXPos() << " y3: " << entities[0]->getYPos();
+//    cout << endl;
 //    cout << "top : " << entity->getTopPos() << " bottom: " << entity->getBottomPos() << " left: " << entity->getLeftPos() << " right: " << entity->getRightPos() << " x: " << entity->getXPos() << " y: " << entity->getYPos() << " xVel: " << entity->getX_Velocity() << " yVel: " << entity->getY_Velocity() << " tileX: " << xPos << " tileY: " << yPos << endl;
 //        cout << " x: " << entity->getXPos() << " y: " << entity->getYPos() << " xVel: " << entity->getX_Velocity() << " yVel: " << entity->getY_Velocity() << " tileX: " << xPos << " tileY: " << yPos << endl;
     
