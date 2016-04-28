@@ -28,7 +28,7 @@ using namespace std;
 #define LEVEL_WIDTH 30
 #define GRAVITY_X 0
 #define GRAVITY_Y 0
-#define FRICTION_X .99
+#define FRICTION_X .7
 #define FRICTION_Y .99
 #define SPRITE_SIZE 21
 
@@ -39,6 +39,7 @@ float tileMidBaseLine   = 0;
 int mapWidth    = -1;
 int mapHeight   = -1;
 int solidGround = 586;
+int solidGround_2 = 556;
 int** levelData;
 int** solidTiles;
 bool firstRun = true;
@@ -72,8 +73,8 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
     this->type=entityType;
     
     // Set position of entity in space
-    this->xPos = (float) (xPosition)/SPRITE_SIZE;
-    this->yPos = (float) (yPosition)/-SPRITE_SIZE;
+    this->xPos = (float) (xPosition);
+    this->yPos = (float) (yPosition); // *-TILE_SIZE --> ENTITY SHOULD NOT KNOW ABOUT TILED POSITIONS
     
     // default velocity
     this->xVelocity = 0;
@@ -83,7 +84,7 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
     this->xAccel = 0;
     this->yAccel = 0;
     
-    setPositionVars((float)xPosition /SPRITE_SIZE, (float)yPosition/SPRITE_SIZE, 0, TILE_SIZE);
+    setPositionVars((float)xPosition, (float)yPosition , 0, TILE_SIZE);
     
 //    translateViewMatrix(8, -14, 0);
 //    setPosition(x, y, 0, TILE_SIZE);
@@ -115,8 +116,18 @@ void Entity::applyFrictionToVel(){
 }
 
 void Entity::updatePosition(){
-    this->xPos += xVelocity * FIXED_TIMESTEP;
-    this->yPos += yVelocity * FIXED_TIMESTEP;
+    updateXPos(xVelocity);
+    updateYPos(yVelocity);
+//    this->xPos += xVelocity * FIXED_TIMESTEP;
+//    this->yPos += yVelocity * FIXED_TIMESTEP;
+}
+
+void Entity::updateXPos(float xVel){
+    this->xPos += xVel;
+}
+
+void Entity::updateYPos(float yVel){
+    this->yPos += yVel;
 }
 
 void Entity::updateAccelTo(float accelX, float accelY){
@@ -160,7 +171,7 @@ bool isSolidGround(int val){
     return (val == solidGround) ? true : false;
 }
 
-void getVertexAndTextureDataAtPoint(Entity* entity, float x, float y){
+void getVertexAndTextureDataAtPoint(Entity* entity, float x, float y){ // need to change this to draw at 0, not at wherever it draws now
 //        float u = (float)(((int)levelData[y][x]) % SPRITE_COUNT_X) / (float) SPRITE_COUNT_X;
 //        float v = (float)(((int)levelData[y][x]) / SPRITE_COUNT_X) / (float) SPRITE_COUNT_Y;
         int playerSpritesheetVal = getSpriteSheetValof(entity);
@@ -172,13 +183,11 @@ void getVertexAndTextureDataAtPoint(Entity* entity, float x, float y){
         float spriteWidth = 1.0f/(float)SPRITE_COUNT_X;
         float spriteHeight = 1.0f/(float)SPRITE_COUNT_Y;
 //    cout << "u: " << u << " v: " << v << " Val: " << levelData[y][x] << " Sprite Width: " << spriteWidth << " Sprite Height: " << spriteHeight << endl << endl;
+    
     // set left, right, bottom, top boundaries of each respective obj
     float size = TILE_SIZE;
     float aspect = spriteWidth / spriteHeight;
-//    entity-> leftPos   = -0.5f * size * aspect;
-//    entity-> rightPos  =  0.5f * size * aspect;
-//    entity-> bottomPos = -0.5f * size;
-//    entity-> topPos    =  0.5f * size;
+
         entityVertexData.insert(entityVertexData.end(), {
             TILE_SIZE * x,  -TILE_SIZE * y,
             TILE_SIZE * x, (-TILE_SIZE * y)-TILE_SIZE,
@@ -232,8 +241,8 @@ void getVertexAndTextureCoordsFromTileMap(TileMap* tm){
 }
 
 void worldToTileCoordinates(float worldX, float worldY, int *gridX, int *gridY) { // way to get entities' grid location in space
-    *gridX = (int)(worldX * SPRITE_SIZE);
-    *gridY = (int)(-worldY * SPRITE_SIZE);
+    *gridX = (int)(worldX / TILE_SIZE);
+    *gridY = (int)(-worldY / TILE_SIZE);
 }
 
 void placeEntity(string type, float placeX, float placeY){
@@ -285,6 +294,7 @@ bool readLayerData(ifstream &stream) {
                     getline(lineStream, tile, ',');
                     int val = atoi(tile.c_str());
                     if(val > 0) {
+                
                         // be careful, the tiles in this format are indexed from 1 not 0
 //                        if (val - 1 == solidGround)
 //                        if (val == solidGround)
@@ -320,8 +330,8 @@ bool readEntityData(ifstream &stream) {
             getline(lineStream, yPosition, ',');
 //            float placeX = atoi(xPosition.c_str()) / 21*TILE_SIZE; // NOT GETTING PROPER INDEX... FIXME
 //            float placeY = atoi(yPosition.c_str()) / 21*-TILE_SIZE;
-            float placeX = 6; //* TILE_SIZE; //atoi(xPosition.c_str()); // NOT GETTING PROPER INDEX... FIXME
-            float placeY = 12; //* -TILE_SIZE; //atoi(yPosition.c_str());
+            float placeX = atoi(xPosition.c_str())  *  TILE_SIZE; //atoi(xPosition.c_str()); // NOT GETTING PROPER INDEX... FIXME
+            float placeY = atoi(yPosition.c_str()) * -TILE_SIZE; //atoi(yPosition.c_str());
             placeEntity(type, placeX, placeY);
            }
     }
@@ -351,19 +361,25 @@ void checkForCollision(Entity* entity, float elapsed){
     float bottom = entity->getBottomPos();
     float left   = entity->getLeftPos();
     float right  = entity->getRightPos();
-    float middle = (top+bottom)/2;
+//    float middle = (top+bottom)/2;
+    float middle = (top - (TILE_SIZE/2));
     middle = (middle < 0) ? middle : middle * -1;
+    
+    // TODO - Replace collision logic later, after check works
+    
     // Checking y
     
     // check left
-    worldToTileCoordinates(fabs(left), middle, &xLoc, &yLoc);
-    if (levelData[yLoc][xLoc] == solidGround){
+    worldToTileCoordinates(entity->getXPos(), entity->getYPos(), &xLoc, &yLoc);
+    if (levelData[yLoc+1][xLoc+1] == solidGround || levelData[yLoc][xLoc+1] ==solidGround_2){
         cout << "LEFT collision" << endl;
+        cout << "y " << yLoc << " x: " << xLoc << endl;
     }
     
     // check right
-    worldToTileCoordinates(fabs(right), middle, &xLoc, &yLoc);
-    if (levelData[yLoc][xLoc] == solidGround){
+//    worldToTileCoordinates(fabs(right), middle, &xLoc, &yLoc);
+    worldToTileCoordinates(right, middle, &xLoc, &yLoc);
+    if (levelData[yLoc+1][xLoc+1] == solidGround || levelData[yLoc][xLoc+1] ==solidGround_2){
         cout << "RIGHT collision" << endl;
     }
     
@@ -392,8 +408,9 @@ void doTheEntityThing(Entity* entity, const Uint8* keys, float elapsed, Program*
             firstRun = false;
         }
         if (keys[SDL_SCANCODE_RIGHT]){
-            entity->updateAccelTo(.2, 0);
+            entity->updateAccelTo(.1, 0);
             entity->applyAccelerationToVel();
+//            entity->addToX(entity->getX_Acceleration());
         }
         if (keys[SDL_SCANCODE_LEFT]){
             entity->updateAccelTo(-.1, 0);
@@ -408,7 +425,7 @@ void doTheEntityThing(Entity* entity, const Uint8* keys, float elapsed, Program*
         
         entity->applyFrictionToVel();
         entity->applyGravityToVel(elapsed);
-        entity->move(entity->getX_Velocity(), entity->getY_Velocity(), 0);
+        entity->move(entity->getX_Velocity(), entity->getY_Velocity(), 0, FIXED_TIMESTEP);
     
         entity->updatePosition();
     
@@ -420,8 +437,9 @@ void doTheEntityThing(Entity* entity, const Uint8* keys, float elapsed, Program*
         getVertexAndTextureDataAtPoint(entity, 6, 12);
         entities[0]->drawTexture(entityVertexData.data(), entityTextureData.data());
         
-    cout << "top : " << entity->getTopPos() << " bottom: " << entity->getBottomPos() << " left: " << entity->getLeftPos() << " right: " << entity->getRightPos() << " x: " << entity->getXPos() << " y: " << entity->getYPos() << " xVel: " << entity->getX_Velocity() << " yVel: " << entity->getY_Velocity() << " tileX: " << xPos << " tileY: " << yPos << endl;
-        
+//    cout << "top : " << entity->getTopPos() << " bottom: " << entity->getBottomPos() << " left: " << entity->getLeftPos() << " right: " << entity->getRightPos() << " x: " << entity->getXPos() << " y: " << entity->getYPos() << " xVel: " << entity->getX_Velocity() << " yVel: " << entity->getY_Velocity() << " tileX: " << xPos << " tileY: " << yPos << endl;
+//        cout << " x: " << entity->getXPos() << " y: " << entity->getYPos() << " xVel: " << entity->getX_Velocity() << " yVel: " << entity->getY_Velocity() << " tileX: " << xPos << " tileY: " << yPos << endl;
+    
         entityVertexData.clear();
         entityTextureData.clear();
     

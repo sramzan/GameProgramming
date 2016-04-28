@@ -102,12 +102,12 @@ public:
         float aspect = width / height;
         float vertices[] = {
             -0.5f * size * aspect, -0.5f * size,
-            0.5f * size * aspect,  0.5f * size,
+             0.5f * size * aspect,   0.5f * size,
             -0.5f * size * aspect,  0.5f * size,
             
-            0.5f * size * aspect,  0.5f * size,
+             0.5f * size * aspect,  0.5f * size,
             -0.5f * size * aspect, -0.5f * size,
-            0.5f * size * aspect, -0.5f * size
+             0.5f * size * aspect, -0.5f * size
         };
         // draw our arrays
         drawTexture(vertices, texCoords);
@@ -154,7 +154,7 @@ public:
         }
     }
     
-    void move(float xUnits, float yUnits, float zUnits){ // General move function to move the screen obj around on the screen
+    void move(float xUnits, float yUnits, float zUnits, float fixedTimeStep){ // General move function to move the screen obj around on the screen
         topPos    += yUnits;
         bottomPos += yUnits;
         leftPos   += xUnits;
@@ -191,10 +191,10 @@ public:
     }
     
     void setPositionVars(float xUnits, float yUnits, float zUnits, float size){
-        topPos    = yUnits + size;
-        bottomPos = yUnits - size;
-        leftPos   = xUnits - size;
-        rightPos  = xUnits + size;
+        topPos    = yUnits + size/2;
+        bottomPos = yUnits - size/2;
+        leftPos   = xUnits - size/2;
+        rightPos  = xUnits + size/2;
     }
     
     void translateViewMatrix(float x, float y, float z){

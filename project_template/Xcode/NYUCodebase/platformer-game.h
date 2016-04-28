@@ -58,6 +58,8 @@ public:
     void applyAccelerationToVel();
     void updatePosition();
     void applyFrictionToVel();
+    void updateXPos(float xVel);
+    void updateYPos(float yVel);
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
