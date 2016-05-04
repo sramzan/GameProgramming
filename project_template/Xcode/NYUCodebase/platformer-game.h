@@ -60,6 +60,10 @@ public:
     void applyFrictionToVel();
     void updateXPos(float xVel);
     void updateYPos(float yVel);
+    void setY_Velocity(float vel);
+    void setX_Velocity(float vel);
+    void draw();
+    void getVertexAndTextCoordData();
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
@@ -73,6 +77,11 @@ private:
     float yAccel;
     float xPos;
     float yPos;
+    float size;
+    float u;
+    float v;
+    float spriteWidth;
+    float spriteHeight;
     
 };
 
@@ -83,6 +92,7 @@ public:
     float* getTextData();
     vector<float>* getVertexVector();
     vector<float>* getTextVector();
+    bool isSolidTile(float xLoc, float yLoc);
 private:
     std::vector<float> vertexData;
     std::vector<float> texCoordData;

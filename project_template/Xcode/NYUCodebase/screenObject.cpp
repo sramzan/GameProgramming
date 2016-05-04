@@ -52,7 +52,7 @@ public:
     void setMatrices(){
         program->setModelMatrix(modelMatrix);
         program->setProjectionMatrix(projectionMatrix);
-        program->setViewMatrix(viewMatrix);
+//        program->setViewMatrix(viewMatrix);
     }
     
     void setModelMatrix(){
@@ -127,7 +127,14 @@ public:
         }
     }
     
-    void moveToTheLeft(float xUnits){
+    /*
+    (x/TileSize)
+    (y/-TileSize)
+        - y goes down in openGL, thats why its negative
+    what worlToTile does to get you the pointsin the TileMap
+    */
+     
+     void moveToTheLeft(float xUnits){
         if (xUnits <= 0){
             leftPos += xUnits;
             rightPos += xUnits;
@@ -154,7 +161,7 @@ public:
         }
     }
     
-    void move(float xUnits, float yUnits, float zUnits, float fixedTimeStep){ // General move function to move the screen obj around on the screen
+    void move(float xUnits, float yUnits, float zUnits){ // General move function to move the screen obj around on the screen... used fixedTimeStep here at a point
         topPos    += yUnits;
         bottomPos += yUnits;
         leftPos   += xUnits;
@@ -197,10 +204,10 @@ public:
         rightPos  = xUnits + size/2;
     }
     
-    void translateViewMatrix(float x, float y, float z){
-        viewMatrix.Translate(x, y, z);
-        program->setViewMatrix(viewMatrix);
-    }
+//    void translateViewMatrix(float x, float y, float z){
+//        viewMatrix.Translate(x, y, z);
+//        program->setViewMatrix(viewMatrix);
+//    }
     
     
     void drawPolygon(float* vertices){
@@ -293,7 +300,7 @@ public:
     
     Matrix projectionMatrix;
     Matrix modelMatrix;
-    Matrix viewMatrix;
+//    Matrix viewMatrix;
     GLuint texture = NULL;
     string textureName = "";
     ShaderProgram* program;
