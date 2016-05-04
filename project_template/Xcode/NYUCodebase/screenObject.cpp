@@ -64,6 +64,10 @@ public:
         this->textureName = textName;
     }
     
+    void createNewSprite(unsigned int textID, float uVal, float vVal, float widthVal, float heightVal,float sizeVal){
+        this->sheetSprite = new SheetSprite(textID, uVal, vVal, widthVal, heightVal, sizeVal);
+    }
+    
     void drawTexture(float* verticesArray, float* texCords){
 //        if (texture == NULL)
 //            throw new LoadException("Texture not defined for " + textureName + "\n");

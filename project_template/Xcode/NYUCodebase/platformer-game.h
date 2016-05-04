@@ -45,7 +45,7 @@ GLuint LoadTexture(const char* image_path);
 // Classes
 class Entity : public ScreenObject{
 public:
-    Entity(ShaderProgram* prog, string textSheet, int x, int y);
+    Entity(ShaderProgram* prog, string textSheet, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal);
     std::string getType();
     float
     getXPos();
