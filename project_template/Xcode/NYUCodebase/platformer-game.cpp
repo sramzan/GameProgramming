@@ -27,13 +27,13 @@ using namespace std;
 #define LEVEL_HEIGHT 30
 #define LEVEL_WIDTH 30
 #define GRAVITY_X 0
-#define GRAVITY_Y -.1
+#define GRAVITY_Y -.2
 #define FRICTION_X .7
 #define FRICTION_Y .99
 #define SPRITE_SIZE 21
 
 static ShaderProgram* prog;
-static GLuint spriteText;
+static GLuint tileMapSpriteTextureID;
 static GLuint entitySpriteTextureID;
 float TILE_SIZE=1.25;
 float tileMidBaseLine   = 0;
@@ -75,7 +75,7 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
         entities.pop_back();
     }
     this->type=entityType;
-    this->sheetSprite = new SheetSprite(spriteText, uVal, vVal, widthVal, heightVal, sizeVal);
+    this->sheetSprite = new SheetSprite(entitySpriteTextureID, uVal, vVal, widthVal, heightVal, sizeVal);
     
     // Set position of entity in space
     this->xPos = (float) (xPosition);
@@ -92,6 +92,7 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
     // setting size of the entity
     this->size = TILE_SIZE;
     
+    // TODO - remove this logic
     int playerSpritesheetVal = getSpriteSheetValof(this);
     float u = (float) (( playerSpritesheetVal % SPRITE_COUNT_X )/ (float) SPRITE_COUNT_X);
     float v = ((float)(playerSpritesheetVal)/ SPRITE_COUNT_X) / (float) SPRITE_COUNT_Y;
@@ -193,7 +194,7 @@ void Entity::draw(){
 }
 
 // TileMap Class Definitions
-TileMap::TileMap(ShaderProgram* prog) : ScreenObject(prog, spriteText){}
+TileMap::TileMap(ShaderProgram* prog) : ScreenObject(prog, tileMapSpriteTextureID){}
 vector<float>* TileMap::getVertexVector() { return &vertexData;   }
 vector<float>* TileMap::getTextVector()   { return &texCoordData; }
 float* TileMap::getVertexData() { return vertexData.data();   }
@@ -452,6 +453,8 @@ void checkForCollision(Entity* entity, float elapsed){
 }
 void handleEntityActions(Entity* entity, const Uint8* keys, float elapsed, Program* program){
     
+    entity->identity();
+    entity->move(entity->getXPos(), entity->getYPos(), 0);
     // Apply Gravity
     if (entity == NULL)
         return;
@@ -460,9 +463,8 @@ void handleEntityActions(Entity* entity, const Uint8* keys, float elapsed, Progr
 //        entity->getVertexAndTextCoordData();
 //        entity->draw();
         entity->drawFromSheetSprite();
-        entity->move(entity->getXPos(), entity->getYPos(), 0);
-        entity->modelMatrix.Scale(-1, 1, 1);
-        entity->setModelMatrix();
+//        entity->move(entity->getXPos(), entity->getYPos(), 0);
+        
 //        entity->rotate((90*3.14)/180);
         firstRun = false;
     }
@@ -493,6 +495,13 @@ void handleEntityActions(Entity* entity, const Uint8* keys, float elapsed, Progr
     entity->updatePosition();
     entity->updateAccelTo(0, 0);
     
+
+    if (entity->getX_Velocity() < 0)
+        entity->scale(-1, 1, 1);
+    
+    
+//    entity->scale(-1, 1 ,1);
+    
 //    entity->draw();
 //    entity->drawFromSheetSprite();
 //    program->translateViewMatrix(-1 * entity->getXPos(), -1 * entity->getYPos(), 0);
@@ -510,19 +519,19 @@ void playPlatformGame(){
     
     SDL_Event event;
     
-    spriteText = LoadTexture("spriteSheet.png");
+    tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
     entitySpriteTextureID = LoadTexture("DBZ_sprites.png");
     
     bool done            = false;
     float lastFrameTicks = 0.0f;
     bool getEntity       = true;
     
-    TileMap* tm    = new TileMap(prog);
-    Entity* entity = NULL;
+    TileMap* tileMap = new TileMap(prog);
+    Entity* entity   = NULL;
     readFileLineByLine();
-    getVertexAndTextureCoordsFromTileMap(tm);
+    getVertexAndTextureCoordsFromTileMap(tileMap);
     
-    program.translateViewMatrix(tm->getLeftBoundary() * 1.10, tm->getTopBoundary() * 2, 0);
+    program.translateViewMatrix(tileMap->getLeftBoundary() * 1.10, tileMap->getTopBoundary() * 2, 0);
     
     while (!done) {
         float ticks    = (float)SDL_GetTicks()/1000.0f;
@@ -533,14 +542,24 @@ void playPlatformGame(){
                 done = true;
             }
         }
+        
         program.clearScreen(.2, .3, .4, 1);
         
+//        if (!getEntity)
+//            program.translateViewMatrix(-entity->getXPos(), -entity->getYPos(), 0);
         
         const Uint8 *keys = SDL_GetKeyboardState(NULL);
-        tm->identity();
+        tileMap->identity();
+        program.setModelMatrix(tileMap->getModelMatrix());
+        glBindTexture(GL_TEXTURE_2D, tileMapSpriteTextureID);
+        drawTexture(tileMap->getVertexData(), tileMap->getTextData());
+
+//        if (!getEntity){
+//            program.setModelMatrix(entity->getModelMatrix());
+//            glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
+//            entity->drawFromSheetSprite();
+//        }
         
-        glBindTexture(GL_TEXTURE_2D, spriteText);
-        drawTexture(tm->getVertexData(), tm->getTextData());
 //        glBindTexture(GL_TEXTURE_2D, spriteText);
         
         float fixedElapsed = elapsed;
@@ -563,10 +582,13 @@ void playPlatformGame(){
             handleEntityActions(entity, keys, fixedElapsed, &program);
             getEntity = false;
         }
-        //        updateGame(program, player1, window, fixedElapsed, keys);
-            entity->drawFromSheetSprite();
         
-        //        float fixedElapsed = elapsed;
+        
+        program.setModelMatrix(entity->getModelMatrix());
+        glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
+        program.translateViewMatrix(-entity->getXPos(), -entity->getYPos(), 0);
+        entity->drawFromSheetSprite();
+        
         SDL_GL_SwapWindow(window.getDispWindow());
         
     }

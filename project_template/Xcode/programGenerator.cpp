@@ -46,6 +46,7 @@ public:
     }
     
     void translateViewMatrix(float x, float y, float z){
+        viewMatrix.identity();
         viewMatrix.Translate(x, y, z);
         program.setViewMatrix(viewMatrix);
     }
@@ -69,6 +70,10 @@ public:
     
     void identity(){
         modelMatrix.identity();
+        program.setModelMatrix(modelMatrix);
+    }
+    
+    void setModelMatrix(Matrix modelMatrix){
         program.setModelMatrix(modelMatrix);
     }
     
