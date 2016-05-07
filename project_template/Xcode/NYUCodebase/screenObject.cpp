@@ -28,15 +28,15 @@ class ScreenObject{
 public:
     ScreenObject(ShaderProgram* prog){
         this->program = prog;
-        setProjection();
-        setMatrices();
+//        setProjection();
+//        setMatrices();
     }
     
     ScreenObject(ShaderProgram* prog, GLuint texture){
         this->program = prog;
         this->spriteSheetTexture = texture;
-        setProjection();
-        setMatrices();
+//        setProjection();
+//        setMatrices();
     }
     
     // used for adding a sheetSprite to the respective entity
@@ -62,6 +62,10 @@ public:
     void setTexture(GLuint text, string textName){
         this->texture = text;
         this->textureName = textName;
+    }
+    
+    void createNewSprite(unsigned int textID, float uVal, float vVal, float widthVal, float heightVal,float sizeVal){
+        this->sheetSprite = new SheetSprite(textID, uVal, vVal, widthVal, heightVal, sizeVal);
     }
     
     void drawTexture(float* verticesArray, float* texCords){
@@ -115,7 +119,7 @@ public:
     
     void rotate(float rotateAmt){
         modelMatrix.Rotate(rotateAmt);
-        program->setModelMatrix(modelMatrix);
+//        program->setModelMatrix(modelMatrix);
     }
     
     void moveToTheRight(float xUnits){
@@ -123,7 +127,7 @@ public:
             leftPos  += xUnits;
             rightPos += xUnits;
             modelMatrix.Translate(xUnits, 0, 0);
-            program->setModelMatrix(modelMatrix); // MUST set the model matrix everytime a transformation is made as the program will not know what changes have been in the matrix, if not explicitly told. The matrices simply hold a bunch of values that can be used to plot points on a screen
+//            program->setModelMatrix(modelMatrix); // MUST set the model matrix everytime a transformation is made as the program will not know what changes have been in the matrix, if not explicitly told. The matrices simply hold a bunch of values that can be used to plot points on a screen
         }
     }
     
@@ -139,7 +143,7 @@ public:
             leftPos += xUnits;
             rightPos += xUnits;
             modelMatrix.Translate(xUnits, 0, 0);
-            program->setModelMatrix(modelMatrix);
+//            program->setModelMatrix(modelMatrix);
         }
     }
     
@@ -148,7 +152,7 @@ public:
             topPos += yUnits;
             bottomPos += yUnits;
             modelMatrix.Translate(0, yUnits, 0);
-            program->setModelMatrix(modelMatrix);
+//            program->setModelMatrix(modelMatrix);
         }
     }
     
@@ -157,7 +161,7 @@ public:
             topPos += yUnits;
             bottomPos += yUnits;
             modelMatrix.Translate(0, yUnits, 0);
-            program->setModelMatrix(modelMatrix);
+//            program->setModelMatrix(modelMatrix);
         }
     }
     
@@ -167,7 +171,7 @@ public:
         leftPos   += xUnits;
         rightPos  += xUnits;
         modelMatrix.Translate(xUnits, yUnits, zUnits);
-        program->setModelMatrix(modelMatrix);
+//        program->setModelMatrix(modelMatrix);
     }
     
     void setPositionInSpace(float top, float bottom, float left, float right){ // General move function to move the screen obj around on the screen
@@ -194,7 +198,7 @@ public:
         leftPos   = xUnits - size;
         rightPos  = xUnits + size;
         modelMatrix.setPosition(xUnits, yUnits, zUnits);
-        program->setModelMatrix(modelMatrix);
+//        program->setModelMatrix(modelMatrix);
     }
     
     void setPositionVars(float xUnits, float yUnits, float zUnits, float size){
@@ -226,7 +230,7 @@ public:
     
     void resetPosition(){
         modelMatrix.identity();
-        program->setModelMatrix(modelMatrix);
+//        program->setModelMatrix(modelMatrix);
     }
     
     void setTopPos(float top){
@@ -290,12 +294,18 @@ public:
     
     void identity(){
         modelMatrix.identity();
-        program->setModelMatrix(modelMatrix);
+//        program->setModelMatrix(modelMatrix);
+    }
+    
+    void scale(float x, float y, float z){
+        modelMatrix.Scale(x, y, z);
     }
     
     void destroy(){
         
     }
+    
+    Matrix getModelMatrix() { return modelMatrix; }
     
     
     Matrix projectionMatrix;

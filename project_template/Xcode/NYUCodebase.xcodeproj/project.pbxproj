@@ -11,6 +11,8 @@
 		141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114381C696DD50003BE05 /* cardSpadesQ.png */; };
 		141114421C698A860003BE05 /* cardSpadesJ.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114401C698A860003BE05 /* cardSpadesJ.png */; };
 		141114431C698A860003BE05 /* cardSpadesK.png in Resources */ = {isa = PBXBuildFile; fileRef = 141114411C698A860003BE05 /* cardSpadesK.png */; };
+		14241E261CDA97DE00E84999 /* DBZ_sprites.png in Resources */ = {isa = PBXBuildFile; fileRef = 14241E251CDA97DE00E84999 /* DBZ_sprites.png */; };
+		14241E281CDAA4BB00E84999 /* planes.png in Resources */ = {isa = PBXBuildFile; fileRef = 14241E271CDAA4BB00E84999 /* planes.png */; };
 		145071BD1CA980B700E3DBCD /* platformer-game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145071BB1CA980B700E3DBCD /* platformer-game.cpp */; };
 		146F885B1C6D2201000B7F9B /* windowGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 146F885A1C6D2201000B7F9B /* windowGenerator.cpp */; };
 		1485CD1D1CA9CDF300A22965 /* screenObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1485CD1C1CA9CDF300A22965 /* screenObject.cpp */; };
@@ -52,6 +54,8 @@
 		141114381C696DD50003BE05 /* cardSpadesQ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesQ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesQ.png"; sourceTree = "<group>"; };
 		141114401C698A860003BE05 /* cardSpadesJ.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesJ.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesJ.png"; sourceTree = "<group>"; };
 		141114411C698A860003BE05 /* cardSpadesK.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cardSpadesK.png; path = "../../../assets/graphics/Boardgame pack (520 assets)/PNG/Cards/cardSpadesK.png"; sourceTree = "<group>"; };
+		14241E251CDA97DE00E84999 /* DBZ_sprites.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DBZ_sprites.png; sourceTree = "<group>"; };
+		14241E271CDAA4BB00E84999 /* planes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = planes.png; sourceTree = "<group>"; };
 		145071BB1CA980B700E3DBCD /* platformer-game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "platformer-game.cpp"; sourceTree = "<group>"; };
 		145071BC1CA980B700E3DBCD /* platformer-game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platformer-game.h"; sourceTree = "<group>"; };
 		146F885A1C6D2201000B7F9B /* windowGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = windowGenerator.cpp; sourceTree = "<group>"; };
@@ -229,6 +233,8 @@
 		14CBA4391C6D2F0E00DF1A56 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				14241E271CDAA4BB00E84999 /* planes.png */,
+				14241E251CDA97DE00E84999 /* DBZ_sprites.png */,
 				1485CD1C1CA9CDF300A22965 /* screenObject.cpp */,
 				1491040E1C838FCD001472FA /* sheetSprite.cpp */,
 				148923AB1C7178280030103A /* input_output.cpp */,
@@ -394,6 +400,7 @@
 				141114421C698A860003BE05 /* cardSpadesJ.png in Resources */,
 				1485CD211CACC81F00A22965 /* level1.txt in Resources */,
 				141114431C698A860003BE05 /* cardSpadesK.png in Resources */,
+				14241E261CDA97DE00E84999 /* DBZ_sprites.png in Resources */,
 				149104131C83D070001472FA /* spaceSheet.png in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
 				149104201C881B1D001472FA /* font2.png in Resources */,
@@ -404,6 +411,7 @@
 				1491041C1C88186A001472FA /* font1.png in Resources */,
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
+				14241E281CDAA4BB00E84999 /* planes.png in Resources */,
 				6DC7076A1BA7273500225B7D /* vertex_textured.glsl in Resources */,
 				1491041A1C83E0F2001472FA /* spacePics.png in Resources */,
 				1491041E1C881AC2001472FA /* pixel_font.png in Resources */,
