@@ -48,7 +48,7 @@ class TileMap;
 // Classes
 class Entity : public ScreenObject{
 public:
-    Entity(ShaderProgram* prog, string textSheet, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal);
+    Entity(ShaderProgram* prog, string entityType, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal, int direction, int healthVal);
     std::string getType();
     int getDirection();
     float getXPos();
@@ -68,6 +68,18 @@ public:
     void draw();
     void getVertexAndTextCoordData();
     void fire();
+    void setDirectionLeft();
+    void setDirectionRight();
+    void moveBullets();
+    void deleteBullet(Bullet* bullet);
+    void checkBulletCollisions(float elapsed);
+    void drawBullets();
+    void setBulletsToIdentity();
+    void moveAllBulletsToPosition();
+    void applyAccelerationToVelForAllBullets();
+    void updateAllBulletPositions();
+    void applyAccelerationToVelFor(Bullet* bullet);
+    void invertBulletsIfNecessary();
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
@@ -75,7 +87,8 @@ public:
     
 private:
     std::string type;
-    int direction; // 1 to move right, -1 to move left
+    int direction;
+    int health;
     float xVelocity;
     float yVelocity;
     float xAccel;
@@ -88,16 +101,17 @@ private:
     float spriteWidth;
     float spriteHeight;
     std::vector<Bullet*> bullets;
-    
 };
 
 class Bullet : public Entity{
 public:
     Bullet(ShaderProgram* prog, int xPos, int yPos, int direction);
-    int getDirection();
-    
+    void markForDeletion();
+    bool isMarkedForDeletion();
+    int getBulletDirection();
 private:
-    int direction; // 1 to move right, -1 to move left
+    int bulletDirection;
+    bool markedForDeletion;
     
 };
 
