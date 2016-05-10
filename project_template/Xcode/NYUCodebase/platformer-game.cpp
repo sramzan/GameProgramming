@@ -15,6 +15,7 @@
 #include <SDL_opengl.h>
 #include <SDL_image.h>
 #include <unistd.h>
+#include <SDL_mixer.h>
 #include "windowGenerator.cpp"
 #include "../programGenerator.cpp"
 #include "../global-variables.cpp"
@@ -50,11 +51,26 @@ const int iceGround_2 = 645;
 const int iceGround_3 = 646;
 const int iceGround_4 = 191;
 
+const int MENU    = 0;
+const int LEVEL_1 = 1;
+const int LEVEL_2 = 2;
+const int LEVEL_3 = 3;
+const int GAME_OVER  = 4;
+const int GAME_STATE = 0;
+
 int** levelData;
 int** solidTiles;
 bool firstRun = true;
 int totalArrayHeight = 0;
 int totalArrayWidth  = 0;
+
+// bullet sprite sheet info
+// player 1
+float bullet_uVal   = 0.0f;
+float bullet_vVal   = 0.0f;
+float bullet_width  = 0.0f;
+float bullet_height = 0.0f;
+
 
 std::string levelFilePath = "level3.txt";
 std::string tileLayerName = "layer";
@@ -110,11 +126,14 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
 
 // Entity Class Definitions
 string Entity::getType()          { return this->type;      }
+int   Entity::getHealth()         { return this->health;    }
 int   Entity::getDirection()      { return this->direction; }
 float Entity::getX_Acceleration() { return this->xAccel;    }
 float Entity::getY_Acceleration() { return this->yAccel;    }
 float Entity::getX_Velocity()     { return this->xVelocity; }
 float Entity::getY_Velocity()     { return this->yVelocity; }
+float Entity::getSize()           { return this->size;      }
+
 
 float Entity::getXPos() { return this->xPos; }
 float Entity::getYPos() { return this->yPos; }
@@ -245,6 +264,46 @@ void Entity::checkBulletCollisions(float elapsed){
     }
 }
 
+void Entity::checkBulletCollisions(Entity* player, float elapsed){
+    float playerSize   = player->getSize();
+    float entityLeft   = player->getXPos() - (playerSize/2);
+    float entityRight  = player->getXPos();// + (playerSize/2);
+    float entityTop    = player->getYPos() + (playerSize/2);
+    float entityBottom = player->getYPos() - (playerSize/2);
+    
+    for (int index = 0; index < bullets.size(); index++){
+        Bullet* bullet   = bullets[index];
+        float bulletSize = bullet->getSize();
+        int bulletLeft   = bullet->getXPos(); //- (bulletSize/2);
+        int bulletRight  = bullet->getXPos() + (bulletSize/2);
+        int bulletTop    = bullet->getYPos() + (bulletSize/2);
+        int bulletBottom = bullet->getYPos() - (bulletSize/2);
+        
+        //check top bullet & bottom entity
+        if (bullet->getDirection() == 1 && (player->getXPos() >= bullet->getInitialX())){
+            if (  ((bulletTop >= entityBottom) && (bulletRight >= entityLeft)) && ((bulletBottom <= entityTop) && (bulletRight >= entityLeft))){
+                player->decrementHealth();
+                cout << "Player " + player->getType() + " was hit... Current Health: " << player->getHealth() << endl;
+                bullets.erase(bullets.begin() + index);
+                delete bullet;
+            }
+        }
+        
+        if ((bullet->getDirection() == -1) && (player->getXPos() <= bullet->getInitialX())){
+            
+            if(  ((bulletTop >= entityBottom) && (bulletLeft  <= entityRight)) && ((bulletBottom <= entityTop) && (bulletLeft <= entityRight))){
+                player->decrementHealth();
+                cout << "Player " + player->getType() + " was hit... Current Health: " << player->getHealth() << endl;
+                bullets.erase(bullets.begin() + index);
+                delete bullet;
+            }
+        }
+        
+            // TODO - switch logic here to just mark for deletion and let the other collision check function take care of the deleting
+        }
+}
+
+
 void Entity::drawBullets(){
     if (bullets.size() > 0){
         for (Bullet* bullet : bullets){
@@ -293,11 +352,16 @@ void Entity::invertBulletsIfNecessary(){
     }
 }
 
-Bullet::Bullet(ShaderProgram* prog, int xPos, int yPos, int dir) : Entity(prog, "bullet", xPos, yPos, 178.0f/512.0f, 148.0f/512.0f, 16/512.0f, 12.0f/512.0f, TILE_SIZE/2, dir){
+void Entity::decrementHealth(){
+    health--;
+}
+
+Bullet::Bullet(ShaderProgram* prog, float xPos, float yPos, int dir) : Entity(prog, "bullet", xPos, yPos, bullet_uVal/512.0f, bullet_vVal/512.0f, bullet_width/512.0f, bullet_height/512.0f, TILE_SIZE/2, dir, 0){ // bullets have a natural health of 0
     this->bulletDirection = dir;
     this->markedForDeletion = false;
+    this->initialXPos = xPos;
+    this->initialYPos = yPos;
     
-//    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/> Bullet location on sprite sheet
 }
 void Bullet::markForDeletion(){
     this->markedForDeletion = true;
@@ -309,6 +373,14 @@ bool Bullet::isMarkedForDeletion(){
 
 int Bullet::getBulletDirection(){
     return bulletDirection;
+}
+
+float Bullet::getInitialX(){
+    return initialXPos;
+}
+
+float Bullet::getInitialY(){
+    return initialYPos;
 }
 
 
@@ -563,29 +635,30 @@ void checkForCollision(Entity* entity, float elapsed, bool isBullet){
     //check bottom
     worldToTileCoordinates(entity->getXPos(), entityBottom, &xLoc, &yLoc);
     if (isSolidTile(levelData[yLoc][xLoc])){
-        cout << "BOTTOM COLLISION" << endl;
+//        cout << "BOTTOM COLLISION" << endl;
         if (isBullet){
 //            entity->deleteBullet((Bullet*)entity); // may cause an issue
 //            ((Bullet*) entity)->markForDeletion();
         }else{
             float penetration = fabs((yLoc*-TILE_SIZE) - entityBottom);
-            entity->moveUp(penetration + .00000001);
-            entity->updateYPos(penetration + .00000001);
+            entity->moveUp(penetration + .0001);
+            entity->updateYPos(penetration + .0001);
+            //.00000001
         }
     }
     
     // checking top collision
     worldToTileCoordinates(entity->getXPos(), entityTop, &xLoc, &yLoc);
     if (isSolidTile(levelData[yLoc][xLoc])){
-        cout << "TOP COLLISION" << endl;
+//        cout << "TOP COLLISION" << endl;
         if (isBullet){
 //            ((Bullet*) entity)->markForDeletion();
             
         }else{
             float y_distance = fabs(((yLoc*-TILE_SIZE) - TILE_SIZE) - entityTop);
             float penetration = y_distance;
-            entity->moveDown(-penetration + .00000001);
-            entity->updateYPos(-penetration + .00000001);
+            entity->moveDown(-penetration + .0001);
+            entity->updateYPos(-penetration + .0001);
         }
         //        entity->setY_Velocity(0);
     }
@@ -593,13 +666,13 @@ void checkForCollision(Entity* entity, float elapsed, bool isBullet){
     // checking left collision
     worldToTileCoordinates(entityLeft, entity->getYPos(), &xLoc, &yLoc);
     if (isSolidTile(levelData[yLoc][xLoc])){
-        cout << "Left COLLISION" << endl;
+//        cout << "Left COLLISION" << endl;
         if (isBullet){
             ((Bullet*) entity)->markForDeletion();
         }else{
             float penetration = fabs(((TILE_SIZE * xLoc) + TILE_SIZE) - entityLeft);
-            entity->moveToTheRight(penetration + .00000001);
-            entity->updateXPos(penetration + .00000001);
+            entity->moveToTheRight(penetration + .0001);
+            entity->updateXPos(penetration + .0001);
         }
         //        entity->setY_Velocity(0);
     }
@@ -607,13 +680,13 @@ void checkForCollision(Entity* entity, float elapsed, bool isBullet){
     // checking right collision
     worldToTileCoordinates(entityRight, entity->getYPos(), &xLoc, &yLoc);
     if (isSolidTile(levelData[yLoc][xLoc])){
-        cout << "RIGHT COLLISION" << endl;
+//        cout << "RIGHT COLLISION" << endl;
         if (isBullet){
             ((Bullet*) entity)->markForDeletion();
         }else{
             float penetration = fabs((TILE_SIZE * xLoc) - entityRight);
-            entity->moveToTheLeft(-penetration + .00000001);
-            entity->updateXPos(-penetration + .00000001);
+            entity->moveToTheLeft(-penetration + .0001);
+            entity->updateXPos(-penetration + .0001);
         }
         //        entity->setY_Velocity(0);
     }
@@ -666,9 +739,10 @@ void handleInputCommands(Entity* player1, Entity* player2, const Uint8* keys){
     }
 }
 
-void checkIfPlayerBulletsHitOtherPlayer(Entity* player1, Entity* player2){
-    
+void checkIfPlayerBulletsHitOtherPlayer(Entity* player1, Entity* player2, float elapsed){
+    player1->checkBulletCollisions(player2, elapsed);
 }
+
 void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, float elapsed, Program* program){
     
     if (player1 == NULL || player2 == NULL)
@@ -699,7 +773,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
     player1->checkBulletCollisions(elapsed);
 //    player1->moveBullets();
     player1->updateAllBulletPositions();
-    
+    checkIfPlayerBulletsHitOtherPlayer(player1, player2, elapsed);
     checkForCollision(player1, elapsed, false);
     player1->updatePosition();
     player1->updateAccelTo(0, 0);
@@ -709,6 +783,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
     player2->move(player1->getX_Velocity(), player1->getY_Velocity(), 0);
     player2->checkBulletCollisions(elapsed);
     player2->updateAllBulletPositions();
+    checkIfPlayerBulletsHitOtherPlayer(player2, player1, elapsed);
     checkForCollision(player2, elapsed, false);
     player2->updatePosition();
     player2->updateAccelTo(0, 0);
@@ -728,7 +803,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
         player2->scale(-1, 1, 1);
         player2->setDirectionLeft();
     }else{
-        player2awwww->setDirectionRight();
+        player2->setDirectionRight();
     }
     
     player2->invertBulletsIfNecessary();
@@ -738,6 +813,16 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
 //    entity->draw();
 //    entity->drawFromSheetSprite();
 //    program->translateViewMatrix(-1 * entity->getXPos(), -1 * entity->getYPos(), 0);
+}
+
+void determineGameState(){
+    switch (GAME_STATE){
+        case MENU:
+            //display the menu and options
+            GAME_STATE = displayAndGetMenuChoice();
+            break;
+    }
+    
 }
 
 void playPlatformGame(){
@@ -760,7 +845,7 @@ void playPlatformGame(){
     float lastFrameTicks = 0.0f;
     bool getEntity       = true;
     
-    TileMap* tileMap = new TileMap(prog);
+    TileMap* tileMap  = new TileMap(prog);
     Entity* player1   = NULL;
     Entity* player2   = NULL;
     readFileLineByLine();
@@ -773,13 +858,10 @@ void playPlatformGame(){
         }
     }
     
-//    program.scaleViewMatrix(1.5, 1.5, 0);
-//    tileMap->identity();
     program.setViewMatrixToIdentity();
     program.scaleViewMatrix(.8, .8, 0);
 
     program.translateViewMatrix(tileMap->getLeftBoundary() + 1, tileMap->getTopBoundary() + 4.5, 0);
-    //    program.translateViewMatrix(tileMap->getLeftBoundary() + 1, tileMap->getTopBoundary() + 4, 0);
     program.setViewMatrix();
 //    program.translateViewMatrix(tileMap->getLeftBoundary() * 1.10, tileMap->getTopBoundary() * 2, 0); WITH TILE SIZE AS 1.25
     
@@ -796,10 +878,20 @@ void playPlatformGame(){
             
             if (event.type == SDL_KEYDOWN){
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE){
+                    //<SubTexture name="slice103_@.png" x="0" y="179" width="63" height="56"/>
+                    bullet_uVal   = 0.0f;
+                    bullet_vVal   = 179.0f;
+                    bullet_width  = 63.0f;
+                    bullet_height = 56.0f;
                     player1->fire();
                 }
                 
                 if (event.key.keysym.scancode == SDL_SCANCODE_Z){
+                    //    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/> Bullet location on sprite sheet
+                    bullet_uVal   = 178.0f;
+                    bullet_vVal   = 148.0f;
+                    bullet_width  = 16.0f;
+                    bullet_height = 12.0f;
                     player2->fire();
                 }
             }
@@ -862,6 +954,65 @@ void playPlatformGame(){
         SDL_GL_SwapWindow(window.getDispWindow());
         
     }
+    SDL_Quit();
+    
+}
+
+void playSpaceInvaders(){
+    //    Int Mix_OpenAudio
+    Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "The Awesome Platform Game - SR");
+    
+#ifdef _WINDOWS
+    glewInit();
+#endif
+    
+    Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 );
+    Mix_Chunk* laserBlastSound = Mix_LoadWAV("Laser_Blast.wav");
+    Mix_Chunk* explosionSound  = Mix_LoadWAV("Explosion.wav");
+    
+    
+    Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
+    prog = program.getShaderProgram();
+    
+    SDL_Event event;
+    
+    tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
+    //    tileMapSpriteTextureID = LoadTexture("sprites");
+    entitySpriteTextureID  = LoadTexture("DBZ_sprites.png");
+    
+    bool done            = false;
+    float lastFrameTicks = 0.0f;
+    bool getEntity       = true;
+    
+    TileMap* tileMap  = new TileMap(prog);
+    Entity* player1   = NULL;
+    Entity* player2   = NULL;
+    readFileLineByLine();
+    getVertexAndTextureCoordsFromTileMap(tileMap);
+    if (entities.size() > 0){
+        if(getEntity){
+            player1 = entities[0];
+            player2 = entities[1];
+            getEntity = false;
+        }
+    }
+    
+    const Uint8 *keys = SDL_GetKeyboardState(NULL);
+    
+    while (!done) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
+                done = true;
+            }
+        }
+        
+        if(keys[SDL_SCANCODE_SPACE] && gameEnded == false ) // create new bullet
+            GAME_STATE = GAME_SCREEN;
+        
+        screenSelect(&program, fontTexture, &window, laserBlastSound);
+        
+    }
+    Mix_FreeChunk(laserBlastSound);
     SDL_Quit();
     
 }

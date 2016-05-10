@@ -51,12 +51,14 @@ public:
     Entity(ShaderProgram* prog, string entityType, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal, int direction, int healthVal);
     std::string getType();
     int getDirection();
+    int getHealth();
     float getXPos();
     float getYPos();
     float getX_Velocity();
     float getY_Velocity();
     float getX_Acceleration();
     float getY_Acceleration();
+    float getSize();
     void applyGravityToVel(float elapsed);
     void applyAccelerationToVel();
     void updatePosition();
@@ -80,6 +82,8 @@ public:
     void updateAllBulletPositions();
     void applyAccelerationToVelFor(Bullet* bullet);
     void invertBulletsIfNecessary();
+    void checkBulletCollisions(Entity* player, float elapsed);
+    void decrementHealth();
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
@@ -105,13 +109,18 @@ private:
 
 class Bullet : public Entity{
 public:
-    Bullet(ShaderProgram* prog, int xPos, int yPos, int direction);
+    Bullet(ShaderProgram* prog, float xPos, float yPos, int direction);
     void markForDeletion();
     bool isMarkedForDeletion();
     int getBulletDirection();
+    float getInitialX();
+    float getInitialY();
+    
 private:
     int bulletDirection;
     bool markedForDeletion;
+    float initialXPos;
+    float initialYPos;
     
 };
 
