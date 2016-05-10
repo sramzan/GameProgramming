@@ -41,14 +41,17 @@ bool readEntityData(std::ifstream &stream);
 
 GLuint LoadTexture(const char* image_path);
 
+class Bullet;
+class Entity;
+class TileMap;
 
 // Classes
 class Entity : public ScreenObject{
 public:
     Entity(ShaderProgram* prog, string textSheet, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal);
     std::string getType();
-    float
-    getXPos();
+    int getDirection();
+    float getXPos();
     float getYPos();
     float getX_Velocity();
     float getY_Velocity();
@@ -64,6 +67,7 @@ public:
     void setX_Velocity(float vel);
     void draw();
     void getVertexAndTextCoordData();
+    void fire();
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
@@ -71,6 +75,7 @@ public:
     
 private:
     std::string type;
+    int direction; // 1 to move right, -1 to move left
     float xVelocity;
     float yVelocity;
     float xAccel;
@@ -82,6 +87,17 @@ private:
     float v;
     float spriteWidth;
     float spriteHeight;
+    std::vector<Bullet*> bullets;
+    
+};
+
+class Bullet : public Entity{
+public:
+    Bullet(ShaderProgram* prog, int xPos, int yPos, int direction);
+    int getDirection();
+    
+private:
+    int direction; // 1 to move right, -1 to move left
     
 };
 
@@ -104,6 +120,7 @@ int getSpriteSheetValof(Entity* entity);
 std::vector<float> entityVertexData;
 std::vector<float> entityTextureData;
 std::vector<Entity*> entities;
+
 
 typedef std::map<std::string, int> playerMapping;
 

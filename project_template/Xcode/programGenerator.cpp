@@ -48,7 +48,13 @@ public:
     void translateViewMatrix(float x, float y, float z){
         viewMatrix.identity();
         viewMatrix.Translate(x, y, z);
-        program.setViewMatrix(viewMatrix);
+//        program.setViewMatrix(viewMatrix);
+    }
+    
+    void scaleViewMatrix(float x, float y, float z){
+        viewMatrix.identity();
+        viewMatrix.Scale(x, y, z);
+//        program.setViewMatrix(viewMatrix);
     }
     
     ShaderProgram* getShaderProgram(){
@@ -76,6 +82,11 @@ public:
     void setModelMatrix(Matrix modelMatrix){
         program.setModelMatrix(modelMatrix);
     }
+    
+    void setViewMatrix(){
+        program.setViewMatrix(viewMatrix);
+    }
+    
     
 private:
     ShaderProgram program;

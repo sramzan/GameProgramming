@@ -35,20 +35,26 @@ using namespace std;
 static ShaderProgram* prog;
 static GLuint tileMapSpriteTextureID;
 static GLuint entitySpriteTextureID;
-float TILE_SIZE=1.25;
+float TILE_SIZE=.90f;
 float tileMidBaseLine   = 0;
 int mapWidth    = -1;
 int mapHeight   = -1;
 const int solidGround_1 = 586; // TODO - name these more descriptively
 const int solidGround_2 = 555;
 const int solidGround_3 = 557;
+
+const int iceGround_1 = 607;
+const int iceGround_2 = 645;
+const int iceGround_3 = 646;
+const int iceGround_4 = 191;
+
 int** levelData;
 int** solidTiles;
 bool firstRun = true;
 int totalArrayHeight = 0;
 int totalArrayWidth  = 0;
 
-std::string levelFilePath = "level1.txt";
+std::string levelFilePath = "level3.txt";
 std::string tileLayerName = "layer";
 std::string objLayerName  = "ObjLayer";
 
@@ -69,11 +75,8 @@ float lerp(float v0, float v1, float t) {
     return (1.0-t)*v0 + t*v1;
 }
 
-Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosition, float uVal, float vVal, float widthVal, float heightVal,float sizeVal) : ScreenObject(prog, entitySpriteTextureID){
-    if (entities.size() > 0){
-        delete entities[0];
-        entities.pop_back();
-    }
+Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosition, float uVal, float vVal, float widthVal, float heightVal,float sizeVal, int dir) : ScreenObject(prog, entitySpriteTextureID){
+
     this->type=entityType;
     this->sheetSprite = new SheetSprite(entitySpriteTextureID, uVal, vVal, widthVal, heightVal, sizeVal);
     
@@ -92,17 +95,19 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
     // setting size of the entity
     this->size = TILE_SIZE;
     
-    // TODO - remove this logic
-    int playerSpritesheetVal = getSpriteSheetValof(this);
-    float u = (float) (( playerSpritesheetVal % SPRITE_COUNT_X )/ (float) SPRITE_COUNT_X);
-    float v = ((float)(playerSpritesheetVal)/ SPRITE_COUNT_X) / (float) SPRITE_COUNT_Y;
-    float spriteWidth = 1.0f/(float)SPRITE_COUNT_X;
-    float spriteHeight = 1.0f/(float)SPRITE_COUNT_Y;
+    this->direction = dir;
     
-    this->u = u;
-    this->v = v;
-    this->spriteWidth  = spriteWidth;
-    this->spriteHeight = spriteHeight;
+    // TODO - remove this logic
+//    int playerSpritesheetVal = getSpriteSheetValof(this);
+//    float u = (float) (( playerSpritesheetVal % SPRITE_COUNT_X )/ (float) SPRITE_COUNT_X);
+//    float v = ((float)(playerSpritesheetVal)/ SPRITE_COUNT_X) / (float) SPRITE_COUNT_Y;
+//    float spriteWidth = 1.0f/(float)SPRITE_COUNT_X;
+//    float spriteHeight = 1.0f/(float)SPRITE_COUNT_Y;
+//    
+//    this->u = u;
+//    this->v = v;
+//    this->spriteWidth  = spriteWidth;
+//    this->spriteHeight = spriteHeight;
     
     setPositionVars((float)xPosition, (float)yPosition , 0, size);
     
@@ -112,6 +117,7 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
 
 // Entity Class Definitions
 string Entity::getType()          { return this->type;      }
+int   Entity::getDirection()      { return this->direction; }
 float Entity::getX_Acceleration() { return this->xAccel;    }
 float Entity::getY_Acceleration() { return this->yAccel;    }
 float Entity::getX_Velocity()     { return this->xVelocity; }
@@ -193,6 +199,20 @@ void Entity::draw(){
     drawTexture(entityVertexData.data(), entityTextureData.data());
 }
 
+void Entity::fire(){
+    Bullet* newBullet = new Bullet(program, xPos, yPos, this->direction);
+}
+
+Bullet::Bullet(ShaderProgram* prog, int xPos, int yPos, int dir) : Entity(prog, "bullet", xPos, yPos, 178.0f/512.0f, 148.0f/512.0f, 16/512.0f, 12.0f/512.0f, TILE_SIZE/2){
+    this->direction = dir;
+    
+//    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/> Bullet location on sprite sheet
+}
+
+int Bullet::getDirection(){
+    return direction;
+}
+
 // TileMap Class Definitions
 TileMap::TileMap(ShaderProgram* prog) : ScreenObject(prog, tileMapSpriteTextureID){}
 vector<float>* TileMap::getVertexVector() { return &vertexData;   }
@@ -240,6 +260,20 @@ bool isSolidTile(int val){
         case solidGround_3:
             return true;
             break;
+        case iceGround_1:
+            return true;
+            break;
+        case iceGround_2:
+            return true;
+            break;
+        case iceGround_3:
+            return true;
+            break;
+        case iceGround_4:
+            return true;
+            break;
+            
+        // for level3
     }
     
     return false;
@@ -291,7 +325,22 @@ void placeEntity(string type, float placeX, float placeY){
     //
     // <SubTexture name="slice29_29.png" x="207" y="0" width="32" height="43"/>
 //    <SubTexture name="planeBlue1.png" x="0" y="73" width="88" height="73"/>
-    Entity* newEntity = new Entity(prog, type.c_str(), placeX, placeY, 207.0f/512.0f, 0.0f/512.0f, 32.0f/512.0f, 43.0f/512.0f, TILE_SIZE);
+    float x, y, width, height;
+    if (type=="player1"){
+        x = 207.0f;
+        y = 0.0f;
+        width = 32.0f;
+        height = 43.0f;
+    }
+//    <SubTexture name="slice136_@.png" x="233" y="133" width="32" height="43"/>
+    if (type == "player2"){
+        x = 233.0f;
+        y = 133.0f;
+        width = 32.0f;
+        height = 43.0f;
+        
+    }
+    Entity* newEntity = new Entity(prog, type.c_str(), placeX, placeY, x/512.0f, y/512.0f, width/512.0f, height/512.0f, TILE_SIZE);
     entities.push_back(newEntity);
 }
 
@@ -451,54 +500,117 @@ void checkForCollision(Entity* entity, float elapsed){
     
     
 }
-void handleEntityActions(Entity* entity, const Uint8* keys, float elapsed, Program* program){
-    
-    entity->identity();
-    entity->move(entity->getXPos(), entity->getYPos(), 0);
-    // Apply Gravity
-    if (entity == NULL)
-        return;
-    
-    if (firstRun){
-//        entity->getVertexAndTextCoordData();
-//        entity->draw();
-        entity->drawFromSheetSprite();
-//        entity->move(entity->getXPos(), entity->getYPos(), 0);
-        
-//        entity->rotate((90*3.14)/180);
-        firstRun = false;
-    }
+
+void handleInputCommands(Entity* player1, Entity* player2, const Uint8* keys){
+    // Player 1 Commands
     if (keys[SDL_SCANCODE_RIGHT]){
-        entity->updateAccelTo(.1, 0);
-        entity->applyAccelerationToVel();
+        player1->updateAccelTo(.1, 0);
+        player1->applyAccelerationToVel();
         //            entity->addToX(entity->getX_Acceleration());
     }
     if (keys[SDL_SCANCODE_LEFT]){
-        entity->updateAccelTo(-.1, 0);
-        entity->applyAccelerationToVel();
+        player1->updateAccelTo(-.1, 0);
+        player1->applyAccelerationToVel();
     }
     
     if (keys[SDL_SCANCODE_DOWN]){
-        entity->updateAccelTo(0, -.1);
-        entity->applyAccelerationToVel();
+        player1->updateAccelTo(0, -.1);
+        player1->applyAccelerationToVel();
     }
     
     if (keys[SDL_SCANCODE_UP]){
-        entity->updateAccelTo(0, .2);
-        entity->applyAccelerationToVel();
+        player1->updateAccelTo(0, .2);
+        player1->applyAccelerationToVel();
     }
+    
+    if (keys[SDL_SCANCODE_SPACE]){
+        // add bullet to player/fire bullet
+    }
+    
+    // Player 2 Commands
+    if (keys[SDL_SCANCODE_D]){
+        player2->updateAccelTo(.1, 0);
+        player2->applyAccelerationToVel();
+        //            entity->addToX(entity->getX_Acceleration());
+    }
+    if (keys[SDL_SCANCODE_A]){
+        player2->updateAccelTo(-.1, 0);
+        player2->applyAccelerationToVel();
+    }
+    
+    if (keys[SDL_SCANCODE_S]){
+        player2->updateAccelTo(0, -.1);
+        player2->applyAccelerationToVel();
+    }
+    
+    if (keys[SDL_SCANCODE_W]){
+        player2->updateAccelTo(0, .2);
+        player2->applyAccelerationToVel();
+    }
+}
+void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, float elapsed, Program* program){
+    
+    player1->identity();
+    player2->identity();
+    player1->move(player1->getXPos(), player1->getYPos(), 0);
+    player2->move(player2->getXPos(), player2->getYPos(), 0);
 
-    entity->applyFrictionToVel();
-    entity->applyGravityToVel(elapsed);
-    entity->move(entity->getX_Velocity(), entity->getY_Velocity(), 0);
-    checkForCollision(entity, elapsed);
-    entity->updatePosition();
-    entity->updateAccelTo(0, 0);
+    // Apply Gravity
+    if (player1 == NULL || player2 == NULL)
+        return;
+    handleInputCommands(player1, player2, keys);
+//    if (firstRun){
+////        entity->getVertexAndTextCoordData();
+////        entity->draw();
+//        entity->drawFromSheetSprite();
+////        entity->move(entity->getXPos(), entity->getYPos(), 0);
+//        
+////        entity->rotate((90*3.14)/180);
+//        firstRun = false;
+//    }
+//    if (keys[SDL_SCANCODE_RIGHT]){
+//        player1->updateAccelTo(.1, 0);
+//        player1->applyAccelerationToVel();
+//        //            entity->addToX(entity->getX_Acceleration());
+//    }
+//    if (keys[SDL_SCANCODE_LEFT]){
+//        player1->updateAccelTo(-.1, 0);
+//        player1->applyAccelerationToVel();
+//    }
+//    
+//    if (keys[SDL_SCANCODE_DOWN]){
+//        player1->updateAccelTo(0, -.1);
+//        player1->applyAccelerationToVel();
+//    }
+//    
+//    if (keys[SDL_SCANCODE_UP]){
+//        player1->updateAccelTo(0, .2);
+//        player1->applyAccelerationToVel();
+//    }
+    
+//    applyPhysicsTo(player1); // TODO make code more readable by implementing these functions
+//    applyPhysicsTo(player2);
+
+    player1->applyFrictionToVel();
+    player1->applyGravityToVel(elapsed);
+    player1->move(player1->getX_Velocity(), player1->getY_Velocity(), 0);
+    checkForCollision(player1, elapsed);
+    player1->updatePosition();
+    player1->updateAccelTo(0, 0);
+    
+    player2->applyFrictionToVel();
+    player2->applyGravityToVel(elapsed);
+    player2->move(player1->getX_Velocity(), player1->getY_Velocity(), 0);
+    checkForCollision(player2, elapsed);
+    player2->updatePosition();
+    player2->updateAccelTo(0, 0);
     
 
-    if (entity->getX_Velocity() < 0)
-        entity->scale(-1, 1, 1);
+    if (player1->getX_Velocity() < 0)
+        player1->scale(-1, 1, 1);
     
+    if (player2->getX_Velocity() < 0)
+        player2->scale(-1, 1, 1);
     
 //    entity->scale(-1, 1 ,1);
     
@@ -520,18 +632,35 @@ void playPlatformGame(){
     SDL_Event event;
     
     tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
-    entitySpriteTextureID = LoadTexture("DBZ_sprites.png");
+//    tileMapSpriteTextureID = LoadTexture("sprites");
+    entitySpriteTextureID  = LoadTexture("DBZ_sprites.png");
     
     bool done            = false;
     float lastFrameTicks = 0.0f;
     bool getEntity       = true;
     
     TileMap* tileMap = new TileMap(prog);
-    Entity* entity   = NULL;
+    Entity* player1   = NULL;
+    Entity* player2   = NULL;
     readFileLineByLine();
     getVertexAndTextureCoordsFromTileMap(tileMap);
+    if (entities.size() > 0){
+        if(getEntity){
+            player1 = entities[0];
+            player2 = entities[1];
+            getEntity = false;
+        }
+    }
     
-    program.translateViewMatrix(tileMap->getLeftBoundary() * 1.10, tileMap->getTopBoundary() * 2, 0);
+//    program.scaleViewMatrix(1.5, 1.5, 0);
+//    tileMap->identity();
+    program.translateViewMatrix(tileMap->getLeftBoundary() + 1, tileMap->getTopBoundary() + 4, 0);
+    
+    program.scaleViewMatrix(.5, .5, 0);
+    program.setViewMatrix();
+//    program.translateViewMatrix(tileMap->getLeftBoundary() * 1.10, tileMap->getTopBoundary() * 2, 0); WITH TILE SIZE AS 1.25
+    
+    
     
     while (!done) {
         float ticks    = (float)SDL_GetTicks()/1000.0f;
@@ -543,7 +672,7 @@ void playPlatformGame(){
             }
         }
         
-        program.clearScreen(.2, .3, .4, 1);
+        program.clearScreen(.5, .3, .4, 1);
         
 //        if (!getEntity)
 //            program.translateViewMatrix(-entity->getXPos(), -entity->getYPos(), 0);
@@ -568,27 +697,24 @@ void playPlatformGame(){
         }
         
         
-        if (entities.size() > 0){
-            if(getEntity){
-                entity = entities[0];
-            }
             glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
             while (fixedElapsed >= FIXED_TIMESTEP ) {
                 fixedElapsed -= FIXED_TIMESTEP;
                 //              updateGame(program, player1, window, FIXED_TIMESTEP, keys);
-                handleEntityActions(entity, keys, fixedElapsed, &program);
+                handleEntityActions(player1, player2, keys, fixedElapsed, &program);
                 
             }
-            handleEntityActions(entity, keys, fixedElapsed, &program);
+            handleEntityActions(player1, player2, keys, fixedElapsed, &program);
             getEntity = false;
-        }
         
         
-        program.setModelMatrix(entity->getModelMatrix());
+        program.setModelMatrix(player1->getModelMatrix());
         glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
-        program.translateViewMatrix(-entity->getXPos(), -entity->getYPos(), 0);
-        entity->drawFromSheetSprite();
-        
+//        program.translateViewMatrix(-player1->getXPos(), -player1->getYPos(), 0);
+        player1->drawFromSheetSprite();
+        program.setModelMatrix(player2->getModelMatrix());
+        player2->drawFromSheetSprite();
+    
         SDL_GL_SwapWindow(window.getDispWindow());
         
     }
@@ -603,6 +729,7 @@ int main(int argc, char* argv[]){
     printf("Current dir: %s", dir);
     playPlatformGame();
     
-    
+//    bullet
+//    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/>
     
 }
