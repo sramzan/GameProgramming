@@ -39,6 +39,13 @@ public:
         glUseProgram(program.programID);
     }
     
+    void resetMatrices(){
+        modelMatrix.identity();
+        viewMatrix.identity();
+        program.setModelMatrix(modelMatrix);
+        program.setViewMatrix(viewMatrix);
+    }
+    
     
     void clearScreen(float red, float green, float blue, float alpha){
         glClearColor(red, green, blue, alpha);

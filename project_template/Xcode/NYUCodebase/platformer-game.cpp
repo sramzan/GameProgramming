@@ -15,7 +15,6 @@
 #include <SDL_opengl.h>
 #include <SDL_image.h>
 #include <unistd.h>
-#include <SDL_mixer.h>
 #include "windowGenerator.cpp"
 #include "../programGenerator.cpp"
 #include "../global-variables.cpp"
@@ -56,7 +55,7 @@ const int LEVEL_1 = 1;
 const int LEVEL_2 = 2;
 const int LEVEL_3 = 3;
 const int GAME_OVER  = 4;
-const int GAME_STATE = 0;
+int GAME_STATE = 0;
 
 int** levelData;
 int** solidTiles;
@@ -71,10 +70,16 @@ float bullet_vVal   = 0.0f;
 float bullet_width  = 0.0f;
 float bullet_height = 0.0f;
 
+// CONFIGS TO BE CHANGED PER LEVEL OF THE GAME
 
+float scaleViewMatrix_x = 0.0f;
+float scaleViewMatrix_y = 0.0f;
+float translateViewMatrixOffset_x = 0.0f;
+float translateViewMatrixOffset_y = 0.0f;
 std::string levelFilePath = "level3.txt";
 std::string tileLayerName = "layer";
 std::string objLayerName  = "ObjLayer";
+Mix_Music* music;
 
 void checkForCollision(Entity* entity, float elapsed, bool isBullet);
 
@@ -89,6 +94,55 @@ GLuint LoadTexture(const char* image_path) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     SDL_FreeSurface(surface);
     return textureID;
+}
+
+void blendTextures(GLuint texture){
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //    glDisable(GL_TEXTURE_2D);
+}
+
+void DrawText(ShaderProgram *program, int fontTexture, string text, float size, float spacing, float x_offset, float y_offset) {
+    float texture_size = 1.0/16.0f;
+    vector<float> vertexData;
+    vector<float> texCoordData;
+    for(int i=0; i < text.size(); i++) {
+        float texture_x = (float)(((int)text[i]) % 16) / 16.0f;
+        float texture_y = (float)(((int)text[i]) / 16) / 16.0f;
+        vertexData.insert(vertexData.end(), {
+            ((size+spacing) * i) + (-0.5f * size) + x_offset  , 0.5f * size + y_offset,
+            ((size+spacing) * i) + (-0.5f * size) + x_offset,  -0.5f * size + y_offset,
+            ((size+spacing) * i) + (0.5f * size)  + x_offset,   0.5f * size + y_offset,
+            
+            ((size+spacing) * i) + (0.5f * size)  + x_offset, -0.5f * size + y_offset,
+            ((size+spacing) * i) + (0.5f * size)  + x_offset,  0.5f * size + y_offset,
+            ((size+spacing) * i) + (-0.5f * size) + x_offset, -0.5f * size + y_offset,
+        });
+        texCoordData.insert(texCoordData.end(), {
+            texture_x, texture_y,
+            texture_x, texture_y + texture_size,
+            texture_x + texture_size, texture_y,
+            texture_x + texture_size, texture_y + texture_size,
+            texture_x + texture_size, texture_y,
+            texture_x, texture_y + texture_size,
+        });
+    }
+    
+    blendTextures(fontTexture);
+    
+    glUseProgram(program->programID);
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertexData.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoordData.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    glBindTexture(GL_TEXTURE_2D, fontTexture);
+    glDrawArrays(GL_TRIANGLES, 0, text.size() * 6);
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+    
+    
 }
 
 float lerp(float v0, float v1, float t) {
@@ -215,16 +269,16 @@ void Entity::applyAccelerationToVelFor(Bullet* bullet){
     bullet->applyAccelerationToVel();
 }
 
-void Entity::fire(){
+void Entity::fire(Mix_Chunk* energyBlastSound){
     Bullet* newBullet = NULL;
     if (direction == 1)
         newBullet = new Bullet(program, xPos + TILE_SIZE, yPos - TILE_SIZE/2 , direction);
     if (direction == -1)
         newBullet = new Bullet(program, xPos - TILE_SIZE/2, yPos - TILE_SIZE/2 , direction);
-        
+    Mix_PlayChannel( -1, energyBlastSound, 0);
 //    newBullet->updateAccelTo(.2 * direction, 0);
 //    newBullet->move(.2* direction, 0, 0);
-    newBullet->updateAccelTo(3 * direction, 0);
+    newBullet->updateAccelTo(5 * direction, 0);
     applyAccelerationToVelFor(newBullet);
     bullets.push_back(newBullet);
 }
@@ -815,166 +869,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
 //    program->translateViewMatrix(-1 * entity->getXPos(), -1 * entity->getYPos(), 0);
 }
 
-void determineGameState(){
-    switch (GAME_STATE){
-        case MENU:
-            //display the menu and options
-            GAME_STATE = displayAndGetMenuChoice();
-            break;
-    }
-    
-}
-
-void playPlatformGame(){
-    Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "The Awesome Platform Game - SR");
-    
-#ifdef _WINDOWS
-    glewInit();
-#endif
-    
-    Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
-    prog = program.getShaderProgram();
-    
-    SDL_Event event;
-    
-    tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
-//    tileMapSpriteTextureID = LoadTexture("sprites");
-    entitySpriteTextureID  = LoadTexture("DBZ_sprites.png");
-    
-    bool done            = false;
-    float lastFrameTicks = 0.0f;
-    bool getEntity       = true;
-    
-    TileMap* tileMap  = new TileMap(prog);
-    Entity* player1   = NULL;
-    Entity* player2   = NULL;
-    readFileLineByLine();
-    getVertexAndTextureCoordsFromTileMap(tileMap);
-    if (entities.size() > 0){
-        if(getEntity){
-            player1 = entities[0];
-            player2 = entities[1];
-            getEntity = false;
-        }
-    }
-    
-    program.setViewMatrixToIdentity();
-    program.scaleViewMatrix(.8, .8, 0);
-
-    program.translateViewMatrix(tileMap->getLeftBoundary() + 1, tileMap->getTopBoundary() + 4.5, 0);
-    program.setViewMatrix();
-//    program.translateViewMatrix(tileMap->getLeftBoundary() * 1.10, tileMap->getTopBoundary() * 2, 0); WITH TILE SIZE AS 1.25
-    
-    
-    
-    while (!done) {
-        float ticks    = (float)SDL_GetTicks()/1000.0f;
-        float elapsed  = ticks - lastFrameTicks;
-        lastFrameTicks = ticks;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
-                done = true;
-            }
-            
-            if (event.type == SDL_KEYDOWN){
-                if (event.key.keysym.scancode == SDL_SCANCODE_SPACE){
-                    //<SubTexture name="slice103_@.png" x="0" y="179" width="63" height="56"/>
-                    bullet_uVal   = 0.0f;
-                    bullet_vVal   = 179.0f;
-                    bullet_width  = 63.0f;
-                    bullet_height = 56.0f;
-                    player1->fire();
-                }
-                
-                if (event.key.keysym.scancode == SDL_SCANCODE_Z){
-                    //    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/> Bullet location on sprite sheet
-                    bullet_uVal   = 178.0f;
-                    bullet_vVal   = 148.0f;
-                    bullet_width  = 16.0f;
-                    bullet_height = 12.0f;
-                    player2->fire();
-                }
-            }
-            
-            
-        }
-        
-//        program.clearScreen(.5, .3, .4, 1);
-        program.clearScreen(0, 0, 0, 0);
-        
-//        if (!getEntity)
-//            program.translateViewMatrix(-entity->getXPos(), -entity->getYPos(), 0);
-        
-        const Uint8 *keys = SDL_GetKeyboardState(NULL);
-        tileMap->identity();
-        program.setModelMatrix(tileMap->getModelMatrix());
-        glBindTexture(GL_TEXTURE_2D, tileMapSpriteTextureID);
-        drawTexture(tileMap->getVertexData(), tileMap->getTextData());
-
-//        if (!getEntity){
-//            program.setModelMatrix(entity->getModelMatrix());
-//            glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
-//            entity->drawFromSheetSprite();
-//        }
-        
-//        glBindTexture(GL_TEXTURE_2D, spriteText);
-        /*
-        if (keys[SDL_SCANCODE_SPACE]){
-            // add bullet to player/fire bullet
-            player1->fire();
-            //        player1->applyAccelerationToVelForAllBullets();
-        }
-         */
-        
-        float fixedElapsed = elapsed;
-        if(fixedElapsed > FIXED_TIMESTEP * MAX_TIMESTEPS) {
-            fixedElapsed = FIXED_TIMESTEP * MAX_TIMESTEPS;
-        }
-        
-            glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
-            while (fixedElapsed >= FIXED_TIMESTEP ) {
-                fixedElapsed -= FIXED_TIMESTEP;
-                //              updateGame(program, player1, window, FIXED_TIMESTEP, keys);
-                handleEntityActions(player1, player2, keys, fixedElapsed, &program);
-                
-            }
-            handleEntityActions(player1, player2, keys, fixedElapsed, &program);
-            getEntity = false;
-        
-        
-        program.setModelMatrix(player1->getModelMatrix());
-        glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
-//        program.translateViewMatrix(-player1->getXPos(), -player1->getYPos(), 0);
-        player1->drawFromSheetSprite();
-        player1->drawBullets();
-        program.setModelMatrix(player2->getModelMatrix());
-        player2->drawFromSheetSprite();
-        player2->drawBullets();
-    
-        SDL_GL_SwapWindow(window.getDispWindow());
-        
-    }
-    SDL_Quit();
-    
-}
-
-void playSpaceInvaders(){
-    //    Int Mix_OpenAudio
-    Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "The Awesome Platform Game - SR");
-    
-#ifdef _WINDOWS
-    glewInit();
-#endif
-    
-    Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 );
-    Mix_Chunk* laserBlastSound = Mix_LoadWAV("Laser_Blast.wav");
-    Mix_Chunk* explosionSound  = Mix_LoadWAV("Explosion.wav");
-    
-    
-    Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
-    prog = program.getShaderProgram();
-    
-    SDL_Event event;
+void playGame(Program* program, SDL_Event* event, Window* window){
     
     tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
     //    tileMapSpriteTextureID = LoadTexture("sprites");
@@ -987,6 +882,13 @@ void playSpaceInvaders(){
     TileMap* tileMap  = new TileMap(prog);
     Entity* player1   = NULL;
     Entity* player2   = NULL;
+    
+    Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 );
+    Mix_Chunk* player1Sound  = Mix_LoadWAV("energyBlast1.wav");
+    Mix_Chunk* player2Sound  = Mix_LoadWAV("energyBlast2.wav");
+    Mix_PlayMusic(music, -1);
+    
+    // DO THIS AFTER CHOOSING A LEVEL
     readFileLineByLine();
     getVertexAndTextureCoordsFromTileMap(tileMap);
     if (entities.size() > 0){
@@ -997,6 +899,159 @@ void playSpaceInvaders(){
         }
     }
     
+    program->setViewMatrixToIdentity();
+//    program->scaleViewMatrix(.8, .8, 0);
+    program->scaleViewMatrix(scaleViewMatrix_x, scaleViewMatrix_y, 0);
+
+    program->translateViewMatrix(tileMap->getLeftBoundary() + translateViewMatrixOffset_x, tileMap->getTopBoundary() + translateViewMatrixOffset_y, 0);
+    program->setViewMatrix();
+    //    program.translateViewMatrix(tileMap->getLeftBoundary() * 1.10, tileMap->getTopBoundary() * 2, 0); WITH TILE SIZE AS 1.25
+    
+    
+    
+    while (!done) {
+        float ticks    = (float)SDL_GetTicks()/1000.0f;
+        float elapsed  = ticks - lastFrameTicks;
+        lastFrameTicks = ticks;
+        while (SDL_PollEvent(event)) {
+            if (event->type == SDL_QUIT || event->type == SDL_WINDOWEVENT_CLOSE) {
+                done = true;
+            }
+            
+            if (event->type == SDL_KEYDOWN){
+                if (event->key.keysym.scancode == SDL_SCANCODE_SPACE){
+                    //<SubTexture name="slice103_@.png" x="0" y="179" width="63" height="56"/>
+                    bullet_uVal   = 0.0f;
+                    bullet_vVal   = 179.0f;
+                    bullet_width  = 63.0f;
+                    bullet_height = 56.0f;
+                    player1->fire(player1Sound);
+                }
+                
+                if (event->key.keysym.scancode == SDL_SCANCODE_Z){
+                    //    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/> Bullet location on sprite sheet
+                    bullet_uVal   = 178.0f;
+                    bullet_vVal   = 148.0f;
+                    bullet_width  = 16.0f;
+                    bullet_height = 12.0f;
+                    player2->fire(player2Sound);
+                }
+                
+                if (event->key.keysym.scancode == SDL_SCANCODE_Q){
+                    GAME_STATE = MENU;
+                    Mix_FreeChunk(player1Sound);
+                    Mix_FreeChunk(player2Sound);
+                    Mix_FreeMusic(music);
+                    return;
+                }
+            }
+            
+            
+        }
+        
+        program->clearScreen(0, 0, 0, 0);
+        
+        const Uint8 *keys = SDL_GetKeyboardState(NULL);
+        tileMap->identity();
+        program->setModelMatrix(tileMap->getModelMatrix());
+        glBindTexture(GL_TEXTURE_2D, tileMapSpriteTextureID);
+        drawTexture(tileMap->getVertexData(), tileMap->getTextData());
+        
+        
+        float fixedElapsed = elapsed;
+        if(fixedElapsed > FIXED_TIMESTEP * MAX_TIMESTEPS) {
+            fixedElapsed = FIXED_TIMESTEP * MAX_TIMESTEPS;
+        }
+        
+        glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
+        while (fixedElapsed >= FIXED_TIMESTEP ) {
+            fixedElapsed -= FIXED_TIMESTEP;
+            handleEntityActions(player1, player2, keys, fixedElapsed, program);
+            
+        }
+        handleEntityActions(player1, player2, keys, fixedElapsed, program);
+        getEntity = false;
+        
+        
+        program->setModelMatrix(player1->getModelMatrix());
+        glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
+        player1->drawFromSheetSprite();
+        player1->drawBullets();
+        program->setModelMatrix(player2->getModelMatrix());
+        player2->drawFromSheetSprite();
+        player2->drawBullets();
+        
+        SDL_GL_SwapWindow(window->getDispWindow());
+        
+    }
+    Mix_FreeChunk(player1Sound);
+    Mix_FreeChunk(player2Sound);
+    SDL_Quit();
+    
+}
+
+void determineGameState(Program* program, GLuint fontTexture, Window* window, SDL_Event* event){
+    switch (GAME_STATE){
+        case MENU:
+            //display the menu and options
+            program->resetMatrices();
+            program->clearScreen(0,0,0,0);
+            DrawText(program->getShaderProgram(), fontTexture, "Choose Level!",  1.50f, 0, -8.5, 5);
+            DrawText(program->getShaderProgram(), fontTexture, "Level 1",  1.00f, 0, -3, 3);
+            DrawText(program->getShaderProgram(), fontTexture, "Level 2",  1.00f, 0, -3, 1.5);
+            DrawText(program->getShaderProgram(), fontTexture, "Level 3",  1.00f, 0, -3, 0);
+            SDL_GL_SwapWindow(window->getDispWindow());
+//            GAME_STATE = displayAndGetMenuChoice();
+            break;
+        case LEVEL_1:
+            cout << "Loading configs for Level 1";
+            levelFilePath = "level1.txt";
+            playGame(program, event, window);
+            break;
+            
+        case LEVEL_2:
+            cout << "Loading configs for Level 2";
+            levelFilePath = "level2.txt";
+            playGame(program, event, window);
+            break;
+            
+        case LEVEL_3:
+            cout << "Loading configs for Level 3";
+            levelFilePath = "level3.txt";
+            scaleViewMatrix_x = 0.8f;
+            scaleViewMatrix_y = 0.8f;
+            translateViewMatrixOffset_x = 1.0f;
+            translateViewMatrixOffset_y = 4.5f;
+            music = Mix_LoadMUS("background_music_level1.mp3");
+            playGame(program, event, window);
+            break;
+    }
+    
+}
+
+
+void playSpaceInvaders(){
+    //    Int Mix_OpenAudio
+    Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "The Awesome Platform Game - SR");
+    
+#ifdef _WINDOWS
+    glewInit();
+#endif
+    
+
+    GLuint fontTexture = LoadTexture("font1.png");
+    
+    
+    Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
+    prog = program.getShaderProgram();
+    
+    SDL_Event event;
+    
+    tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
+    //    tileMapSpriteTextureID = LoadTexture("sprites");
+    entitySpriteTextureID  = LoadTexture("DBZ_sprites.png");
+    
+    bool done            = false;
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     
     while (!done) {
@@ -1004,25 +1059,40 @@ void playSpaceInvaders(){
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
             }
+            
+            if (event.type == SDL_KEYDOWN){
+                if (event.key.keysym.scancode == SDL_SCANCODE_1){
+                    GAME_STATE = LEVEL_1;
+                }
+                
+                if (event.key.keysym.scancode == SDL_SCANCODE_2){
+                    GAME_STATE = LEVEL_2;
+                }
+                
+                if (event.key.keysym.scancode == SDL_SCANCODE_3){
+                   GAME_STATE = LEVEL_3;
+                    
+                }
+            }
+
         }
         
-        if(keys[SDL_SCANCODE_SPACE] && gameEnded == false ) // create new bullet
-            GAME_STATE = GAME_SCREEN;
+//        if(keys[SDL_SCANCODE_SPACE] && gameEnded == false ) // create new bullet
+//            GAME_STATE = MENU;
         
-        screenSelect(&program, fontTexture, &window, laserBlastSound);
+        determineGameState(&program, fontTexture, &window, &event);
         
     }
-    Mix_FreeChunk(laserBlastSound);
     SDL_Quit();
     
 }
 
 
 int main(int argc, char* argv[]){
-    //    playSpaceInvaders();
+        playSpaceInvaders();
     char * dir = getcwd(NULL, 0);
     printf("Current dir: %s", dir);
-    playPlatformGame();
+//    playPlatformGame();
     
 //    bullet
 //    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/>

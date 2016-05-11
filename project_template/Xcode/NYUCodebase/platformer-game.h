@@ -12,6 +12,7 @@
 #include <vector>
 #include "screenObject.cpp"
 #include <map>
+#include <SDL_mixer.h>
 
 //using namespace std;
 
@@ -69,7 +70,7 @@ public:
     void setX_Velocity(float vel);
     void draw();
     void getVertexAndTextCoordData();
-    void fire();
+    void fire(Mix_Chunk* energyBlastSound);
     void setDirectionLeft();
     void setDirectionRight();
     void moveBullets();
