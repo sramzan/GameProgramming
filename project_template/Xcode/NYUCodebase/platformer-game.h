@@ -12,6 +12,7 @@
 #include <vector>
 #include "screenObject.cpp"
 #include <map>
+#include <SDL_mixer.h>
 
 //using namespace std;
 
@@ -41,19 +42,24 @@ bool readEntityData(std::ifstream &stream);
 
 GLuint LoadTexture(const char* image_path);
 
+class Bullet;
+class Entity;
+class TileMap;
 
 // Classes
 class Entity : public ScreenObject{
 public:
-    Entity(ShaderProgram* prog, string textSheet, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal);
+    Entity(ShaderProgram* prog, string entityType, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal, int direction, int healthVal);
     std::string getType();
-    float
-    getXPos();
+    int getDirection();
+    int getHealth();
+    float getXPos();
     float getYPos();
     float getX_Velocity();
     float getY_Velocity();
     float getX_Acceleration();
     float getY_Acceleration();
+    float getSize();
     void applyGravityToVel(float elapsed);
     void applyAccelerationToVel();
     void updatePosition();
@@ -64,6 +70,21 @@ public:
     void setX_Velocity(float vel);
     void draw();
     void getVertexAndTextCoordData();
+    void fire(Mix_Chunk* energyBlastSound);
+    void setDirectionLeft();
+    void setDirectionRight();
+    void moveBullets();
+    void deleteBullet(Bullet* bullet);
+    void checkBulletCollisions(float elapsed);
+    void drawBullets();
+    void setBulletsToIdentity();
+    void moveAllBulletsToPosition();
+    void applyAccelerationToVelForAllBullets();
+    void updateAllBulletPositions();
+    void applyAccelerationToVelFor(Bullet* bullet);
+    void invertBulletsIfNecessary();
+    void checkBulletCollisions(Entity* player, float elapsed);
+    void decrementHealth();
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
@@ -71,6 +92,8 @@ public:
     
 private:
     std::string type;
+    int direction;
+    int health;
     float xVelocity;
     float yVelocity;
     float xAccel;
@@ -82,6 +105,23 @@ private:
     float v;
     float spriteWidth;
     float spriteHeight;
+    std::vector<Bullet*> bullets;
+};
+
+class Bullet : public Entity{
+public:
+    Bullet(ShaderProgram* prog, float xPos, float yPos, int direction);
+    void markForDeletion();
+    bool isMarkedForDeletion();
+    int getBulletDirection();
+    float getInitialX();
+    float getInitialY();
+    
+private:
+    int bulletDirection;
+    bool markedForDeletion;
+    float initialXPos;
+    float initialYPos;
     
 };
 
@@ -104,6 +144,7 @@ int getSpriteSheetValof(Entity* entity);
 std::vector<float> entityVertexData;
 std::vector<float> entityTextureData;
 std::vector<Entity*> entities;
+
 
 typedef std::map<std::string, int> playerMapping;
 

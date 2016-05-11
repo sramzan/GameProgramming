@@ -30,6 +30,13 @@
 		1491041E1C881AC2001472FA /* pixel_font.png in Resources */ = {isa = PBXBuildFile; fileRef = 1491041D1C881AC2001472FA /* pixel_font.png */; };
 		149104201C881B1D001472FA /* font2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1491041F1C881B1D001472FA /* font2.png */; };
 		14A22EBA1C9214E500F8FB29 /* Laser_Blast.wav in Resources */ = {isa = PBXBuildFile; fileRef = 14A22EB91C9214E500F8FB29 /* Laser_Blast.wav */; };
+		14A84E701CE11A11002706A3 /* mine_stuff.png in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E6F1CE11A11002706A3 /* mine_stuff.png */; };
+		14A84E721CE2A85E002706A3 /* energyBlast1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E711CE2A85E002706A3 /* energyBlast1.mp3 */; };
+		14A84E761CE2AC37002706A3 /* energyBlast2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E751CE2AC37002706A3 /* energyBlast2.mp3 */; };
+		14A84E791CE2ACE8002706A3 /* energyBlast1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E771CE2ACE8002706A3 /* energyBlast1.wav */; };
+		14A84E7A1CE2ACE8002706A3 /* energyBlast2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E781CE2ACE8002706A3 /* energyBlast2.wav */; };
+		14A84E7C1CE2AF77002706A3 /* background_music_level1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E7B1CE2AF77002706A3 /* background_music_level1.wav */; };
+		14A84E7E1CE2B046002706A3 /* background_music_level1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 14A84E7D1CE2B046002706A3 /* background_music_level1.mp3 */; };
 		14CBA4351C6D281500DF1A56 /* programGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4341C6D281500DF1A56 /* programGenerator.cpp */; };
 		14CBA4381C6D2BA800DF1A56 /* exceptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */; };
 		14CBA43E1C70F00200DF1A56 /* pong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CBA43D1C70F00200DF1A56 /* pong.cpp */; };
@@ -74,6 +81,13 @@
 		1491041D1C881AC2001472FA /* pixel_font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pixel_font.png; sourceTree = "<group>"; };
 		1491041F1C881B1D001472FA /* font2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font2.png; sourceTree = "<group>"; };
 		14A22EB91C9214E500F8FB29 /* Laser_Blast.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Laser_Blast.wav; sourceTree = "<group>"; };
+		14A84E6F1CE11A11002706A3 /* mine_stuff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mine_stuff.png; sourceTree = "<group>"; };
+		14A84E711CE2A85E002706A3 /* energyBlast1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = energyBlast1.mp3; sourceTree = "<group>"; };
+		14A84E751CE2AC37002706A3 /* energyBlast2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = energyBlast2.mp3; sourceTree = "<group>"; };
+		14A84E771CE2ACE8002706A3 /* energyBlast1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = energyBlast1.wav; sourceTree = "<group>"; };
+		14A84E781CE2ACE8002706A3 /* energyBlast2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = energyBlast2.wav; sourceTree = "<group>"; };
+		14A84E7B1CE2AF77002706A3 /* background_music_level1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = background_music_level1.wav; sourceTree = "<group>"; };
+		14A84E7D1CE2B046002706A3 /* background_music_level1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background_music_level1.mp3; sourceTree = "<group>"; };
 		14CBA4341C6D281500DF1A56 /* programGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = programGenerator.cpp; path = ../programGenerator.cpp; sourceTree = "<group>"; };
 		14CBA4371C6D2BA800DF1A56 /* exceptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptions.cpp; path = NYUCodebase/exceptions.cpp; sourceTree = SOURCE_ROOT; };
 		14CBA43D1C70F00200DF1A56 /* pong.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pong.cpp; sourceTree = "<group>"; };
@@ -187,6 +201,7 @@
 		149104111C83D048001472FA /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				14A84E6F1CE11A11002706A3 /* mine_stuff.png */,
 				1485CD201CACC81F00A22965 /* level1.txt */,
 				1485CD1E1CAB548100A22965 /* spritesheet.png */,
 				1491041F1C881B1D001472FA /* font2.png */,
@@ -209,6 +224,12 @@
 		14A22EB41C9213BA00F8FB29 /* Sound Clips */ = {
 			isa = PBXGroup;
 			children = (
+				14A84E7D1CE2B046002706A3 /* background_music_level1.mp3 */,
+				14A84E7B1CE2AF77002706A3 /* background_music_level1.wav */,
+				14A84E771CE2ACE8002706A3 /* energyBlast1.wav */,
+				14A84E781CE2ACE8002706A3 /* energyBlast2.wav */,
+				14A84E751CE2AC37002706A3 /* energyBlast2.mp3 */,
+				14A84E711CE2A85E002706A3 /* energyBlast1.mp3 */,
 				14A22EB91C9214E500F8FB29 /* Laser_Blast.wav */,
 			);
 			name = "Sound Clips";
@@ -396,12 +417,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				141114391C696DD50003BE05 /* cardSpadesQ.png in Resources */,
+				14A84E701CE11A11002706A3 /* mine_stuff.png in Resources */,
 				6D5A86B819AE5C710066C1FD /* InfoPlist.strings in Resources */,
 				141114421C698A860003BE05 /* cardSpadesJ.png in Resources */,
 				1485CD211CACC81F00A22965 /* level1.txt in Resources */,
 				141114431C698A860003BE05 /* cardSpadesK.png in Resources */,
 				14241E261CDA97DE00E84999 /* DBZ_sprites.png in Resources */,
+				14A84E721CE2A85E002706A3 /* energyBlast1.mp3 in Resources */,
 				149104131C83D070001472FA /* spaceSheet.png in Resources */,
+				14A84E761CE2AC37002706A3 /* energyBlast2.mp3 in Resources */,
 				6DEF23C11B96CC2600BCE792 /* fragment.glsl in Resources */,
 				149104201C881B1D001472FA /* font2.png in Resources */,
 				14A22EBA1C9214E500F8FB29 /* Laser_Blast.wav in Resources */,
@@ -412,9 +436,13 @@
 				6D5A86BE19AE5C710066C1FD /* Credits.rtf in Resources */,
 				6DEF23C41B96CC2600BCE792 /* vertex.glsl in Resources */,
 				14241E281CDAA4BB00E84999 /* planes.png in Resources */,
+				14A84E7E1CE2B046002706A3 /* background_music_level1.mp3 in Resources */,
 				6DC7076A1BA7273500225B7D /* vertex_textured.glsl in Resources */,
+				14A84E7A1CE2ACE8002706A3 /* energyBlast2.wav in Resources */,
+				14A84E791CE2ACE8002706A3 /* energyBlast1.wav in Resources */,
 				1491041A1C83E0F2001472FA /* spacePics.png in Resources */,
 				1491041E1C881AC2001472FA /* pixel_font.png in Resources */,
+				14A84E7C1CE2AF77002706A3 /* background_music_level1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
