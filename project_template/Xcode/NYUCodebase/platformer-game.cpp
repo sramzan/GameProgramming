@@ -83,12 +83,14 @@ const int LEVEL_3 = 3;
 const int GAME_OVER  = 4;
 int GAME_STATE = 0;
 bool player1Won = false;
+bool player2HasMadeFirstMove = false;
 
 int** levelData;
 int** solidTiles;
 bool firstRun = true;
 int totalArrayHeight = 0;
 int totalArrayWidth  = 0;
+bool playerHit = false;
 
 // bullet sprite sheet info
 // player 1
@@ -366,6 +368,7 @@ void Entity::checkBulletCollisions(Entity* player, float elapsed){
                 player->decrementHealth();
                 cout << "Player " + player->getType() + " was hit... Current Health: " << player->getHealth() << endl;
                 bullets.erase(bullets.begin() + index);
+                playerHit = true;
                 delete bullet;
             }
         }
@@ -376,6 +379,7 @@ void Entity::checkBulletCollisions(Entity* player, float elapsed){
                 player->decrementHealth();
                 cout << "Player " + player->getType() + " was hit... Current Health: " << player->getHealth() << endl;
                 bullets.erase(bullets.begin() + index);
+                playerHit = true;
                 delete bullet;
             }
         }
@@ -879,11 +883,13 @@ void handleInputCommands(Entity* player1, Entity* player2, const Uint8* keys){
     if (keys[SDL_SCANCODE_D]){
         player2->updateAccelTo(.1, 0);
         player2->applyAccelerationToVel();
+        player2HasMadeFirstMove = true;
         //            entity->addToX(entity->getX_Acceleration());
     }
     if (keys[SDL_SCANCODE_A]){
         player2->updateAccelTo(-.1, 0);
         player2->applyAccelerationToVel();
+        player2HasMadeFirstMove = true;
     }
     
     if (keys[SDL_SCANCODE_S]){
@@ -957,7 +963,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
     player1->invertBulletsIfNecessary();
     
     
-    if (player2->getX_Velocity() < 0){
+    if (player2->getX_Velocity() < 0 || !player2HasMadeFirstMove){
         player2->scale(-1, 1, 1);
         player2->setDirectionLeft();
     }else{
@@ -975,6 +981,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
 
 void playGame(Program* program, SDL_Event* event, Window* window){
     program->resetMatrices();
+    player2HasMadeFirstMove = false;
     
     tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
     //    tileMapSpriteTextureID = LoadTexture("sprites");
@@ -1084,7 +1091,16 @@ void playGame(Program* program, SDL_Event* event, Window* window){
         }
         handleEntityActions(player1, player2, keys, fixedElapsed, program);
         getEntity = false;
-        
+        /*
+         Potential Logic to shake the screen when a player is shot
+        if (playerHit){
+            float screenShakeValue = 1.0f + elapsed;
+            float screenShakeSpeed = .3;
+            float screenShakeIntensity = .5;
+            program->translateViewMatrix(0.0f, sin(screenShakeValue * screenShakeSpeed)* screenShakeIntensity, 0.0f);
+            program->setViewMatrix();
+        }
+         */
         
         program->setModelMatrix(player1->getModelMatrix());
         glBindTexture(GL_TEXTURE_2D, entitySpriteTextureID);
