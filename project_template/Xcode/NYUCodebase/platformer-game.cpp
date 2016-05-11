@@ -30,7 +30,7 @@ using namespace std;
 #define LEVEL_WIDTH 30
 #define GRAVITY_X 0
 #define GRAVITY_Y -.2
-#define FRICTION_X .7
+#define FRICTION_X .9
 #define FRICTION_Y .99
 #define SPRITE_SIZE 21
 
@@ -41,14 +41,40 @@ float TILE_SIZE=.90f;
 float tileMidBaseLine   = 0;
 int mapWidth    = -1;
 int mapHeight   = -1;
-const int solidGround_1 = 586; // TODO - name these more descriptively
-const int solidGround_2 = 555;
-const int solidGround_3 = 557;
+
+// Level 1 solid pieces
+const int solidGround_1 = 191; // TODO - name these more descriptively
+const int solidGround_2 = 130;
+const int solidGround_3 = 224;
+const int solidGround_4 = 194;
+const int solidGround_5 = 195;
+const int solidGround_6 = 133;
+
+// Level 2 solid pieces
+const int underwater_1 = 743;
+const int underwater_2 = 332;
+const int underwater_3 = 121;
+const int underwater_4 = 222;
+const int underwater_5 = 123;
+const int underwater_6 = 153;
+const int underwater_7 = 125;
+const int underwater_8 = 151;
+const int underwater_9 = 154;
+const int underwater_10 = 745;
+const int underwater_11 = 776;
+const int underwater_12 = 744;
+const int underwater_13 = 774;
+const int underwater_14 = 746;
+const int underwater_15 = 775;
+const int underwater_16 = 773;
+const int underwater_17 = 122;
+const int underwater_18 = 124;
+
 
 const int iceGround_1 = 607;
 const int iceGround_2 = 645;
 const int iceGround_3 = 646;
-const int iceGround_4 = 191;
+const int iceGround_4 = 225;
 
 const int MENU    = 0;
 const int LEVEL_1 = 1;
@@ -56,6 +82,7 @@ const int LEVEL_2 = 2;
 const int LEVEL_3 = 3;
 const int GAME_OVER  = 4;
 int GAME_STATE = 0;
+bool player1Won = false;
 
 int** levelData;
 int** solidTiles;
@@ -410,6 +437,18 @@ void Entity::decrementHealth(){
     health--;
 }
 
+void Entity::deleteAllBullets(){
+    for (int index = 0; index < bullets.size(); index++){
+        bullets.erase(bullets.begin() + index);
+        delete bullets[index];
+    }
+    bullets.clear();
+}
+
+void Entity::resetHealth(){
+    health = 5;
+}
+
 Bullet::Bullet(ShaderProgram* prog, float xPos, float yPos, int dir) : Entity(prog, "bullet", xPos, yPos, bullet_uVal/512.0f, bullet_vVal/512.0f, bullet_width/512.0f, bullet_height/512.0f, TILE_SIZE/2, dir, 0){ // bullets have a natural health of 0
     this->bulletDirection = dir;
     this->markedForDeletion = false;
@@ -486,6 +525,71 @@ bool isSolidTile(int val){
         case solidGround_3:
             return true;
             break;
+        case solidGround_4:
+            return true;
+            break;
+        case solidGround_5:
+            return true;
+            break;
+        case solidGround_6:
+            return true;
+            break;
+
+        case underwater_1:
+            return true;
+            break;
+        case underwater_2:
+            return true;
+            break;
+        case underwater_3:
+            return true;
+            break;
+        case underwater_4:
+            return true;
+            break;
+        case underwater_5:
+            return true;
+            break;
+        case underwater_6:
+            return true;
+            break;
+        case underwater_7:
+            return true;
+            break;
+        case underwater_8:
+            return true;
+            break;
+        case underwater_9:
+            return true;
+            break;
+        case underwater_10:
+            return true;
+            break;
+        case underwater_11:
+            return true;
+            break;
+        case underwater_12:
+            return true;
+            break;
+        case underwater_13:
+            return true;
+            break;
+        case underwater_14:
+            return true;
+            break;
+        case underwater_15:
+            return true;
+            break;
+        case underwater_16:
+            return true;
+            break;
+        case underwater_17:
+            return true;
+            break;
+        case underwater_18:
+            return true;
+            break;
+            
         case iceGround_1:
             return true;
             break;
@@ -551,7 +655,7 @@ void placeEntity(string type, float placeX, float placeY){
     // <SubTexture name="slice29_29.png" x="207" y="0" width="32" height="43"/> - Standard Vegito
     // <SubTexture name="planeBlue1.png" x="0" y="73" width="88" height="73"/>  - Super Saiyan Vegito
     float x, y, width, height;
-    int direction, health=3; // every player starts off with a health level of 3
+    int direction, health=5; // every player starts off with a health level of 3
     
     if (type=="player1"){
         x = 207.0f;
@@ -870,6 +974,7 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
 }
 
 void playGame(Program* program, SDL_Event* event, Window* window){
+    program->resetMatrices();
     
     tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
     //    tileMapSpriteTextureID = LoadTexture("sprites");
@@ -937,13 +1042,21 @@ void playGame(Program* program, SDL_Event* event, Window* window){
                     player2->fire(player2Sound);
                 }
                 
-                if (event->key.keysym.scancode == SDL_SCANCODE_Q){
+                if (event->key.keysym.scancode == SDL_SCANCODE_M){
                     GAME_STATE = MENU;
+                    player1->deleteAllBullets();
+                    player2->deleteAllBullets();
+                    for (int index = 0; index < entities.size(); index++){
+                        entities.erase(entities.begin() + index);
+                        delete entities[index];
+                    }
+                    entities.clear();
                     Mix_FreeChunk(player1Sound);
                     Mix_FreeChunk(player2Sound);
                     Mix_FreeMusic(music);
                     return;
                 }
+                
             }
             
             
@@ -981,6 +1094,38 @@ void playGame(Program* program, SDL_Event* event, Window* window){
         player2->drawFromSheetSprite();
         player2->drawBullets();
         
+        if (player2->getHealth() <= 0){
+            GAME_STATE = GAME_OVER;
+            player1->deleteAllBullets();
+            player2->deleteAllBullets();
+            for (int index = 0; index < entities.size(); index++){
+                entities.erase(entities.begin() + index);
+                delete entities[index];
+            }
+            entities.clear();
+            player1Won = true;
+            Mix_FreeChunk(player1Sound);
+            Mix_FreeChunk(player2Sound);
+            Mix_FreeMusic(music);
+            return;
+        }
+        
+        if (player1->getHealth() <= 0){
+            GAME_STATE = GAME_OVER;
+            player1Won = false;
+            player1->deleteAllBullets();
+            player2->deleteAllBullets();
+            for (int index = 0; index < entities.size(); index++){
+                entities.erase(entities.begin() + index);
+                delete entities[index];
+            }
+            entities.clear();
+            Mix_FreeChunk(player1Sound);
+            Mix_FreeChunk(player2Sound);
+            Mix_FreeMusic(music);
+            return;
+        }
+        
         SDL_GL_SwapWindow(window->getDispWindow());
         
     }
@@ -997,21 +1142,34 @@ void determineGameState(Program* program, GLuint fontTexture, Window* window, SD
             program->resetMatrices();
             program->clearScreen(0,0,0,0);
             DrawText(program->getShaderProgram(), fontTexture, "Choose Level!",  1.50f, 0, -8.5, 5);
-            DrawText(program->getShaderProgram(), fontTexture, "Level 1",  1.00f, 0, -3, 3);
-            DrawText(program->getShaderProgram(), fontTexture, "Level 2",  1.00f, 0, -3, 1.5);
-            DrawText(program->getShaderProgram(), fontTexture, "Level 3",  1.00f, 0, -3, 0);
+            DrawText(program->getShaderProgram(), fontTexture, "Level 1",    1.00f, 0, -3, 3);
+            DrawText(program->getShaderProgram(), fontTexture, "Level 2",    1.00f, 0, -3, 1.5);
+            DrawText(program->getShaderProgram(), fontTexture, "Level 3",    1.00f, 0, -3, 0);
+            DrawText(program->getShaderProgram(), fontTexture, "Quit Game",  1.00f, 0, -4, -1.5);
             SDL_GL_SwapWindow(window->getDispWindow());
 //            GAME_STATE = displayAndGetMenuChoice();
             break;
         case LEVEL_1:
             cout << "Loading configs for Level 1";
             levelFilePath = "level1.txt";
+            scaleViewMatrix_x = 0.65f;
+            scaleViewMatrix_y = 0.65f;
+            translateViewMatrixOffset_x = 1.0f;
+            translateViewMatrixOffset_y = 4.5f;
+//            Mix_FreeMusic(music);
+            music = Mix_LoadMUS("happy_ukulele.mp3");
             playGame(program, event, window);
             break;
             
         case LEVEL_2:
             cout << "Loading configs for Level 2";
             levelFilePath = "level2.txt";
+            scaleViewMatrix_x = 0.65f;
+            scaleViewMatrix_y = 0.65f;
+            translateViewMatrixOffset_x = 1.0f;
+            translateViewMatrixOffset_y = 4.5f;
+            //            Mix_FreeMusic(music);
+            music = Mix_LoadMUS("under_the_sea.mp3");
             playGame(program, event, window);
             break;
             
@@ -1022,8 +1180,32 @@ void determineGameState(Program* program, GLuint fontTexture, Window* window, SD
             scaleViewMatrix_y = 0.8f;
             translateViewMatrixOffset_x = 1.0f;
             translateViewMatrixOffset_y = 4.5f;
+//            Mix_FreeMusic(music);
             music = Mix_LoadMUS("background_music_level1.mp3");
             playGame(program, event, window);
+            break;
+        case GAME_OVER:
+            music = Mix_LoadMUS("background_music_level1.mp3");
+            Mix_PlayMusic(music, -1);
+            bool timeForMainMenu = false;
+            //display the menu and options
+            while((!timeForMainMenu)){
+                  while(SDL_PollEvent(event)){
+                      if (event->key.keysym.scancode == SDL_SCANCODE_M){
+                          timeForMainMenu=true;
+                          break;
+                      }
+                program->resetMatrices();
+                program->clearScreen(0,0,0,0);
+                DrawText(program->getShaderProgram(), fontTexture, "Game Over",  1.50f, 0, -5.5, 5);
+                string playerThatWon = (player1Won == true) ? "Player 1" : "Player 2";
+                DrawText(program->getShaderProgram(), fontTexture, playerThatWon + " is victorious!",  1.00f, 0, -11, 2);
+                SDL_GL_SwapWindow(window->getDispWindow());
+            //            GAME_STATE = displayAndGetMenuChoice();
+                  }
+            }
+            Mix_FreeMusic(music);
+            GAME_STATE = MENU;
             break;
     }
     
@@ -1073,6 +1255,11 @@ void playSpaceInvaders(){
                    GAME_STATE = LEVEL_3;
                     
                 }
+                
+                if (event.key.keysym.scancode == SDL_SCANCODE_Q){
+                    done = true;
+                    
+                }
             }
 
         }
@@ -1089,9 +1276,10 @@ void playSpaceInvaders(){
 
 
 int main(int argc, char* argv[]){
-        playSpaceInvaders();
     char * dir = getcwd(NULL, 0);
     printf("Current dir: %s", dir);
+    playSpaceInvaders();
+    
 //    playPlatformGame();
     
 //    bullet

@@ -85,6 +85,8 @@ public:
     void invertBulletsIfNecessary();
     void checkBulletCollisions(Entity* player, float elapsed);
     void decrementHealth();
+    void deleteAllBullets();
+    void resetHealth();
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
