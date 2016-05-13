@@ -37,6 +37,7 @@ using namespace std;
 static ShaderProgram* prog;
 static GLuint tileMapSpriteTextureID;
 static GLuint entitySpriteTextureID;
+GLuint fontTexture;
 float TILE_SIZE=.90f;
 float tileMidBaseLine   = 0;
 int mapWidth    = -1;
@@ -88,6 +89,8 @@ bool player2HasMadeFirstMove = false;
 int** levelData;
 int** solidTiles;
 bool firstRun = true;
+bool player1OnGround = true;
+bool player2OnGroudn = true;
 int totalArrayHeight = 0;
 int totalArrayWidth  = 0;
 bool playerHit = false;
@@ -108,6 +111,10 @@ float translateViewMatrixOffset_y = 0.0f;
 std::string levelFilePath = "level3.txt";
 std::string tileLayerName = "layer";
 std::string objLayerName  = "ObjLayer";
+float txtX_1 = 0;
+float txtY_1 = 0;
+float txtX_2 = 0;
+float txtY_2 = 0;
 Mix_Music* music;
 
 void checkForCollision(Entity* entity, float elapsed, bool isBullet);
@@ -200,6 +207,9 @@ Entity::Entity(ShaderProgram* prog, string entityType, int xPosition, int yPosit
     
     this->direction = dir;
     this->health = healthVal;
+    
+    this->shouldSwitchSprite = false;
+    this->isOnFloor = true;
     
     setPositionVars((float)xPosition, (float)yPosition , 0, size);
     
@@ -453,12 +463,23 @@ void Entity::resetHealth(){
     health = 5;
 }
 
+bool Entity::switchSprite(){
+    return this->shouldSwitchSprite;
+}
+
+void Entity::changeSpriteCoords(float uVal, float vVal, float width, float height){
+    this->sheetSprite->setSpriteCoords(uVal, vVal, width, height);
+}
+
+void Entity::switchSpriteNextTime(){
+    this->shouldSwitchSprite = (shouldSwitchSprite) ? false : true;
+}
+
 Bullet::Bullet(ShaderProgram* prog, float xPos, float yPos, int dir) : Entity(prog, "bullet", xPos, yPos, bullet_uVal/512.0f, bullet_vVal/512.0f, bullet_width/512.0f, bullet_height/512.0f, TILE_SIZE/2, dir, 0){ // bullets have a natural health of 0
     this->bulletDirection = dir;
     this->markedForDeletion = false;
     this->initialXPos = xPos;
     this->initialYPos = yPos;
-    
 }
 void Bullet::markForDeletion(){
     this->markedForDeletion = true;
@@ -479,6 +500,7 @@ float Bullet::getInitialX(){
 float Bullet::getInitialY(){
     return initialYPos;
 }
+
 
 
 
@@ -657,15 +679,17 @@ void worldToTileCoordinates(float worldX, float worldY, int *gridX, int *gridY) 
 void placeEntity(string type, float placeX, float placeY){
 
     // <SubTexture name="slice29_29.png" x="207" y="0" width="32" height="43"/> - Standard Vegito
+    // <SubTexture name="slice28_28.png" x="306" y="369" width="27" height="47"/>
     // <SubTexture name="planeBlue1.png" x="0" y="73" width="88" height="73"/>  - Super Saiyan Vegito
+    // <SubTexture name="slice28_28.png" x="306" y="369" width="27" height="47"/>
     float x, y, width, height;
     int direction, health=5; // every player starts off with a health level of 3
     
     if (type=="player1"){
-        x = 207.0f;
-        y = 0.0f;
-        width = 32.0f;
-        height = 43.0f;
+        x = 306.0f;
+        y = 369.0f;
+        width = 27.0f;
+        height = 47.0f;
         direction = 1;
     }
 //    <SubTexture name="slice136_@.png" x="233" y="133" width="32" height="43"/>
@@ -807,7 +831,10 @@ void checkForCollision(Entity* entity, float elapsed, bool isBullet){
             entity->updateYPos(penetration + .0001);
             //.00000001
         }
-    }
+        entity->isOnFloor = true;
+        
+    }else
+        entity->isOnFloor = false;
     
     // checking top collision
     worldToTileCoordinates(entity->getXPos(), entityTop, &xLoc, &yLoc);
@@ -861,35 +888,45 @@ void handleInputCommands(Entity* player1, Entity* player2, const Uint8* keys){
     if (keys[SDL_SCANCODE_RIGHT]){
         player1->updateAccelTo(.1, 0);
         player1->applyAccelerationToVel();
+        // <SubTexture name="slice32_32.png" x="240" y="45" width="32" height="41"/>
+//            <SubTexture name="slice31_31.png" x="241" y="0" width="31" height="43"/>
+        player1->changeSpriteCoords(240.0f/512.0f, 45.0f/512.0f, 32.0f/512.0f, 41.0f/512.0f);
+
         //            entity->addToX(entity->getX_Acceleration());
     }
     if (keys[SDL_SCANCODE_LEFT]){
         player1->updateAccelTo(-.1, 0);
         player1->applyAccelerationToVel();
+        player1->changeSpriteCoords(240.0f/512.0f, 45.0f/512.0f, 32.0f/512.0f, 41.0f/512.0f);
     }
     
     if (keys[SDL_SCANCODE_DOWN]){
         player1->updateAccelTo(0, -.1);
         player1->applyAccelerationToVel();
+//        player1->changeSpriteCoords(335.0f/512.0f, 142.0f/512.0f, 26.0f/512.0f, 46.0f/512.0f);
     }
     
     if (keys[SDL_SCANCODE_UP]){
         player1->updateAccelTo(0, .2);
         player1->applyAccelerationToVel();
+        // SubTexture name="slice44_44.png" x="335" y="142" width="26" height="46"/>
+//        player1->changeSpriteCoords(335.0f/512.0f, 142.0f/512.0f, 26.0f/512.0f, 46.0f/512.0f);
     }
-    
+//    <SubTexture name="slice108_@.png" x="206" y="45" width="32" height="41"/>
     
     // Player 2 Commands
     if (keys[SDL_SCANCODE_D]){
         player2->updateAccelTo(.1, 0);
         player2->applyAccelerationToVel();
         player2HasMadeFirstMove = true;
+        player2->changeSpriteCoords(206.0f/512.0f, 45.0f/512.0f, 32.0f/512.0f, 41.0f/512.0f);
         //            entity->addToX(entity->getX_Acceleration());
     }
     if (keys[SDL_SCANCODE_A]){
         player2->updateAccelTo(-.1, 0);
         player2->applyAccelerationToVel();
         player2HasMadeFirstMove = true;
+        player2->changeSpriteCoords(206.0f/512.0f, 45.0f/512.0f, 32.0f/512.0f, 41.0f/512.0f);
     }
     
     if (keys[SDL_SCANCODE_S]){
@@ -952,6 +989,17 @@ void handleEntityActions(Entity* player1, Entity* player2, const Uint8* keys, fl
     player2->updatePosition();
     player2->updateAccelTo(0, 0);
     
+    
+    if (player1->getX_Velocity() <= 0.001 && player1->getX_Velocity() >= -0.001){
+//        <SubTexture name="slice28_28.png" x="306" y="369" width="27" height="47"/>
+        player1->changeSpriteCoords(306.0f/512.0f, 369.0f/512.0f, 27.0f/512.0f, 47.0f/512.0f);
+    }
+    
+    
+    if (player2->getX_Velocity() <= 0.001 && player2->getX_Velocity() >= -0.001){
+        //  <SubTexture name="slice104_@.png" x="306" y="320" width="27" height="47"/>
+        player2->changeSpriteCoords(306.0f/512.0f, 320.0f/512.0f, 27.0f/512.0f, 47.0f/512.0f);
+    }
 
     if (player1->getX_Velocity() < 0){
         player1->scale(-1, 1, 1);
@@ -990,6 +1038,8 @@ void playGame(Program* program, SDL_Event* event, Window* window){
     bool done            = false;
     float lastFrameTicks = 0.0f;
     bool getEntity       = true;
+    bool player1Fired    = false;
+    bool player2Fired    = false;
     
     TileMap* tileMap  = new TileMap(prog);
     Entity* player1   = NULL;
@@ -1037,7 +1087,11 @@ void playGame(Program* program, SDL_Event* event, Window* window){
                     bullet_vVal   = 179.0f;
                     bullet_width  = 63.0f;
                     bullet_height = 56.0f;
+//                        <SubTexture name="slice71_71.png" x="305" y="468" width="26" height="42"/>
+            
+//                    player1->changeSpriteCoords(305.0f/512.0f, 468.0f/512.0f, 26.0f/512.0f, 42.0f/512.0f);
                     player1->fire(player1Sound);
+                    player1Fired = true;
                 }
                 
                 if (event->key.keysym.scancode == SDL_SCANCODE_Z){
@@ -1109,6 +1163,9 @@ void playGame(Program* program, SDL_Event* event, Window* window){
         program->setModelMatrix(player2->getModelMatrix());
         player2->drawFromSheetSprite();
         player2->drawBullets();
+        program->identity();
+         DrawText(program->getShaderProgram(), fontTexture, "P1 HP:" + to_string(player1->getHealth()), 1.00f, 0, txtX_1, txtY_1);
+         DrawText(program->getShaderProgram(), fontTexture, "P2 HP:" + to_string(player2->getHealth()), 1.00f, 0, txtX_2, txtY_2);
         
         if (player2->getHealth() <= 0){
             GAME_STATE = GAME_OVER;
@@ -1163,16 +1220,18 @@ void determineGameState(Program* program, GLuint fontTexture, Window* window, SD
             DrawText(program->getShaderProgram(), fontTexture, "Level 3",    1.00f, 0, -3, 0);
             DrawText(program->getShaderProgram(), fontTexture, "Quit Game",  1.00f, 0, -4, -1.5);
             SDL_GL_SwapWindow(window->getDispWindow());
-//            GAME_STATE = displayAndGetMenuChoice();
             break;
         case LEVEL_1:
             cout << "Loading configs for Level 1";
             levelFilePath = "level1.txt";
-            scaleViewMatrix_x = 0.65f;
-            scaleViewMatrix_y = 0.65f;
+            scaleViewMatrix_x = 0.63f;
+            scaleViewMatrix_y = 0.63f;
             translateViewMatrixOffset_x = 1.0f;
             translateViewMatrixOffset_y = 4.5f;
-//            Mix_FreeMusic(music);
+            txtX_1 = 1.0;
+            txtY_1 = -0.5;
+            txtX_2 = 20.7;
+            txtY_2 = -0.5;
             music = Mix_LoadMUS("happy_ukulele.mp3");
             playGame(program, event, window);
             break;
@@ -1184,6 +1243,10 @@ void determineGameState(Program* program, GLuint fontTexture, Window* window, SD
             scaleViewMatrix_y = 0.65f;
             translateViewMatrixOffset_x = 1.0f;
             translateViewMatrixOffset_y = 4.5f;
+            txtX_1 = 1.0;
+            txtY_1 = -0.5;
+            txtX_2 = 20.7;
+            txtY_2 = -0.5;
             //            Mix_FreeMusic(music);
             music = Mix_LoadMUS("under_the_sea.mp3");
             playGame(program, event, window);
@@ -1195,13 +1258,16 @@ void determineGameState(Program* program, GLuint fontTexture, Window* window, SD
             scaleViewMatrix_x = 0.8f;
             scaleViewMatrix_y = 0.8f;
             translateViewMatrixOffset_x = 1.0f;
+            txtX_1 = 1.0;
+            txtY_1 = -3;
+            txtX_2 = 20.7;
+            txtY_2 = -3;
             translateViewMatrixOffset_y = 4.5f;
-//            Mix_FreeMusic(music);
             music = Mix_LoadMUS("background_music_level1.mp3");
             playGame(program, event, window);
             break;
         case GAME_OVER:
-            music = Mix_LoadMUS("background_music_level1.mp3");
+            music = Mix_LoadMUS("epic.mp3");
             Mix_PlayMusic(music, -1);
             bool timeForMainMenu = false;
             //display the menu and options
@@ -1228,8 +1294,7 @@ void determineGameState(Program* program, GLuint fontTexture, Window* window, SD
 }
 
 
-void playSpaceInvaders(){
-    //    Int Mix_OpenAudio
+void playFinalPlatformGame(){
     Window window(WINDOW_HEIGHT, WINDOW_WIDTH, "The Awesome Platform Game - SR");
     
 #ifdef _WINDOWS
@@ -1237,7 +1302,7 @@ void playSpaceInvaders(){
 #endif
     
 
-    GLuint fontTexture = LoadTexture("font1.png");
+    fontTexture = LoadTexture("font1.png");
     
     
     Program program(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl"); // defines new shader program, and sets the program ID. This is the obj that will be used to clear the screen every frame
@@ -1246,7 +1311,6 @@ void playSpaceInvaders(){
     SDL_Event event;
     
     tileMapSpriteTextureID = LoadTexture("spriteSheet.png");
-    //    tileMapSpriteTextureID = LoadTexture("sprites");
     entitySpriteTextureID  = LoadTexture("DBZ_sprites.png");
     
     bool done            = false;
@@ -1256,6 +1320,10 @@ void playSpaceInvaders(){
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
                 done = true;
+            }
+            
+            if (keys[SDL_SCANCODE_F]){
+                SDL_SetWindowFullscreen(window.getDispWindow(), SDL_WINDOW_FULLSCREEN);
             }
             
             if (event.type == SDL_KEYDOWN){
@@ -1280,9 +1348,6 @@ void playSpaceInvaders(){
 
         }
         
-//        if(keys[SDL_SCANCODE_SPACE] && gameEnded == false ) // create new bullet
-//            GAME_STATE = MENU;
-        
         determineGameState(&program, fontTexture, &window, &event);
         
     }
@@ -1294,11 +1359,7 @@ void playSpaceInvaders(){
 int main(int argc, char* argv[]){
     char * dir = getcwd(NULL, 0);
     printf("Current dir: %s", dir);
-    playSpaceInvaders();
+    playFinalPlatformGame();
     
-//    playPlatformGame();
-    
-//    bullet
-//    <SubTexture name="slice139_@.png" x="178" y="148" width="16" height="12"/>
     
 }

@@ -46,6 +46,10 @@ public:
         return displayWindow;
     }
     
+    SDL_Window* getWindowPtr(){
+        return displayWindow;
+    }
+    
 private:
     int windowHeight;
     int windowWidth;

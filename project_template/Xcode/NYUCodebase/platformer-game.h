@@ -51,6 +51,7 @@ class Entity : public ScreenObject{
 public:
     Entity(ShaderProgram* prog, string entityType, int x, int y, float uVal, float vVal, float widthVal, float heightVal,float sizeVal, int direction, int healthVal);
     std::string getType();
+    bool switchSprite();
     int getDirection();
     int getHealth();
     float getXPos();
@@ -87,11 +88,13 @@ public:
     void decrementHealth();
     void deleteAllBullets();
     void resetHealth();
+    void switchSpriteNextTime();
+    void changeSpriteCoords(float uVal, float vVal, float width, float height);
     
     // Setter Function
     void updateVelocityTo(float velX, float velY);
     void updateAccelTo(float accelX,  float accelY);
-    
+    bool isOnFloor;
 private:
     std::string type;
     int direction;
@@ -107,6 +110,7 @@ private:
     float v;
     float spriteWidth;
     float spriteHeight;
+    bool shouldSwitchSprite;
     std::vector<Bullet*> bullets;
 };
 

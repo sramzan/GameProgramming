@@ -340,9 +340,10 @@ public:
     bool collidedLeft = false;
     bool collidedRight = false;
     
-    SheetSprite* sheetSprite;
     GLuint spriteSheetTexture;
     
+protected:
+        SheetSprite* sheetSprite;
 
     
     // Values will be used to set the prospective per Animation

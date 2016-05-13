@@ -33,6 +33,13 @@ public:
          
     }
     
+    void setSpriteCoords(float uVal, float vVal, float widthVal, float heightVal){
+        this->u = uVal;
+        this->v = vVal;
+        this->width  = widthVal;
+        this->height = heightVal;
+    }
+    
     
     
     float getTopPos()    { return topPos;    }
